@@ -1,4 +1,4 @@
-import { LOCATION_LATIN, SUBJECT_LATIN } from '../dictionary/closedClass';
+import { LOCATION_LATIN, PARTICLE_LATIN, SUBJECT_LATIN } from '../dictionary/closedClass';
 import { englishGloss, type WordTranslation } from '../dictionary';
 import { parseSuffix } from '../morphology/suffixParser';
 import { EMPTY_FRAME, type SemanticFrame, type Tense } from './types';
@@ -39,10 +39,18 @@ export function extractDvFrame(words: string[], lookups: WordTranslation[]): Sem
     const gloss = lookup ? englishGloss(lookup).replace(/^\[unknown:\s*|\]$/g, '') : latin;
     const unknown = !lookup || lookup.confidence === 'low';
 
-    if (surface.startsWith('nu') && surface.length > 3) {
+    if (surface === 'nu' || surface === 'neth' || (surface.startsWith('nu') && surface.length > 3)) {
       frame.polarity = 'negative';
+      if (surface === 'nu' || surface === 'neth' || PARTICLE_LATIN.has(surface)) {
+        assigned.add(i);
+        continue;
+      }
     }
-    if (surface.endsWith('anan') || surface.endsWith('vaane')) {
+    if (surface === 'eve' || surface === 'ves') {
+      assigned.add(i);
+      continue;
+    }
+    if (surface.endsWith('anan') || surface.endsWith('vaane') || surface.endsWith('aane')) {
       frame.tense = 'future';
     }
 

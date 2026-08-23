@@ -1,0 +1,13 @@
+{
+  "englishPairs": 3500,
+  "englishTrain": 3150,
+  "englishValid": 350,
+  "dhivehiPairs": 3500,
+  "dhivehiTrain": 3150,
+  "dhivehiValid": 350,
+  "combinatorialEnglish": 5640,
+  "combinatorialDhivehi": 4935,
+  "englishSeedLines": 20,
+  "parallelLines": 49,
+  "missingCuratedLemmas": []
+}

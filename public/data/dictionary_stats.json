@@ -1,8 +1,18 @@
 {
-  "rawDbRows": 15984,
-  "uniqueThaana": 15591,
-  "uniqueLatin": 15984,
-  "entriesWithEnglish": 15984,
-  "finalExportedEntries": 15984,
-  "source": "C:\\Users\\Moham\\Desktop\\dhivehi\\dhivehi-latin-slm\\data\\dhivehi_dictionary.db"
+  "startingExportEntries": 15984,
+  "beforeEntries": 15984,
+  "beforeUniqueLatin": 15984,
+  "rawDbRows": 16014,
+  "uniqueThaana": 15616,
+  "uniqueLatin": 16014,
+  "entriesWithEnglish": 16014,
+  "finalExportedEntries": 16014,
+  "newlyAdded": 30,
+  "glossesUnioned": 17,
+  "posFilled": 1,
+  "frequencyUpdated": 11639,
+  "thaanaRepaired": 0,
+  "skippedEnglishKeys": 0,
+  "latinKeysDropped": 0,
+  "source": "merge: public/data/dictionary.json + Database_sources/dictionary_latin.json + Database_sources/full curreny database.json + tools/fritz_closed_class.json + Database_sources/spelling.md"
 }
