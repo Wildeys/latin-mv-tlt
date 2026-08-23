@@ -1,7 +1,7 @@
 import { normalise } from '../normalize';
 import { stemWord } from '../morphology/suffixParser';
 import { transliterateThaana } from '../transliterator/thaanaToLatin';
-import { ENGLISH_TO_LATIN } from './closedClass';
+import { ENGLISH_TO_LATIN, LATIN_TO_ENGLISH } from './closedClass';
 import type { DictionaryEntry, DictionaryStats, LookupHit, WordTranslation } from './types';
 
 const MIN_PREFIX_LEN = 4;
@@ -185,6 +185,26 @@ export function translateWord(word: string, sourceLang: 'dhivehi' | 'english'): 
 
   const ascii = [...cleaned].every((c) => c.charCodeAt(0) < 128);
   if (ascii) {
+    const closedEn = LATIN_TO_ENGLISH[cleaned.trim().toLowerCase()];
+    if (closedEn) {
+      const dictHits = lookupLatin(cleaned);
+      result.translations = dictHits.length
+        ? dictHits
+        : [
+            {
+              dhivehi: cleaned,
+              latin: cleaned,
+              english: [closedEn],
+              pos: 'closed_class',
+              frequency: 1,
+              matchType: 'closed_class',
+            },
+          ];
+      result.confidence = 'high';
+      result.transliteration = cleaned;
+      result.fallbackUsed = dictHits.length ? null : 'closed_class';
+      return result;
+    }
     let matches = lookupLatin(cleaned);
     if (!matches.length || matches[0].matchType !== 'exact') {
       const stemmed = stemWord(cleaned, isKnownLatin);

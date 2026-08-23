@@ -10,7 +10,7 @@ export default function Feedback() {
   const [naturalness, setNaturalness] = useState(3);
   const [correction, setCorrection] = useState('');
   const [saved, setSaved] = useState(false);
-  const rows = loadFeedback();
+  const [count, setCount] = useState(() => loadFeedback().length);
 
   function onSave() {
     saveFeedback({
@@ -21,6 +21,7 @@ export default function Feedback() {
       correction,
       direction: last?.traces[0]?.direction ?? 'unknown',
     });
+    setCount(loadFeedback().length);
     setSaved(true);
   }
 
@@ -48,8 +49,8 @@ export default function Feedback() {
           Export CSV
         </button>
       </div>
-      {saved && <p className="text-sm text-emerald-700">Saved locally. {rows.length + 1} ratings on this device.</p>}
-      <p className="text-xs text-slate-500">{rows.length} stored rating(s). Nothing is sent to a server.</p>
+      {saved && <p className="text-sm text-emerald-700">Saved locally. {count} rating(s) on this device.</p>}
+      <p className="text-xs text-slate-500">{count} stored rating(s). Nothing is sent to a server.</p>
     </div>
   );
 }

@@ -36,7 +36,10 @@ export function extractWordsOnly(text: string): string[] {
 export function identifyScript(text: string): Record<string, number> {
   if (!text) return {};
   const total = text.length;
-  const count = (re: RegExp) => [...text.matchAll(re)].length;
+  const count = (re: RegExp) => {
+    const flags = re.global ? re.flags : `${re.flags}g`;
+    return [...text.matchAll(new RegExp(re.source, flags))].length;
+  };
   return {
     thaana: (count(/[\u0780-\u07BF]/g) / total) * 100,
     latin: (count(/[a-zA-Z]/g) / total) * 100,

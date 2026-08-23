@@ -1,0 +1,311 @@
+[
+  {
+    "latin": "izzathery",
+    "thaana": "ޢިއްޒަތްތެރި",
+    "english": [
+      "Honourable",
+      "Excellency"
+    ],
+    "register": "reverential",
+    "kind": "title",
+    "plainForm": null
+  },
+  {
+    "latin": "manikufaanu",
+    "thaana": "މަނިކުފާނު",
+    "english": [
+      "Sir",
+      "His Excellency"
+    ],
+    "register": "reverential",
+    "kind": "title",
+    "plainForm": null
+  },
+  {
+    "latin": "ekamanaa",
+    "thaana": "އެކަމަނާ",
+    "english": [
+      "Her Excellency",
+      "Madam"
+    ],
+    "register": "reverential",
+    "kind": "title",
+    "plainForm": null
+  },
+  {
+    "latin": "beyfulhaa",
+    "thaana": "ބޭފުޅާ",
+    "english": [
+      "respected person",
+      "Sir",
+      "Madam"
+    ],
+    "register": "respectful",
+    "kind": "title",
+    "plainForm": null
+  },
+  {
+    "latin": "fadheelathushshaikh",
+    "thaana": "ފަޟީލަތުއްޝައިޚް",
+    "english": [
+      "His Eminence",
+      "respected Sheikh"
+    ],
+    "register": "reverential",
+    "kind": "title",
+    "plainForm": null
+  },
+  {
+    "latin": "usthaadhu",
+    "thaana": "އުސްތާޛް",
+    "english": [
+      "learned scholar",
+      "professor"
+    ],
+    "register": "respectful",
+    "kind": "title",
+    "plainForm": null
+  },
+  {
+    "latin": "kaleygefaanu",
+    "thaana": "ކަލޭގެފާނު",
+    "english": [
+      "Sire",
+      "my Lord"
+    ],
+    "register": "reverential",
+    "kind": "title",
+    "plainForm": null
+  },
+  {
+    "latin": "saahibu",
+    "thaana": "ސާހިބު",
+    "english": [
+      "master",
+      "lord"
+    ],
+    "register": "respectful",
+    "kind": "title",
+    "plainForm": null
+  },
+  {
+    "latin": "saahibaa",
+    "thaana": "ސާހިބާ",
+    "english": [
+      "master",
+      "lord"
+    ],
+    "register": "respectful",
+    "kind": "title",
+    "plainForm": null
+  },
+  {
+    "latin": "emanikufaanu",
+    "thaana": "އެމަނިކުފާނު",
+    "english": [
+      "he (reverential)",
+      "His Excellency"
+    ],
+    "register": "reverential",
+    "kind": "pronoun3",
+    "plainForm": "eyna"
+  },
+  {
+    "latin": "thiyabeyfulhaa",
+    "thaana": "ތިޔަބޭފުޅާ",
+    "english": [
+      "you (respectful)"
+    ],
+    "register": "respectful",
+    "kind": "pronoun2",
+    "plainForm": "kaley"
+  },
+  {
+    "latin": "ebeyfulhaa",
+    "thaana": "އެބޭފުޅާ",
+    "english": [
+      "he",
+      "she (respectful)"
+    ],
+    "register": "respectful",
+    "kind": "pronoun3",
+    "plainForm": "eyna"
+  },
+  {
+    "latin": "kaley",
+    "thaana": "ކަލޭ",
+    "english": [
+      "you"
+    ],
+    "register": "informal",
+    "kind": "pronoun2",
+    "plainForm": null
+  },
+  {
+    "latin": "thibaa",
+    "thaana": "ތިބާ",
+    "english": [
+      "you"
+    ],
+    "register": "informal",
+    "kind": "pronoun2",
+    "plainForm": null
+  },
+  {
+    "latin": "eyna",
+    "thaana": "އޭނާ",
+    "english": [
+      "he",
+      "she"
+    ],
+    "register": "informal",
+    "kind": "pronoun3",
+    "plainForm": null
+  },
+  {
+    "latin": "emeehun",
+    "thaana": "އެމީހުން",
+    "english": [
+      "they"
+    ],
+    "register": "informal",
+    "kind": "pronoun3",
+    "plainForm": null
+  },
+  {
+    "latin": "vidhaalhuvun",
+    "thaana": "ވިދާޅުވުން",
+    "english": [
+      "to say",
+      "to speak"
+    ],
+    "register": "reverential",
+    "kind": "verb",
+    "plainForm": "bunun"
+  },
+  {
+    "latin": "vadaigathun",
+    "thaana": "ވަޑައިގަތުން",
+    "english": [
+      "to go",
+      "to come"
+    ],
+    "register": "reverential",
+    "kind": "verb",
+    "plainForm": "dhiyun"
+  },
+  {
+    "latin": "farikkulhuvvun",
+    "thaana": "ފަރިއްކުޅުއްވުން",
+    "english": [
+      "to eat"
+    ],
+    "register": "reverential",
+    "kind": "verb",
+    "plainForm": "keun"
+  },
+  {
+    "latin": "avahaarafulhu leppevun",
+    "thaana": "އަވަހާރަފުޅު ލެއްޕެވުން",
+    "english": [
+      "to sleep"
+    ],
+    "register": "reverential",
+    "kind": "verb",
+    "plainForm": "nidhun"
+  },
+  {
+    "latin": "bellevun",
+    "thaana": "ބެއްލެވުން",
+    "english": [
+      "to look",
+      "to examine"
+    ],
+    "register": "reverential",
+    "kind": "verb",
+    "plainForm": "belun"
+  },
+  {
+    "latin": "engivadaigathun",
+    "thaana": "އެނގިވަޑައިގަތުން",
+    "english": [
+      "to know",
+      "to understand"
+    ],
+    "register": "reverential",
+    "kind": "verb",
+    "plainForm": "engun"
+  },
+  {
+    "latin": "avahaaravun",
+    "thaana": "އަވަހާރަވުން",
+    "english": [
+      "to pass away"
+    ],
+    "register": "reverential",
+    "kind": "verb",
+    "plainForm": "maruvun"
+  },
+  {
+    "latin": "nanfulhu",
+    "thaana": "ނަންފުޅު",
+    "english": [
+      "name (honorific)"
+    ],
+    "register": "respectful",
+    "kind": "noun_hon",
+    "plainForm": "nan"
+  },
+  {
+    "latin": "ismufulhu",
+    "thaana": "އިސްމުފުޅު",
+    "english": [
+      "name (honorific)"
+    ],
+    "register": "respectful",
+    "kind": "noun_hon",
+    "plainForm": "ismu"
+  },
+  {
+    "latin": "gekolhu",
+    "thaana": "ގެކޮޅު",
+    "english": [
+      "house (honorific)"
+    ],
+    "register": "respectful",
+    "kind": "noun_hon",
+    "plainForm": "ge"
+  },
+  {
+    "latin": "dharifulhu",
+    "thaana": "ދަރިފުޅު",
+    "english": [
+      "son",
+      "daughter (respectful)"
+    ],
+    "register": "respectful",
+    "kind": "noun_hon",
+    "plainForm": "dhari"
+  },
+  {
+    "latin": "hithpulhu",
+    "thaana": "ހިތްޕުޅު",
+    "english": [
+      "heart",
+      "mind (honorific)"
+    ],
+    "register": "respectful",
+    "kind": "noun_hon",
+    "plainForm": "hiy"
+  },
+  {
+    "latin": "siteefulhu",
+    "thaana": "ސިޓީފުޅު",
+    "english": [
+      "letter (honorific)"
+    ],
+    "register": "respectful",
+    "kind": "noun_hon",
+    "plainForm": "sitee"
+  }
+]

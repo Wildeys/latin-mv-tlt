@@ -42,6 +42,9 @@ export function extractDvFrame(words: string[], lookups: WordTranslation[]): Sem
     if (surface.startsWith('nu') && surface.length > 3) {
       frame.polarity = 'negative';
     }
+    if (surface.endsWith('anan') || surface.endsWith('vaane')) {
+      frame.tense = 'future';
+    }
 
     if (!frame.subject && (SUBJECT_LATIN.has(latin) || /^(i|he|she|we|they|you)$/i.test(gloss))) {
       frame.subject = unknown ? latin : gloss;
@@ -62,10 +65,10 @@ export function extractDvFrame(words: string[], lookups: WordTranslation[]): Sem
       continue;
     }
 
-    const tense = foldTense(suffixes, parsed.tense);
+    const tense = foldTense(suffixes, parsed.tense) ?? (surface.endsWith('anan') ? 'future' : null);
     const looksVerbal =
       Boolean(tense) ||
-      /un$|aan$|ee$|ey$|jje$/.test(surface) ||
+      /un$|anan$|aan$|ee$|ey$|jje$/.test(surface) ||
       lookup?.translations[0]?.pos === 'verb';
     if (!frame.action && looksVerbal) {
       frame.action = unknown ? (lookup?.stem || latin) : gloss.split(' ')[0];

@@ -1,7 +1,8 @@
 import type { RealizationResult, RealizationStatus } from './types';
 
-const EN_MODEL = (import.meta.env.VITE_EN_REALIZE_MODEL as string | undefined) || '';
-const DV_MODEL = (import.meta.env.VITE_DV_REALIZE_MODEL as string | undefined) || '';
+const env = (import.meta as ImportMeta & { env?: Record<string, string> }).env ?? {};
+const EN_MODEL = env.VITE_EN_REALIZE_MODEL || '';
+const DV_MODEL = env.VITE_DV_REALIZE_MODEL || '';
 
 type Generator = (text: string) => Promise<string>;
 

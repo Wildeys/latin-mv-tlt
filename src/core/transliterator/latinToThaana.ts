@@ -27,7 +27,9 @@ const CORE_LATIN_TO_THAANA: [string, string][] = [
 ];
 
 const LATIN_TO_THAANA_VOWELS: Record<string, string> = Object.fromEntries(
-  Object.entries(THAANA_VOWELS).filter(([, v]) => v),
+  Object.entries(THAANA_VOWELS)
+    .filter(([, latin]) => latin)
+    .map(([thaana, latin]) => [latin, thaana]),
 );
 
 const SUKUN = 'ް';

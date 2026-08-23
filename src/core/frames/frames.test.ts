@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { extractEnFrame } from './extractEn';
+import { extractDvFrame } from './extractDv';
 import { serializeFrame } from './serialize';
 import { mapEnglishFrameToLatin } from './mapSlots';
-import { loadDictionaryFromData } from '../dictionary/lookup';
+import { loadDictionaryFromData, translateWord } from '../dictionary/lookup';
 
 describe('English frame extractor', () => {
   it('extracts I will go to Malé', () => {
@@ -20,6 +21,20 @@ describe('English frame extractor', () => {
     const frame = extractEnFrame('I did not go to Malé.');
     expect(frame.polarity).toBe('negative');
     expect(frame.action).toBe('go');
+  });
+});
+
+describe('Dhivehi frame extractor', () => {
+  it('fills subject, location, action, and future for the demo sentence', () => {
+    loadDictionaryFromData([]);
+    const words = ['aharen', 'maale', 'dhaanan'];
+    const lookups = words.map((w) => translateWord(w, 'dhivehi'));
+    const frame = extractDvFrame(words, lookups);
+    expect(frame.subject).toBe('I');
+    expect(frame.location).toBe('Malé');
+    expect(frame.action).toBe('go');
+    expect(frame.tense).toBe('future');
+    expect(frame.residue).toEqual([]);
   });
 });
 

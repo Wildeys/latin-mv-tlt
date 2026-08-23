@@ -17,6 +17,7 @@ describe('pipelines without a realization model', () => {
     expect(trace.latin.toLowerCase()).toContain('aharen');
     expect(trace.frameString).toBeTruthy();
     expect(trace.englishFrame.subject).toBeTruthy();
+    expect(trace.englishFrame.location || trace.englishFrame.action || trace.englishFrame.residue.length).toBeTruthy();
     expect(trace.realization.status).toBe('not_loaded');
     expect(trace.output).toBeNull();
     expect(trace.stages.final).toBe('unavailable');

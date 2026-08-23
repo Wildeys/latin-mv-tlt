@@ -62,6 +62,7 @@ export const STEM_SUFFIXES: [string, string][] = [
   ['kollun', ''],
   ['kolli', ''],
   ['koh', ''],
+  ['anan', ''],
   ['fulhun', ''],
   ['fulhu', ''],
   ['eve', ''],
