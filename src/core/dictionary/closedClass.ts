@@ -46,7 +46,6 @@ export const LATIN_TO_ENGLISH: Record<string, string> = {
   ann: 'come',
   male: 'Malé',
   maale: 'Malé',
-  dhaanan: 'go',
   miadhu: 'today',
   iyye: 'yesterday',
   fen: 'water',
