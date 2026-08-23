@@ -1,0 +1,25 @@
+{
+  "notes": "Starter gold set. Expand to 20–30 per direction before claiming BLEU/chrF.",
+  "dv_en": [
+    {
+      "source": "އަހަރެން މާލެ ދ�en": [
+    {
+      "source": "އަހަރެން މާލެ ދާނަން",
+      "reference": "I will go to Malé."
+    },
+    {
+      "source": "އަހަރެން ފެން ބޯން",
+      "reference": "I drink water."
+    }
+  ],
+  "en_dv": [
+    {
+      "source": "I will go to Malé.",
+      "reference": "އަހަރެން މާލެ ދާނަން"
+    },
+    {
+      "source": "I drink water.",
+      "reference": "އަހަރެން ފެން ބޯން"
+    }
+  ]
+}

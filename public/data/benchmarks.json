@@ -1,0 +1,15 @@
+{
+  "notes": "Fill values only after a script has measured them on this pipeline. Tokenization figures from dhivehi-latin-slm are supporting research, not the main claim.",
+  "metrics": [
+    { "group": "TRANSLITERATION", "name": "Thaana → Latin accuracy", "value": "not measured on this repo yet", "source": "pending" },
+    { "group": "SEGMENTATION", "name": "Subject detection", "value": "not measured", "source": "pending" },
+    { "group": "SEGMENTATION", "name": "Action detection", "value": "not measured", "source": "pending" },
+    { "group": "SEGMENTATION", "name": "Location detection", "value": "not measured", "source": "pending" },
+    { "group": "TRANSLATION", "name": "BLEU", "value": "not measured — gold set still small", "source": "evaluation/gold_sentences.json" },
+    { "group": "TRANSLATION", "name": "chrF", "value": "not measured — gold set still small", "source": "evaluation/gold_sentences.json" },
+    { "group": "REALIZATION", "name": "Before model", "value": "Unavailable (by design)", "source": "T5-only rule" },
+    { "group": "REALIZATION", "name": "After model", "value": "not measured — model not exported", "source": "pending" },
+    { "group": "HUMAN EVALUATION", "name": "Meaning", "value": "no ratings yet", "source": "Feedback store" },
+    { "group": "HUMAN EVALUATION", "name": "Fluency", "value": "no ratings yet", "source": "Feedback store" }
+  ]
+}
