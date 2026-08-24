@@ -12,6 +12,14 @@ __pycache__
 models/
 data/realize/*.jsonl
 !data/realize/.gitkeep
+models/
+*.onnx
+*.safetensors
+*.pt
+*.bin
+.env
+.env.local
+dist/
 
 # local backups made by tools/clean_dictionary.py runs
 tools/*.backup.json
