@@ -1,0 +1,605 @@
+[
+  {
+    "latin": "aharen",
+    "dhivehi": "އަހަރެން",
+    "english": [
+      "I"
+    ],
+    "pos": "pronoun",
+    "frequency": 500
+  },
+  {
+    "latin": "aharenge",
+    "dhivehi": "އަހަރެންގެ",
+    "english": [
+      "my"
+    ],
+    "pos": "pronoun",
+    "frequency": 200
+  },
+  {
+    "latin": "aharemen",
+    "dhivehi": "އަހަރެމެން",
+    "english": [
+      "we"
+    ],
+    "pos": "pronoun",
+    "frequency": 200
+  },
+  {
+    "latin": "ahah",
+    "dhivehi": "އަހަސް",
+    "english": [
+      "to me"
+    ],
+    "pos": "pronoun",
+    "frequency": 80
+  },
+  {
+    "latin": "kaley",
+    "dhivehi": "ކަލޭ",
+    "english": [
+      "you"
+    ],
+    "pos": "pronoun",
+    "frequency": 300
+  },
+  {
+    "latin": "eyna",
+    "dhivehi": "އޭނާ",
+    "english": [
+      "he",
+      "she"
+    ],
+    "pos": "pronoun",
+    "frequency": 300
+  },
+  {
+    "latin": "emeehun",
+    "dhivehi": "އެމީހުން",
+    "english": [
+      "they"
+    ],
+    "pos": "pronoun",
+    "frequency": 200
+  },
+  {
+    "latin": "thimaa",
+    "dhivehi": "ތިމާ",
+    "english": [
+      "self"
+    ],
+    "pos": "pronoun",
+    "frequency": 80
+  },
+  {
+    "latin": "thimange",
+    "dhivehi": "ތިމަންގެ",
+    "english": [
+      "own"
+    ],
+    "pos": "pronoun",
+    "frequency": 80
+  },
+  {
+    "latin": "thibaa",
+    "dhivehi": "ތިބާ",
+    "english": [
+      "you"
+    ],
+    "pos": "pronoun",
+    "frequency": 80
+  },
+  {
+    "latin": "mi",
+    "dhivehi": "މި",
+    "english": [
+      "this"
+    ],
+    "pos": "pronoun",
+    "frequency": 400
+  },
+  {
+    "latin": "e",
+    "dhivehi": "އެ",
+    "english": [
+      "that"
+    ],
+    "pos": "pronoun",
+    "frequency": 400
+  },
+  {
+    "latin": "ey",
+    "dhivehi": "އޭ",
+    "english": [
+      "that"
+    ],
+    "pos": "pronoun",
+    "frequency": 200
+  },
+  {
+    "latin": "thi",
+    "dhivehi": "ތި",
+    "english": [
+      "that"
+    ],
+    "pos": "pronoun",
+    "frequency": 80
+  },
+  {
+    "latin": "thiya",
+    "dhivehi": "ތިވަ",
+    "english": [
+      "that"
+    ],
+    "pos": "pronoun",
+    "frequency": 80
+  },
+  {
+    "latin": "ek",
+    "dhivehi": "އެއް",
+    "english": [
+      "one"
+    ],
+    "pos": "numeral",
+    "frequency": 200
+  },
+  {
+    "latin": "kon",
+    "dhivehi": "ކޮން",
+    "english": [
+      "which",
+      "what"
+    ],
+    "pos": "pronoun",
+    "frequency": 80
+  },
+  {
+    "latin": "nu",
+    "dhivehi": "ނު",
+    "english": [
+      "not"
+    ],
+    "pos": "particle",
+    "frequency": 400
+  },
+  {
+    "latin": "neth",
+    "dhivehi": "ނެތް",
+    "english": [
+      "there is not"
+    ],
+    "pos": "particle",
+    "frequency": 150
+  },
+  {
+    "latin": "noonee",
+    "dhivehi": "ނޫނީ",
+    "english": [
+      "if not",
+      "or"
+    ],
+    "pos": "particle",
+    "frequency": 80
+  },
+  {
+    "latin": "eve",
+    "dhivehi": "އެވެ",
+    "english": [
+      "they say"
+    ],
+    "pos": "particle",
+    "frequency": 500
+  },
+  {
+    "latin": "ves",
+    "dhivehi": "ވެސް",
+    "english": [
+      "also"
+    ],
+    "pos": "particle",
+    "frequency": 200
+  },
+  {
+    "latin": "namaves",
+    "dhivehi": "ނަމަވެސް",
+    "english": [
+      "although"
+    ],
+    "pos": "particle",
+    "frequency": 80
+  },
+  {
+    "latin": "iru",
+    "dhivehi": "އިރު",
+    "english": [
+      "when"
+    ],
+    "pos": "particle",
+    "frequency": 120
+  },
+  {
+    "latin": "maa",
+    "dhivehi": "މާ",
+    "english": [
+      "when"
+    ],
+    "pos": "particle",
+    "frequency": 80
+  },
+  {
+    "latin": "gai",
+    "dhivehi": "ގައި",
+    "english": [
+      "in",
+      "on",
+      "at"
+    ],
+    "pos": "particle",
+    "frequency": 400
+  },
+  {
+    "latin": "ah",
+    "dhivehi": "އަސް",
+    "english": [
+      "to"
+    ],
+    "pos": "particle",
+    "frequency": 300
+  },
+  {
+    "latin": "ge",
+    "dhivehi": "ގެ",
+    "english": [
+      "house",
+      "home"
+    ],
+    "pos": "noun",
+    "frequency": 300
+  },
+  {
+    "latin": "male",
+    "dhivehi": "މާލެ",
+    "english": [
+      "Malé"
+    ],
+    "pos": "noun",
+    "frequency": 300
+  },
+  {
+    "latin": "maale",
+    "dhivehi": "މާލެ",
+    "english": [
+      "Malé"
+    ],
+    "pos": "noun",
+    "frequency": 200
+  },
+  {
+    "latin": "raajje",
+    "dhivehi": "ރާއްޖެ",
+    "english": [
+      "Maldives"
+    ],
+    "pos": "noun",
+    "frequency": 250
+  },
+  {
+    "latin": "addu",
+    "dhivehi": "އައްޑޫ",
+    "english": [
+      "Addu"
+    ],
+    "pos": "noun",
+    "frequency": 120
+  },
+  {
+    "latin": "hulhumale",
+    "dhivehi": "ހުޅުމާލެ",
+    "english": [
+      "Hulhumalé"
+    ],
+    "pos": "noun",
+    "frequency": 80
+  },
+  {
+    "latin": "miadhu",
+    "dhivehi": "މިއަދު",
+    "english": [
+      "today"
+    ],
+    "pos": "adverb",
+    "frequency": 200
+  },
+  {
+    "latin": "iyye",
+    "dhivehi": "އިއްވެ",
+    "english": [
+      "yesterday"
+    ],
+    "pos": "adverb",
+    "frequency": 150
+  },
+  {
+    "latin": "maadhamaa",
+    "dhivehi": "މާދަމާ",
+    "english": [
+      "tomorrow"
+    ],
+    "pos": "adverb",
+    "frequency": 150
+  },
+  {
+    "latin": "adhu",
+    "dhivehi": "އަދު",
+    "english": [
+      "now"
+    ],
+    "pos": "adverb",
+    "frequency": 120
+  },
+  {
+    "latin": "fahun",
+    "dhivehi": "ފަހުން",
+    "english": [
+      "later"
+    ],
+    "pos": "adverb",
+    "frequency": 80
+  },
+  {
+    "latin": "dhaa",
+    "dhivehi": "ދާ",
+    "english": [
+      "go"
+    ],
+    "pos": "verb",
+    "frequency": 250
+  },
+  {
+    "latin": "dhaanan",
+    "dhivehi": "ދާނަން",
+    "english": [
+      "go"
+    ],
+    "pos": "verb",
+    "frequency": 120
+  },
+  {
+    "latin": "dhiya",
+    "dhivehi": "ދިވަ",
+    "english": [
+      "go"
+    ],
+    "pos": "verb",
+    "frequency": 150
+  },
+  {
+    "latin": "ann",
+    "dhivehi": "އަން",
+    "english": [
+      "come"
+    ],
+    "pos": "verb",
+    "frequency": 200
+  },
+  {
+    "latin": "annan",
+    "dhivehi": "އަންނަން",
+    "english": [
+      "come"
+    ],
+    "pos": "verb",
+    "frequency": 80
+  },
+  {
+    "latin": "ulee",
+    "dhivehi": "އުޅޭ",
+    "english": [
+      "live",
+      "exist"
+    ],
+    "pos": "verb",
+    "frequency": 150
+  },
+  {
+    "latin": "ulhun",
+    "dhivehi": "އުޅުން",
+    "english": [
+      "live"
+    ],
+    "pos": "verb",
+    "frequency": 120
+  },
+  {
+    "latin": "huri",
+    "dhivehi": "ހުރި",
+    "english": [
+      "was",
+      "remained"
+    ],
+    "pos": "verb",
+    "frequency": 150
+  },
+  {
+    "latin": "vanee",
+    "dhivehi": "ވަނީ",
+    "english": [
+      "is"
+    ],
+    "pos": "verb",
+    "frequency": 200
+  },
+  {
+    "latin": "fen",
+    "dhivehi": "ފެން",
+    "english": [
+      "water"
+    ],
+    "pos": "noun",
+    "frequency": 200
+  },
+  {
+    "latin": "meehu",
+    "dhivehi": "މީހު",
+    "english": [
+      "person"
+    ],
+    "pos": "noun",
+    "frequency": 200
+  },
+  {
+    "latin": "meehun",
+    "dhivehi": "މީހުން",
+    "english": [
+      "people"
+    ],
+    "pos": "noun",
+    "frequency": 200
+  },
+  {
+    "latin": "bunun",
+    "dhivehi": "ބުނުން",
+    "english": [
+      "say"
+    ],
+    "pos": "verb",
+    "frequency": 150
+  },
+  {
+    "latin": "keun",
+    "dhivehi": "ކެއުން",
+    "english": [
+      "eat"
+    ],
+    "pos": "verb",
+    "frequency": 120
+  },
+  {
+    "latin": "belun",
+    "dhivehi": "ބެލުން",
+    "english": [
+      "look",
+      "see"
+    ],
+    "pos": "verb",
+    "frequency": 120
+  },
+  {
+    "latin": "engun",
+    "dhivehi": "އެނޮގުން",
+    "english": [
+      "know"
+    ],
+    "pos": "verb",
+    "frequency": 120
+  },
+  {
+    "latin": "bonun",
+    "dhivehi": "ބޮނުން",
+    "english": [
+      "drink"
+    ],
+    "pos": "verb",
+    "frequency": 80
+  },
+  {
+    "latin": "gann",
+    "dhivehi": "ގަން",
+    "english": [
+      "take"
+    ],
+    "pos": "verb",
+    "frequency": 80
+  },
+  {
+    "latin": "gathun",
+    "dhivehi": "ގަތުން",
+    "english": [
+      "buy"
+    ],
+    "pos": "verb",
+    "frequency": 80
+  },
+  {
+    "latin": "hingun",
+    "dhivehi": "ހިންގުން",
+    "english": [
+      "walk"
+    ],
+    "pos": "verb",
+    "frequency": 80
+  },
+  {
+    "latin": "dhinun",
+    "dhivehi": "ދިނުން",
+    "english": [
+      "give"
+    ],
+    "pos": "verb",
+    "frequency": 80
+  },
+  {
+    "latin": "nidun",
+    "dhivehi": "ނިދުން",
+    "english": [
+      "sleep"
+    ],
+    "pos": "verb",
+    "frequency": 80
+  },
+  {
+    "latin": "hoadhun",
+    "dhivehi": "ހޯދަން",
+    "english": [
+      "find"
+    ],
+    "pos": "verb",
+    "frequency": 80
+  },
+  {
+    "latin": "kiyun",
+    "dhivehi": "ކިވުން",
+    "english": [
+      "read"
+    ],
+    "pos": "verb",
+    "frequency": 80
+  },
+  {
+    "latin": "liyun",
+    "dhivehi": "ލިވުން",
+    "english": [
+      "write"
+    ],
+    "pos": "verb",
+    "frequency": 80
+  },
+  {
+    "latin": "kei",
+    "dhivehi": "ކެއް",
+    "english": [
+      "food"
+    ],
+    "pos": "noun",
+    "frequency": 80
+  },
+  {
+    "latin": "foiy",
+    "dhivehi": "ފޮވް",
+    "english": [
+      "book"
+    ],
+    "pos": "noun",
+    "frequency": 80
+  },
+  {
+    "latin": "mas",
+    "dhivehi": "މަސް",
+    "english": [
+      "fish"
+    ],
+    "pos": "noun",
+    "frequency": 80
+  }
+]

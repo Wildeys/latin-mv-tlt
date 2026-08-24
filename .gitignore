@@ -12,3 +12,6 @@ __pycache__
 models/
 data/realize/*.jsonl
 !data/realize/.gitkeep
+
+# local backups made by tools/clean_dictionary.py runs
+tools/*.backup.json

@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { translateDvToEn, translateEnToDv } from '../../core/pipeline';
+import { hasThaana } from '../../core/segmenter/textProcessor';
 import { completeEnglish } from '../../llm/adapter';
 import { loadSettings, saveSettings } from '../../llm/storage';
 import type { ChatMessage, LlmSettings } from '../../llm/types';
+import { useThaanaIme } from '../hooks/useThaanaIme';
 
 export default function Chat() {
   const [settings, setSettings] = useState<LlmSettings>(loadSettings);
@@ -11,6 +13,7 @@ export default function Chat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const ime = useThaanaIme(true);
 
   function persist(next: LlmSettings) {
     setSettings(next);
@@ -20,21 +23,36 @@ export default function Chat() {
   async function send() {
     const text = draft.trim();
     if (!text || busy) return;
+    if (!settings.apiKey && settings.provider === 'api') {
+      setError('No API key. Open Model settings, or use the Translator without an LLM.');
+      return;
+    }
     setBusy(true);
     setError(null);
     setDraft('');
-    const user: ChatMessage = { id: crypto.randomUUID(), role: 'user', thaana: text };
-    setMessages((m) => [...m, user]);
+    ime.reset();
+    const userId = crypto.randomUUID();
+    const userMsg: ChatMessage = {
+      id: userId,
+      role: 'user',
+      thaana: hasThaana(text) ? text : undefined,
+      latin: hasThaana(text) ? undefined : text,
+    };
+    setMessages((m) => [...m, userMsg]);
     try {
       const inbound = await translateDvToEn(text);
       const englishIn = inbound.available
-        ? inbound.output!
+        ? (inbound.output ?? '')
         : inbound.traces.map((t) => t.frameString).join('\n');
-      user.english = englishIn;
+      const inboundLatin = inbound.traces.map((t) => t.latin).filter(Boolean).join(' ');
+      setMessages((m) =>
+        m.map((msg) =>
+          msg.id === userId
+            ? { ...msg, english: englishIn, latin: inboundLatin || msg.latin }
+            : msg,
+        ),
+      );
 
-      if (!settings.apiKey && settings.provider === 'api') {
-        throw new Error('No API key. Open Model settings, or use the Translator without an LLM.');
-      }
       if (!inbound.available) {
         throw new Error(
           'Realization model is not loaded, so there is no fluent English to send to an LLM. Use Translator / Breakdown to inspect the frame.',
@@ -47,7 +65,8 @@ export default function Chat() {
         id: crypto.randomUUID(),
         role: 'assistant',
         english: englishOut,
-        thaana: outbound.available ? outbound.output! : undefined,
+        thaana: outbound.available ? (outbound.output ?? undefined) : undefined,
+        latin: outbound.traces.map((t) => t.latin).filter(Boolean).join(' ') || undefined,
       };
       setMessages((m) => [...m, assistant]);
     } catch (err) {
@@ -68,8 +87,9 @@ export default function Chat() {
       <div className="flex-1 overflow-y-auto space-y-3 rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-white dark:bg-slate-900">
         {messages.length === 0 && (
           <p className="text-sm text-slate-500">
-            Type Dhivehi. The translator produces English, an optional LLM replies in English, then the reverse
-            pipeline returns Dhivehi. Without a realization model, Chat will refuse rather than invent a sentence.
+            Type Male Latin (aharen). It converts to Thaana. The translator produces English, an optional LLM replies in
+            English, then the reverse pipeline returns Thaana. Without a realization model, Chat will refuse rather than
+            invent a sentence.
           </p>
         )}
         {messages.map((msg) => (
@@ -79,9 +99,10 @@ export default function Chat() {
                 msg.role === 'user' ? 'bg-brand-600 text-white' : 'bg-slate-100 dark:bg-slate-800'
               }`}
             >
-              {msg.thaana && (
-                <p className="font-thaana text-base" dir="rtl">
-                  {msg.thaana}
+              {msg.thaana && <p className="font-thaana">{msg.thaana}</p>}
+              {msg.latin && (
+                <p className={`text-xs mt-1 font-mono ${msg.thaana ? 'opacity-80' : ''}`}>
+                  {msg.thaana ? `Latin: ${msg.latin}` : msg.latin}
                 </p>
               )}
               {msg.english && <p className="text-xs opacity-80 mt-1">{msg.english}</p>}
@@ -93,10 +114,13 @@ export default function Chat() {
       <div className="mt-3 flex gap-2">
         <input
           value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && send()}
-          placeholder="މިތަނުގައި ލިޔޭ..."
-          dir="rtl"
+          onChange={(e) => ime.onChange(e, draft, setDraft)}
+          onKeyDown={(e) => {
+            ime.onKeyDown(e, draft, setDraft);
+            if (e.key === 'Enter' && !e.nativeEvent.isComposing) send();
+          }}
+          onBeforeInput={(e) => ime.onBeforeInput(e, draft, setDraft)}
+          placeholder="Type Male Latin (aharen)..."
           className="flex-1 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 font-thaana"
         />
         <button

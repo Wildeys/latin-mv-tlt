@@ -11,20 +11,34 @@ export default function Benchmarks() {
   const stats = getDictionaryStats();
 
   useEffect(() => {
-    fetch('./data/benchmarks.json')
+    const controller = new AbortController();
+    fetch('./data/benchmarks.json', { signal: controller.signal })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => setFile(data as BenchmarksFile | null))
       .catch(() => setFile(null));
+    return () => controller.abort();
   }, []);
 
+  // Only render counters the stats file actually carries. The Thaana count is
+  // gone: the shipped lexicon is Latin only (Context/LATIN-CORE.md).
+  const liveKeys: Array<[string, string]> = [
+    ['rawDbRows', 'Raw DB rows'],
+    ['uniqueLatin', 'Unique Latin'],
+    ['entriesWithEnglish', 'Entries with English'],
+    ['finalExportedEntries', 'Final exported entries'],
+    ['invertedFlipped', 'Inverted rows repaired'],
+    ['quarantined', 'Rows quarantined'],
+    ['keysRecovered', 'Lookup keys recovered'],
+  ];
   const live = stats
-    ? [
-        { group: 'DICTIONARY', name: 'Raw DB rows', value: String(stats.rawDbRows), source: 'export script' },
-        { group: 'DICTIONARY', name: 'Unique Thaana', value: String(stats.uniqueThaana), source: 'export script' },
-        { group: 'DICTIONARY', name: 'Unique Latin', value: String(stats.uniqueLatin), source: 'export script' },
-        { group: 'DICTIONARY', name: 'Entries with English', value: String(stats.entriesWithEnglish), source: 'export script' },
-        { group: 'DICTIONARY', name: 'Final exported entries', value: String(stats.finalExportedEntries), source: 'export script' },
-      ]
+    ? liveKeys
+        .filter(([key]) => stats[key] !== undefined)
+        .map(([key, name]) => ({
+          group: 'DICTIONARY',
+          name,
+          value: String(stats[key]),
+          source: 'build script',
+        }))
     : [];
 
   const rows = [...live, ...(file?.metrics ?? [])];

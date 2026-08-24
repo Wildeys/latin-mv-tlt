@@ -15,7 +15,6 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        thaana: ['"Noto Sans Thaana"', 'Inter', 'sans-serif'],
       },
     },
   },

@@ -25,8 +25,11 @@ export function mapEnglishFrameToLatin(frame: SemanticFrame): SemanticFrame {
     time: mapValue(frame.time),
     manner: mapValue(frame.manner),
     reason: mapValue(frame.reason),
-    tense: frame.tense && TENSE_KEEP.has(frame.tense) ? frame.tense : frame.tense,
+    // Both branches used to be `frame.tense`, which made TENSE_KEEP dead and
+    // let an unrecognised tense through into the model input.
+    tense: frame.tense && TENSE_KEEP.has(frame.tense) ? frame.tense : null,
     polarity: frame.polarity,
+    register: frame.register,
     residue: frame.residue.map((token) => mapValue(token) ?? token),
   };
 }

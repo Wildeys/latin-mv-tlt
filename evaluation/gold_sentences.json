@@ -1,24 +1,47 @@
 {
-  "notes": "Starter gold set. Expand to 20-30 per direction before claiming BLEU/chrF.",
+  "notes": "Gold set for both directions. Evaluation data is Latin-only (see Context/LATIN-CORE.md). Surface forms follow the same conventions as data/realize: lowercase Dhivehi, dative -ah for goals, locative -gai for statives, plain ASCII place names. The two directions are deliberately NOT mirrors of each other. BLEU/chrF stay unmeasured until a realization checkpoint exists.",
   "dv_en": [
-    {
-      "source": "aharen male dhaanan",
-      "source_thaana": "use latin_to_thaana in the app",
-      "reference": "I will go to Male."
-    },
-    {
-      "source": "aharen fen bonun",
-      "reference": "I drink water."
-    }
+    { "source": "aharen maleah dhaanan", "reference": "I will go to Male." },
+    { "source": "aharen fen bonan", "reference": "I will drink water." },
+    { "source": "eyna malegai ulee", "reference": "He lives in Male." },
+    { "source": "aharen geah annan", "reference": "I will come home." },
+    { "source": "kaley maadhamaa annan", "reference": "You will come tomorrow." },
+    { "source": "aharen maleah nu dhaanan", "reference": "I will not go to Male." },
+    { "source": "emeehun malegai nu ulee", "reference": "They do not live in Male." },
+    { "source": "aharen iyye dhiya", "reference": "I went yesterday." },
+    { "source": "aharemen raajjeah dhaanan", "reference": "We will go to the Maldives." },
+    { "source": "eyna mas key", "reference": "He eats fish." },
+    { "source": "aharen foiy kiyan", "reference": "I will read the book." },
+    { "source": "kaley gegai huri", "reference": "You were at home." },
+    { "source": "aharen adduah dhiya", "reference": "I went to Addu." },
+    { "source": "emeehun hulhumaleah dhaanan", "reference": "They will go to Hulhumale." },
+    { "source": "aharen miadhu nu dhaa", "reference": "I do not go today." },
+    { "source": "eyna geah nu annan", "reference": "She will not come home." },
+    { "source": "aharemen kei gathan", "reference": "We will buy food." },
+    { "source": "aharen sai bonan", "reference": "I will drink tea." },
+    { "source": "eyna maleah dhiya eve", "reference": "He went to Male." },
+    { "source": "kaley foiy liyan", "reference": "You will write the book." }
   ],
   "en_dv": [
-    {
-      "source": "I will go to Male.",
-      "reference": "aharen male dhaanan"
-    },
-    {
-      "source": "I drink water.",
-      "reference": "aharen fen bonun"
-    }
+    { "source": "I will go to Male.", "reference": "aharen maleah dhaanan" },
+    { "source": "I drink water.", "reference": "aharen fen boni" },
+    { "source": "They live in Male.", "reference": "emeehun malegai ulee" },
+    { "source": "We came home.", "reference": "aharemen geah ai" },
+    { "source": "You will come later.", "reference": "kaley fahun annan" },
+    { "source": "I will not eat fish.", "reference": "aharen mas nu keyan" },
+    { "source": "He did not see the house.", "reference": "eyna ge nu belifi" },
+    { "source": "I was in Male.", "reference": "aharen malegai huri" },
+    { "source": "She lives in the Maldives.", "reference": "eyna raajjegai ulee" },
+    { "source": "They said yesterday.", "reference": "emeehun iyye bunefi" },
+    { "source": "I will find the book.", "reference": "aharen foiy hoadhan" },
+    { "source": "We know the people.", "reference": "aharemen meehun engan" },
+    { "source": "You go to Male.", "reference": "kaley maleah dhaa" },
+    { "source": "I will come tomorrow.", "reference": "aharen maadhamaa annan" },
+    { "source": "He will eat today.", "reference": "eyna miadhu keyan" },
+    { "source": "I drink water now.", "reference": "aharen adhu fen boni" },
+    { "source": "They take water.", "reference": "emeehun fen gann" },
+    { "source": "I will buy a car.", "reference": "aharen kaaru gathan" },
+    { "source": "The person will walk to Addu.", "reference": "meehaa adduah hinganan" },
+    { "source": "I will not go to Hulhumale.", "reference": "aharen hulhumaleah nu dhaanan" }
   ]
 }

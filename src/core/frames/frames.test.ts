@@ -10,7 +10,7 @@ describe('English frame extractor', () => {
     const frame = extractEnFrame('I will go to Malé.');
     expect(frame.subject).toBe('I');
     expect(frame.action).toBe('go');
-    expect(frame.location).toBe('Malé');
+    expect(frame.location).toBe('Male');
     expect(frame.tense).toBe('future');
     expect(frame.polarity).toBe('affirmative');
     expect(serializeFrame(frame)).toContain('SUBJECT=I');
@@ -31,7 +31,7 @@ describe('Dhivehi frame extractor', () => {
     const lookups = words.map((w) => translateWord(w, 'dhivehi'));
     const frame = extractDvFrame(words, lookups);
     expect(frame.subject).toBe('I');
-    expect(frame.location).toBe('Malé');
+    expect(frame.location).toBe('Male');
     expect(frame.action).toBe('go');
     expect(frame.tense).toBe('future');
     expect(frame.residue).toEqual([]);

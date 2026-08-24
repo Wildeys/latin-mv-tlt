@@ -6,19 +6,21 @@ const DV_MODEL = env.VITE_DV_REALIZE_MODEL || '';
 
 type Generator = (text: string) => Promise<string>;
 
-let enStatus: RealizationStatus = EN_MODEL ? 'not_loaded' : 'not_loaded';
-let dvStatus: RealizationStatus = DV_MODEL ? 'not_loaded' : 'not_loaded';
+let enStatus: RealizationStatus = EN_MODEL ? 'not_loaded' : 'not_configured';
+let dvStatus: RealizationStatus = DV_MODEL ? 'not_loaded' : 'not_configured';
 let enGenerate: Generator | null = null;
 let dvGenerate: Generator | null = null;
+let enLoading: Promise<RealizationStatus> | null = null;
+let dvLoading: Promise<RealizationStatus> | null = null;
 let enError: string | undefined;
 let dvError: string | undefined;
 
 export function getEnglishRealizationStatus(): RealizationStatus {
-  return EN_MODEL ? enStatus : 'not_loaded';
+  return enStatus;
 }
 
 export function getDhivehiRealizationStatus(): RealizationStatus {
-  return DV_MODEL ? dvStatus : 'not_loaded';
+  return dvStatus;
 }
 
 export function getConfiguredModels() {
@@ -36,40 +38,56 @@ async function loadPipeline(modelId: string): Promise<Generator> {
 }
 
 export async function ensureEnglishModel(): Promise<RealizationStatus> {
-  if (!EN_MODEL) return 'not_loaded';
+  if (!EN_MODEL) return 'not_configured';
   if (enGenerate) return 'ready';
-  if (enStatus === 'loading') return 'loading';
+  // Await the in-flight load rather than returning 'loading'. Returning early
+  // made a concurrent caller silently produce no output.
+  if (enLoading) return enLoading;
   enStatus = 'loading';
+  enLoading = (async () => {
+    try {
+      enGenerate = await loadPipeline(EN_MODEL);
+      enStatus = 'ready';
+      enError = undefined;
+    } catch (err) {
+      enStatus = 'error';
+      enError = err instanceof Error ? err.message : String(err);
+    }
+    return enStatus;
+  })();
   try {
-    enGenerate = await loadPipeline(EN_MODEL);
-    enStatus = 'ready';
-    enError = undefined;
-  } catch (err) {
-    enStatus = 'error';
-    enError = err instanceof Error ? err.message : String(err);
+    return await enLoading;
+  } finally {
+    enLoading = null;
   }
-  return enStatus;
 }
 
 export async function ensureDhivehiModel(): Promise<RealizationStatus> {
-  if (!DV_MODEL) return 'not_loaded';
+  if (!DV_MODEL) return 'not_configured';
   if (dvGenerate) return 'ready';
-  if (dvStatus === 'loading') return 'loading';
+  if (dvLoading) return dvLoading;
   dvStatus = 'loading';
+  dvLoading = (async () => {
+    try {
+      dvGenerate = await loadPipeline(DV_MODEL);
+      dvStatus = 'ready';
+      dvError = undefined;
+    } catch (err) {
+      dvStatus = 'error';
+      dvError = err instanceof Error ? err.message : String(err);
+    }
+    return dvStatus;
+  })();
   try {
-    dvGenerate = await loadPipeline(DV_MODEL);
-    dvStatus = 'ready';
-    dvError = undefined;
-  } catch (err) {
-    dvStatus = 'error';
-    dvError = err instanceof Error ? err.message : String(err);
+    return await dvLoading;
+  } finally {
+    dvLoading = null;
   }
-  return dvStatus;
 }
 
 export async function realizeEnglish(frameString: string): Promise<RealizationResult> {
   if (!EN_MODEL) {
-    return { status: 'not_loaded', text: null, modelId: null };
+    return { status: 'not_configured', text: null, modelId: null };
   }
   const status = await ensureEnglishModel();
   if (status !== 'ready' || !enGenerate) {
@@ -90,7 +108,7 @@ export async function realizeEnglish(frameString: string): Promise<RealizationRe
 
 export async function realizeDhivehiLatin(frameString: string): Promise<RealizationResult> {
   if (!DV_MODEL) {
-    return { status: 'not_loaded', text: null, modelId: null };
+    return { status: 'not_configured', text: null, modelId: null };
   }
   const status = await ensureDhivehiModel();
   if (status !== 'ready' || !dvGenerate) {

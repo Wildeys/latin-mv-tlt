@@ -18,13 +18,14 @@ def export(tsv_path: Path = DEFAULT_TSV) -> int:
         parts = line.split("\t")
         if len(parts) < 6 or parts[0].strip() == "latin":
             continue
-        latin, thaana, english, register, kind, plain = (p.strip() for p in parts[:6])
+        # Thaana is read from the TSV but not exported: the shipped data is
+        # Latin + English only. See Context/LATIN-CORE.md.
+        latin, _thaana, english, register, kind, plain = (p.strip() for p in parts[:6])
         if not latin:
             continue
         rows.append(
             {
                 "latin": latin,
-                "thaana": thaana,
                 "english": [g.strip() for g in english.split(";") if g.strip()],
                 "register": register,
                 "kind": kind,

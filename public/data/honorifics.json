@@ -1,7 +1,6 @@
 [
   {
     "latin": "izzathery",
-    "thaana": "ޢިއްޒަތްތެރި",
     "english": [
       "Honourable",
       "Excellency"
@@ -12,7 +11,6 @@
   },
   {
     "latin": "manikufaanu",
-    "thaana": "މަނިކުފާނު",
     "english": [
       "Sir",
       "His Excellency"
@@ -23,7 +21,6 @@
   },
   {
     "latin": "ekamanaa",
-    "thaana": "އެކަމަނާ",
     "english": [
       "Her Excellency",
       "Madam"
@@ -34,7 +31,6 @@
   },
   {
     "latin": "beyfulhaa",
-    "thaana": "ބޭފުޅާ",
     "english": [
       "respected person",
       "Sir",
@@ -46,7 +42,6 @@
   },
   {
     "latin": "fadheelathushshaikh",
-    "thaana": "ފަޟީލަތުއްޝައިޚް",
     "english": [
       "His Eminence",
       "respected Sheikh"
@@ -57,7 +52,6 @@
   },
   {
     "latin": "usthaadhu",
-    "thaana": "އުސްތާޛް",
     "english": [
       "learned scholar",
       "professor"
@@ -68,7 +62,6 @@
   },
   {
     "latin": "kaleygefaanu",
-    "thaana": "ކަލޭގެފާނު",
     "english": [
       "Sire",
       "my Lord"
@@ -79,7 +72,6 @@
   },
   {
     "latin": "saahibu",
-    "thaana": "ސާހިބު",
     "english": [
       "master",
       "lord"
@@ -90,7 +82,6 @@
   },
   {
     "latin": "saahibaa",
-    "thaana": "ސާހިބާ",
     "english": [
       "master",
       "lord"
@@ -101,7 +92,6 @@
   },
   {
     "latin": "emanikufaanu",
-    "thaana": "އެމަނިކުފާނު",
     "english": [
       "he (reverential)",
       "His Excellency"
@@ -112,7 +102,6 @@
   },
   {
     "latin": "thiyabeyfulhaa",
-    "thaana": "ތިޔަބޭފުޅާ",
     "english": [
       "you (respectful)"
     ],
@@ -122,7 +111,6 @@
   },
   {
     "latin": "ebeyfulhaa",
-    "thaana": "އެބޭފުޅާ",
     "english": [
       "he",
       "she (respectful)"
@@ -133,7 +121,6 @@
   },
   {
     "latin": "kaley",
-    "thaana": "ކަލޭ",
     "english": [
       "you"
     ],
@@ -143,7 +130,6 @@
   },
   {
     "latin": "thibaa",
-    "thaana": "ތިބާ",
     "english": [
       "you"
     ],
@@ -153,7 +139,6 @@
   },
   {
     "latin": "eyna",
-    "thaana": "އޭނާ",
     "english": [
       "he",
       "she"
@@ -164,7 +149,6 @@
   },
   {
     "latin": "emeehun",
-    "thaana": "އެމީހުން",
     "english": [
       "they"
     ],
@@ -174,7 +158,6 @@
   },
   {
     "latin": "vidhaalhuvun",
-    "thaana": "ވިދާޅުވުން",
     "english": [
       "to say",
       "to speak"
@@ -185,7 +168,6 @@
   },
   {
     "latin": "vadaigathun",
-    "thaana": "ވަޑައިގަތުން",
     "english": [
       "to go",
       "to come"
@@ -196,7 +178,6 @@
   },
   {
     "latin": "farikkulhuvvun",
-    "thaana": "ފަރިއްކުޅުއްވުން",
     "english": [
       "to eat"
     ],
@@ -206,7 +187,6 @@
   },
   {
     "latin": "avahaarafulhu leppevun",
-    "thaana": "އަވަހާރަފުޅު ލެއްޕެވުން",
     "english": [
       "to sleep"
     ],
@@ -216,7 +196,6 @@
   },
   {
     "latin": "bellevun",
-    "thaana": "ބެއްލެވުން",
     "english": [
       "to look",
       "to examine"
@@ -227,7 +206,6 @@
   },
   {
     "latin": "engivadaigathun",
-    "thaana": "އެނގިވަޑައިގަތުން",
     "english": [
       "to know",
       "to understand"
@@ -238,7 +216,6 @@
   },
   {
     "latin": "avahaaravun",
-    "thaana": "އަވަހާރަވުން",
     "english": [
       "to pass away"
     ],
@@ -248,7 +225,6 @@
   },
   {
     "latin": "nanfulhu",
-    "thaana": "ނަންފުޅު",
     "english": [
       "name (honorific)"
     ],
@@ -258,7 +234,6 @@
   },
   {
     "latin": "ismufulhu",
-    "thaana": "އިސްމުފުޅު",
     "english": [
       "name (honorific)"
     ],
@@ -268,7 +243,6 @@
   },
   {
     "latin": "gekolhu",
-    "thaana": "ގެކޮޅު",
     "english": [
       "house (honorific)"
     ],
@@ -278,7 +252,6 @@
   },
   {
     "latin": "dharifulhu",
-    "thaana": "ދަރިފުޅު",
     "english": [
       "son",
       "daughter (respectful)"
@@ -289,7 +262,6 @@
   },
   {
     "latin": "hithpulhu",
-    "thaana": "ހިތްޕުޅު",
     "english": [
       "heart",
       "mind (honorific)"
@@ -300,7 +272,6 @@
   },
   {
     "latin": "siteefulhu",
-    "thaana": "ސިޓީފުޅު",
     "english": [
       "letter (honorific)"
     ],

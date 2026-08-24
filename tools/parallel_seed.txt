@@ -1,0 +1,49 @@
+aharen maleah dhaanan | I will go to Male.
+aharen maleah dhaa | I go to Male.
+aharen maleah dhiya | I went to Male.
+aharen maleah nu dhaanan | I will not go to Male.
+aharen maleah nu dhiya | I did not go to Male.
+eyna malegai ulee | He lives in Male.
+eyna malegai nu ulee | He does not live in Male.
+aharemen fen bonan | We will drink water.
+emeehun fen bonan | They will drink water.
+kaley maadhamaa annan | You will come tomorrow.
+aharen iyye dhiya | I went yesterday.
+aharen geah annan | I will come home.
+aharen gegai ulee | I live at home.
+eyna miadhu keyan | He will eat today.
+aharen ge belifi | I saw the house.
+aharemen meehun engan | We know the people.
+kaley maleah dhaa | You go to Male.
+emeehun maleah dhaanan | They will go to Male.
+emeehun malegai ulee | They live in Male.
+eyna ge nu belifi | He did not see the house.
+aharen maadhamaa annan | I will come tomorrow.
+aharen fen boni | I drink water.
+eyna iyye dhiya | He went yesterday.
+aharemen iyye nu ai | We did not come yesterday.
+aharen geah dhaanan | I will go home.
+kaley malegai huri | You were in Male.
+eyna raajjegai ulee | She lives in the Maldives.
+aharen adduah dhiya | I went to Addu.
+emeehun hulhumaleah dhaanan | They will go to Hulhumale.
+aharen foiy kiyan | I will read the book.
+eyna mas key | He eats fish.
+kaley nu bunan | You will not say.
+aharen miadhu nu dhaa | I do not go today.
+eyna maleah dhaanan eve | He will go to Male.
+aharen fen nu bonan | I will not drink water.
+aharemen geah ai | We came home.
+emeehun iyye bunefi | They said yesterday.
+aharen malegai huri | I was in Male.
+kaley foiy liyan | You will write the book.
+aharen meehun belan | I will see the people.
+eyna geah nu annan | She will not come home.
+aharen raajjeah dhaanan | I will go to the Maldives.
+emeehun malegai nu ulee | They do not live in Male.
+aharen adhu fen boni | I drink water now.
+kaley fahun annan | You will come later.
+aharen mas nu keyan | I will not eat fish.
+eyna foiy hoadhan | He will find the book.
+aharemen kei gathan | We will buy food.
+emeehun fen gann | They take water.

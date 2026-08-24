@@ -3,8 +3,8 @@ import { mapEnglishFrameToLatin } from '../frames/mapSlots';
 import { serializeFrame } from '../frames/serialize';
 import { realizeDhivehiLatin } from '../realization/runner';
 import { segmentSentences } from '../segmenter/textProcessor';
-import { latinToThaana } from '../transliterator/latinToThaana';
 import { translateWord, type WordTranslation } from '../dictionary';
+import { latinToThaanaDetailed } from '../transliterator/latinToThaana';
 import { normalise } from '../normalize';
 import type { PipelineResult, PipelineTrace } from './types';
 
@@ -23,22 +23,24 @@ export async function translateEnToDvSentence(sentence: string): Promise<Pipelin
   const latinFrameString = serializeFrame(latinFrame);
   const dictionary = dictionaryForEnglish(source);
   const realization = await realizeDhivehiLatin(latinFrameString);
-  const loaded = realization.status === 'ready' && Boolean(realization.text);
-  const latin = loaded ? realization.text! : '';
-  const thaana = loaded ? latinToThaana(latin) : null;
+  const text = realization.status === 'ready' ? realization.text : null;
+  const loaded = Boolean(text);
+  const latin = text ?? '';
+  const converted = loaded ? latinToThaanaDetailed(latin) : null;
 
   return {
     direction: 'en-dv',
     input: source,
     latin,
+    thaana: converted?.thaana ?? null,
+    thaanaPreserved: converted?.preserved ?? [],
     dictionary,
     englishFrame,
     latinFrame,
     frameString,
     latinFrameString,
     realization,
-    output: loaded ? thaana : null,
-    thaana,
+    output: converted?.thaana ?? null,
     register: 'neutral',
     stages: {
       original: 'done',
@@ -53,11 +55,10 @@ export async function translateEnToDvSentence(sentence: string): Promise<Pipelin
 
 export async function translateEnToDv(text: string): Promise<PipelineResult> {
   const sentences = segmentSentences(normalise(text));
-  const traces = [];
-  for (const sentence of sentences) {
-    traces.push(await translateEnToDvSentence(sentence));
-  }
-  const available = traces.every((t) => t.output);
+  const traces: PipelineTrace[] = await Promise.all(
+    sentences.map((sentence) => translateEnToDvSentence(sentence)),
+  );
+  const available = traces.length > 0 && traces.every((t) => t.output);
   return {
     input: text,
     output: available ? traces.map((t) => t.output).join(' ') : null,

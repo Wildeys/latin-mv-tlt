@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
 import type { PipelineTrace } from '../../core/pipeline/types';
-import { serializeFrame } from '../../core/frames/serialize';
+import { hasThaana } from '../../core/segmenter/textProcessor';
 
 function Badge({ state }: { state: string }) {
   const label =
-    state === 'done' ? 'Done' : state === 'not_loaded' ? 'Not loaded' : state === 'unavailable' ? 'Unavailable' : 'Empty';
+    state === 'done' ? 'Done' : state === 'not_loaded' || state === 'not_configured' ? 'Not loaded' : state === 'unavailable' ? 'Unavailable' : 'Empty';
   const cls =
     state === 'done'
       ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200'
@@ -28,12 +28,11 @@ function Block({ title, state, children }: { title: string; state: string; child
 
 export default function TraceView({ trace }: { trace: PipelineTrace }) {
   const frame = trace.direction === 'en-dv' ? trace.latinFrame : trace.englishFrame;
+  const thaanaState = trace.thaana ? 'done' : 'unavailable';
   return (
     <div className="space-y-3">
       <Block title="Original" state={trace.stages.original}>
-        <p className={trace.direction === 'dv-en' ? 'font-thaana text-lg' : ''} dir={trace.direction === 'dv-en' ? 'rtl' : 'ltr'}>
-          {trace.input}
-        </p>
+        <p className={hasThaana(trace.input) ? 'font-thaana' : ''}>{trace.input}</p>
       </Block>
       <Block title="Latin" state={trace.stages.transliteration}>
         {trace.latin || '—'}
@@ -59,7 +58,7 @@ export default function TraceView({ trace }: { trace: PipelineTrace }) {
         )}
         {frame && (
           <pre className="mt-2 text-[11px] font-mono text-slate-500 overflow-x-auto">
-            {JSON.stringify({ ...frame, frameString: undefined }, null, 2)}
+            {JSON.stringify(frame, null, 2)}
           </pre>
         )}
       </Block>
@@ -68,12 +67,23 @@ export default function TraceView({ trace }: { trace: PipelineTrace }) {
           ? trace.realization.text
           : 'Not loaded. The frame is the current output of the research pipeline.'}
       </Block>
+      {trace.direction === 'en-dv' && (
+        <Block title="Thaana conversion" state={thaanaState}>
+          {trace.thaana ? <p className="font-thaana">{trace.thaana}</p> : '—'}
+          {trace.thaanaPreserved?.length > 0 && (
+            <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">
+              Unconverted: {trace.thaanaPreserved.join(', ')}
+            </p>
+          )}
+        </Block>
+      )}
       <Block title="Final translation" state={trace.stages.final}>
-        {trace.output ?? 'Unavailable'}
+        {trace.output ? (
+          <p className={hasThaana(trace.output) ? 'font-thaana' : ''}>{trace.output}</p>
+        ) : (
+          'Unavailable'
+        )}
       </Block>
-      <p className="text-[11px] text-slate-500">
-        Serialized frame: {serializeFrame(trace.englishFrame)}
-      </p>
     </div>
   );
 }

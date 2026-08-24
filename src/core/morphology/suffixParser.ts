@@ -101,6 +101,14 @@ const MUTATIONS: [string, string][] = [
 const MIN_STEM_LEN = 5;
 const MAX_STRIP_DEPTH = 3;
 const SUFFIX_MIN_STEM: Record<string, number> = {
+  // The two productive case endings attach to genuinely short stems: ge+ah,
+  // male+gai, addu+ah. The default minimum of 5 made every one of them
+  // unstemmable, which is most of what the realization corpus contains.
+  // Over-stripping is harmless here because a candidate is only accepted when
+  // `known()` confirms it is a real headword.
+  ah: 2,
+  gai: 2,
+  ga: 2,
   fulhu: 2,
   fulhun: 2,
   kolhu: 2,

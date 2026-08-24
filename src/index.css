@@ -11,8 +11,18 @@
   }
 }
 
+@font-face {
+  font-family: Faruma;
+  src: local("Faruma"), url("/latin-mv-tlt/fonts/Faruma.ttf") format("truetype");
+  font-display: swap;
+}
+
 .font-thaana {
-  font-family: 'Noto Sans Thaana', Inter, sans-serif;
+  font-family: Faruma, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  direction: rtl;
+  text-align: right;
 }
 
 .scroll-thin::-webkit-scrollbar {

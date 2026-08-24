@@ -20,7 +20,10 @@ export default function App() {
   const { dark, toggle } = useDarkMode();
 
   useEffect(() => {
-    Promise.all([loadDictionary(), loadHonorifics()])
+    // Honorifics only drive register detection. A failure there must not blank
+    // the whole app, so only the dictionary is treated as required.
+    loadDictionary()
+      .then(() => loadHonorifics().catch(() => undefined))
       .then(() => setReady(true))
       .catch((err) => setError(err instanceof Error ? err.message : String(err)));
   }, []);

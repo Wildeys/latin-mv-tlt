@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { translate } from '../../core/pipeline';
 import type { Direction, PipelineResult } from '../../core/pipeline/types';
+import { hasThaana } from '../../core/segmenter/textProcessor';
 import { saveLastResult } from '../../lib/lastTrace';
+import { useThaanaIme } from '../hooks/useThaanaIme';
 
-const SAMPLE_DV = 'އަހަރެން މާލެ ދާނަން';
-const SAMPLE_EN = 'I will go to Malé.';
+const SAMPLE_DV = 'އަހަރެން މާލެއަށް ދާނަން';
+const SAMPLE_EN = 'I will go to Male.';
 
 export default function Translator({ onOpenBreakdown }: { onOpenBreakdown: () => void }) {
   const [direction, setDirection] = useState<Direction>('dv-en');
@@ -12,6 +14,7 @@ export default function Translator({ onOpenBreakdown }: { onOpenBreakdown: () =>
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<PipelineResult | null>(null);
+  const ime = useThaanaIme(direction === 'dv-en');
 
   async function run() {
     setBusy(true);
@@ -28,6 +31,7 @@ export default function Translator({ onOpenBreakdown }: { onOpenBreakdown: () =>
   }
 
   const trace = result?.traces[0];
+  const outputIsThaana = Boolean(result?.available && result.output && hasThaana(result.output));
 
   return (
     <div className="space-y-6">
@@ -39,6 +43,7 @@ export default function Translator({ onOpenBreakdown }: { onOpenBreakdown: () =>
               setDirection(d);
               setInput(d === 'dv-en' ? SAMPLE_DV : SAMPLE_EN);
               setResult(null);
+              ime.reset();
             }}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium ${
               direction === d
@@ -56,21 +61,28 @@ export default function Translator({ onOpenBreakdown }: { onOpenBreakdown: () =>
           <span className="text-sm font-medium text-slate-600 dark:text-slate-300">Input</span>
           <textarea
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => ime.onChange(e, input, setInput)}
+            onKeyDown={(e) => ime.onKeyDown(e, input, setInput)}
+            onBeforeInput={(e) => ime.onBeforeInput(e, input, setInput)}
             rows={6}
-            dir={direction === 'dv-en' ? 'rtl' : 'ltr'}
-            className={`w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3 text-sm ${
-              direction === 'dv-en' ? 'font-thaana text-lg' : ''
+            className={`w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3 ${
+              direction === 'dv-en' ? 'font-thaana' : 'text-sm'
             }`}
           />
+          {direction === 'dv-en' && (
+            <p className="text-xs text-slate-500">Type Male Latin (aharen). It converts to Thaana.</p>
+          )}
         </label>
         <div className="space-y-2">
           <span className="text-sm font-medium text-slate-600 dark:text-slate-300">Output</span>
           <div className="min-h-[10rem] rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3 text-sm">
             {result?.available ? (
-              <p className={direction === 'en-dv' ? 'font-thaana text-lg' : ''} dir={direction === 'en-dv' ? 'rtl' : 'ltr'}>
-                {result.output}
-              </p>
+              <div className="space-y-2">
+                <p className={outputIsThaana ? 'font-thaana' : ''}>{result.output}</p>
+                {direction === 'en-dv' && trace?.latin && (
+                  <p className="text-xs text-slate-500 font-mono">Latin: {trace.latin}</p>
+                )}
+              </div>
             ) : result ? (
               <div className="space-y-2">
                 <p className="text-amber-700 dark:text-amber-300 font-medium">Final translation: Unavailable</p>

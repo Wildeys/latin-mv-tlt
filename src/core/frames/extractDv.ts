@@ -39,14 +39,27 @@ export function extractDvFrame(words: string[], lookups: WordTranslation[]): Sem
     const gloss = lookup ? englishGloss(lookup).replace(/^\[unknown:\s*|\]$/g, '') : latin;
     const unknown = !lookup || lookup.confidence === 'low';
 
-    if (surface === 'nu' || surface === 'neth' || (surface.startsWith('nu') && surface.length > 3)) {
+    // `nu` is the negation particle, but plenty of ordinary words begin with
+    // it (`nuun` = "no"/"blue"). Treat a `nu` prefix as negation only when the
+    // full surface is not itself a dictionary word — polarity reversal is the
+    // one error the frame contract cannot tolerate.
+    const isNegationParticle = surface === 'nu' || surface === 'neth';
+    const isNegationPrefix =
+      !isNegationParticle &&
+      surface.startsWith('nu') &&
+      surface.length > 3 &&
+      !PARTICLE_LATIN.has(surface) &&
+      unknown;
+    if (isNegationParticle || isNegationPrefix) {
       frame.polarity = 'negative';
-      if (surface === 'nu' || surface === 'neth' || PARTICLE_LATIN.has(surface)) {
+      if (isNegationParticle || PARTICLE_LATIN.has(surface)) {
         assigned.add(i);
         continue;
       }
     }
     if (surface === 'eve' || surface === 'ves') {
+      // `eve` is the written-register clause ender, not a slot value.
+      if (surface === 'eve') frame.register = 'written';
       assigned.add(i);
       continue;
     }

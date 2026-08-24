@@ -1,0 +1,245 @@
+[
+  {
+    "dhivehi": "ބަރާބަރު / ވަރަހްރަންގަޅުއެއެޕްޓް / ފިޔަވައި",
+    "latin": "baraabaru / varahran'galhuexcept / fiyavai",
+    "english": [
+      "excellent"
+    ],
+    "pos": "adjective",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ބެޑްދުން މައުދަނީ ތަކެތި ހްޔް ކީވްވެ",
+    "latin": "beddhun (maudhanee thakethi why/ keevve",
+    "english": [
+      "weld"
+    ],
+    "pos": "verb",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ޗާބޫކުން ތެޅުން އިންޑް އިންސްޓްރުމެންޓް ހިސްޓްލެ މަޑެ އޮފް",
+    "latin": "chaabookun thelhun/ wind instrument (whistle made of",
+    "english": [
+      "whip"
+    ],
+    "pos": "verb",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ރަށް",
+    "latin": "crush",
+    "english": [
+      "island",
+      "inhabited place"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ފައިސާ ދަބަސް އޮލެޓް",
+    "latin": "faisaa dhabas/ wolet",
+    "english": [
+      "wallet"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ފެނުން ނުވަތަ ތަސައުރުވުން",
+    "latin": "fenun (nuvatha thasawwuruvun)",
+    "english": [
+      "view"
+    ],
+    "pos": "verb",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ފެނުން ނުވަތަތަސައުރުވުން ދެކްކުން",
+    "latin": "fenun (nuvathathasawwuruvun)/ dhekkun",
+    "english": [
+      "view"
+    ],
+    "pos": "verb",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ގޯތިހޮ ކިހިނެއިޔް",
+    "latin": "goathihow/ kihineiy",
+    "english": [
+      "house block"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ކަޅު ފާނަ އޮއެ އިސް މެ މަ ސަހަރޯ",
+    "latin": "kalhu faana woe is me!/ ma saharoa!",
+    "english": [
+      "whitespotted grouper"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ކުޅިގަންދު އިތް އެކުގަ",
+    "latin": "kulhigan'dhu with/ ekuga",
+    "english": [
+      "white cherry"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ން / މަރުހަބާ ހޮމް / ކާކަހް",
+    "latin": "n / maruhabaa whom / kaakah",
+    "english": [
+      "welcome"
+    ],
+    "pos": "adjective",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ނޫސް",
+    "latin": "news",
+    "english": [
+      "newspaper",
+      "news-sheet"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "އޮރިއެންޓަލް ސްއީޓްލިޕްސް",
+    "latin": "oriental sweetlips",
+    "english": [
+      "kan’du guruwa"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "އޮރިއެންޓަލް ސްއީޓްލިޕްސް ފިށް",
+    "latin": "oriental sweetlips (fish)",
+    "english": [
+      "kan’duguruwa"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ޕައިންޓެޑް ސްއީޓްލިޕްސް ފިށް",
+    "latin": "painted sweetlips (fish)",
+    "english": [
+      "galuguruwa"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ޕައިންޓެޑް ސްއީޓްލިޕްސްފިށް",
+    "latin": "painted sweetlips(fish)",
+    "english": [
+      "galu guruwa"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ރޯ",
+    "latin": "row",
+    "english": [
+      "live",
+      "raw",
+      "unripe",
+      "alight"
+    ],
+    "pos": "verb",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ސުވާސްތި ހޮސެ ކާކުގެ",
+    "latin": "suvaasthi whose/ kaakuge",
+    "english": [
+      "welcome"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ވަލީކޮމިޓީ",
+    "latin": "valee comitee",
+    "english": [
+      "regency council"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "އަކީ",
+    "latin": "wakeel",
+    "english": [
+      "under-secretary"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "އަލްލެޓް",
+    "latin": "wallet",
+    "english": [
+      "wolet"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "އަރްޑް",
+    "latin": "ward",
+    "english": [
+      "woadu"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ވަތުތަށި",
+    "latin": "wathuthashi",
+    "english": [
+      "saucer"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "އޯޑު އަވަހް",
+    "latin": "woadu/ avah",
+    "english": [
+      "ward"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ރަށް",
+    "latin": "wrap",
+    "english": [
+      "island",
+      "inhabited place"
+    ],
+    "pos": "verb",
+    "frequency": 1
+  },
+  {
+    "dhivehi": "ރަސް",
+    "latin": "wrasse",
+    "english": [
+      "royal",
+      "excellent",
+      "greatest",
+      "most beloved"
+    ],
+    "pos": "noun",
+    "frequency": 1
+  }
+]

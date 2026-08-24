@@ -3,9 +3,7 @@ import { extractDvFrame } from '../frames/extractDv';
 import { serializeFrame } from '../frames/serialize';
 import { detectRegister } from '../morphology/honorifics';
 import { realizeEnglish } from '../realization/runner';
-import { prepareSentence, segmentSentences } from '../segmenter/textProcessor';
-import { transliterateThaana } from '../transliterator/thaanaToLatin';
-import { hasThaana } from '../segmenter/textProcessor';
+import { hasThaana, prepareSentence, segmentSentences } from '../segmenter/textProcessor';
 import { normalise } from '../normalize';
 import type { PipelineResult, PipelineTrace } from './types';
 
@@ -16,6 +14,8 @@ function lookupWords(latinWords: string[]): WordTranslation[] {
 export async function translateDvToEnSentence(sentence: string): Promise<PipelineTrace> {
   const source = normalise(sentence);
   const prepared = prepareSentence(source);
+  // prepared.transliterated is already the Thaana-to-Latin conversion when the
+  // source is Thaana, and the source itself otherwise. Do not recompute it.
   const latin = prepared.transliterated;
   const latinWords = prepared.latinWords;
   const dictionary = lookupWords(latinWords);
@@ -31,7 +31,9 @@ export async function translateDvToEnSentence(sentence: string): Promise<Pipelin
   return {
     direction: 'dv-en',
     input: source,
-    latin: hasThaana(source) ? transliterateThaana(source) : latin,
+    latin,
+    thaana: hasThaana(source) ? source : null,
+    thaanaPreserved: [],
     dictionary,
     englishFrame,
     latinFrame: null,
@@ -39,7 +41,6 @@ export async function translateDvToEnSentence(sentence: string): Promise<Pipelin
     latinFrameString: null,
     realization,
     output: loaded ? realization.text : null,
-    thaana: hasThaana(source) ? source : null,
     register,
     stages: {
       original: 'done',
@@ -54,11 +55,12 @@ export async function translateDvToEnSentence(sentence: string): Promise<Pipelin
 
 export async function translateDvToEn(text: string): Promise<PipelineResult> {
   const sentences = segmentSentences(normalise(text));
-  const traces = [];
-  for (const sentence of sentences) {
-    traces.push(await translateDvToEnSentence(sentence));
-  }
-  const available = traces.every((t) => t.output);
+  const traces: PipelineTrace[] = await Promise.all(
+    sentences.map((sentence) => translateDvToEnSentence(sentence)),
+  );
+  // `[].every(...)` is vacuously true, which reported empty input as a
+  // successful translation with an empty output. Require at least one sentence.
+  const available = traces.length > 0 && traces.every((t) => t.output);
   return {
     input: text,
     output: available ? traces.map((t) => t.output).join(' ') : null,

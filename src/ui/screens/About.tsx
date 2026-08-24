@@ -29,8 +29,10 @@ English
   → Sentence analysis
   → Semantic frame
   → Map slots to Dhivehi Latin
-  → Realization model
-  → Latin → Thaana`}</pre>
+  → T5 realization
+  → Dhivehi Latin
+  → Latin → Thaana
+  → Dhivehi`}</pre>
       </section>
       <section>
         <h2 className="text-lg font-semibold">Research goals</h2>

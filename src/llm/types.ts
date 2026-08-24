@@ -12,6 +12,7 @@ export type ChatMessage = {
   id: string;
   role: 'user' | 'assistant' | 'system';
   thaana?: string;
+  latin?: string;
   english?: string;
   pending?: boolean;
 };

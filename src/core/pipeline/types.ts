@@ -10,6 +10,8 @@ export type PipelineTrace = {
   direction: Direction;
   input: string;
   latin: string;
+  thaana: string | null;
+  thaanaPreserved: string[];
   dictionary: WordTranslation[];
   englishFrame: SemanticFrame;
   latinFrame: SemanticFrame | null;
@@ -17,7 +19,6 @@ export type PipelineTrace = {
   latinFrameString: string | null;
   realization: RealizationResult;
   output: string | null;
-  thaana: string | null;
   register: string;
   stages: {
     original: StageState;

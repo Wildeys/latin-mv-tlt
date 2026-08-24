@@ -1,22 +1,30 @@
 # latin-mv-tlt
 
-Browser-only **Dhivehi–English** translation through a Latin intermediate representation, semantic frames, and small sentence-realization models. The LLM is optional.
+Browser-only **Dhivehi–English** translation through a Latin intermediate representation, semantic frames, and small sentence-realization models. The LLM is optional. Research notes: [`Context/PROJECT.md`](Context/PROJECT.md).
 
-Research notes live in [`Context/`](Context/PROJECT.md).
+## Run locally
 
-## Quick start
+Need **Node.js 18+** (npm comes with it). If `npm` is missing, install from https://nodejs.org and reopen the terminal.
 
 ```powershell
-cd latin-mv-tlt
-python tools/export_dictionary.py
-python tools/export_honorifics.py
-python tools/build_frame_pairs.py
+cd C:\Users\Moham\Desktop\dhivehi\latin-mv-tlt
 npm install
-npm test
 npm run dev
 ```
 
-Open the local Vite URL. Translator and Breakdown work before any T5 is trained. Fluent output stays **Unavailable** until `VITE_EN_REALIZE_MODEL` / `VITE_DV_REALIZE_MODEL` point at exported Hugging Face models. See [`Context/TRAINING.md`](Context/TRAINING.md).
+Open **http://localhost:5173/latin-mv-tlt/** — not the site root. `vite.config.ts` sets `base: '/latin-mv-tlt/'` for GitHub Pages, so the dev server serves the app under that path.
+
+Translator and Breakdown work with the files already in `public/data/`. Fluent output stays **Unavailable** until you set `VITE_EN_REALIZE_MODEL` / `VITE_DV_REALIZE_MODEL` in a `.env` copied from [`.env.example`](.env.example). See [`Context/TRAINING.md`](Context/TRAINING.md).
+
+## Other commands
+
+```powershell
+npm test
+npm run build
+npm run preview
+```
+
+`npm run preview` serves the production `dist/` build locally (same `/latin-mv-tlt/` path).
 
 ## Screens
 
@@ -24,4 +32,11 @@ Translator (main artefact) · Sentence Breakdown (viva) · AI Chat (demo) · Fee
 
 ## Deploy
 
-`npm run build` writes static files to `dist/`. GitHub Pages can host that folder (`base` is `./`).
+`npm run build` writes static files to `dist/`. GitHub Pages hosts that folder; `base` is `/latin-mv-tlt/` (see `vite.config.ts`), which matches the project-pages URL.
+
+## Optional data and training
+
+You do **not** need to regenerate the dictionary or training pairs to start the UI. Those files are already in `public/data/` and `data/realize/`.
+
+- Dictionary and frame pairs: [`Context/DATA-IMPROVEMENT.md`](Context/DATA-IMPROVEMENT.md)
+- Colab T5 training: [`Context/COLAB-TRAINING.md`](Context/COLAB-TRAINING.md)

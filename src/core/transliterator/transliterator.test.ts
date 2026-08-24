@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { latinToThaana } from './latinToThaana';
+import { latinToThaana, latinToThaanaDetailed } from './latinToThaana';
 import { transliterateThaana } from './thaanaToLatin';
 
 describe('transliterator', () => {
@@ -53,5 +53,30 @@ describe('transliterator', () => {
       expect(latin).not.toContain('shsh');
       expect(latin).not.toContain('thiy');
     }
+  });
+
+  it('does not silently delete unknown characters', () => {
+    const hello = latinToThaanaDetailed('hello, world!');
+    expect(hello.thaana).toContain(',');
+    expect(hello.thaana).toContain('!');
+    expect(hello.thaana).toContain('ޥ');
+    expect(hello.thaana).not.toContain('w');
+
+    const mixed = latinToThaanaDetailed('abc123');
+    expect(mixed.thaana).toContain('c');
+    expect(mixed.thaana).toContain('123');
+    expect(mixed.preserved).toEqual(expect.arrayContaining(['c', '1', '2', '3']));
+  });
+
+  it('folds accented place names before conversion', () => {
+    expect(latinToThaana('Malé')).toBe(latinToThaana('male'));
+    expect(latinToThaanaDetailed('Malé').preserved).toEqual([]);
+  });
+
+  it('maps Arabic-loan q and lists leftover Latin letters', () => {
+    const q = latinToThaanaDetailed('naquluvun');
+    expect(q.thaana).toContain('ޤ');
+    expect(q.preserved).toEqual([]);
+    expect(latinToThaanaDetailed('taxi').preserved).toContain('x');
   });
 });
