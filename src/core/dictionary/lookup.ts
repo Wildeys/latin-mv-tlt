@@ -282,7 +282,7 @@ function translateWordUncached(
     }
   } else {
     // Thaana input is normalised to Latin and then looked up. There is no
-    // Thaana index: the shipped lexicon is Latin only. See Context/LATIN-CORE.md.
+    // Thaana index: the shipped lexicon is Latin only. See Context/PROJECT.md.
     const latin = transliterateThaana(cleaned);
     result.transliteration = latin;
     const latinHits = lookupLatin(latin);

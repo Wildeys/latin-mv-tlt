@@ -6,7 +6,7 @@ export type Tense = 'past' | 'present' | 'future' | 'present_continuous' | null;
  * Written Dhivehi ends a past-tense clause in `eve`; spoken Dhivehi does not.
  * The realization corpus carries both, so the slot has to be in the frame --
  * otherwise one frame string maps to two different sentences and the model
- * cannot learn which to produce. See Context/TRAINING-DATA.md.
+ * cannot learn which to produce. See Context/DATA.md.
  */
 export type Register = 'spoken' | 'written';
 

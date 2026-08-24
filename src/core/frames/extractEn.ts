@@ -316,7 +316,7 @@ export function extractEnFrame(text: string): SemanticFrame {
 
 /**
  * Slot values stay plain ASCII so the frame string the model sees matches the
- * training corpus exactly. See Context/TRAINING-DATA.md.
+ * training corpus exactly. See Context/DATA.md.
  */
 function capitalizePlace(word: string): string {
   // `home` is a common noun and the corpus slot value is lowercase.

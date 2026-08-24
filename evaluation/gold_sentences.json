@@ -1,5 +1,5 @@
 {
-  "notes": "Gold set for both directions. Evaluation data is Latin-only (see Context/LATIN-CORE.md). Surface forms follow the same conventions as data/realize: lowercase Dhivehi, dative -ah for goals, locative -gai for statives, plain ASCII place names. The two directions are deliberately NOT mirrors of each other. BLEU/chrF stay unmeasured until a realization checkpoint exists.",
+  "notes": "Gold set for both directions. Evaluation data is Latin-only (see Context/PROJECT.md). Surface forms follow the same conventions as data/realize: lowercase Dhivehi, dative -ah for goals, locative -gai for statives, plain ASCII place names. The two directions are deliberately NOT mirrors of each other. BLEU/chrF stay unmeasured until a realization checkpoint exists.",
   "dv_en": [
     { "source": "aharen maleah dhaanan", "reference": "I will go to Male." },
     { "source": "aharen fen bonan", "reference": "I will drink water." },

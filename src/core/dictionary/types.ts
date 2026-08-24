@@ -5,7 +5,7 @@ export type DictionaryEntry = {
   frequency: number;
   /**
    * Provenance of `frequency`. The shipped lexicon uses placeholder constants
-   * for most rows, so this is not a corpus count. See Context/DATA-QUALITY.md.
+   * for most rows, so this is not a corpus count. See Context/DATA.md.
    */
   freqSource?: string;
 };
