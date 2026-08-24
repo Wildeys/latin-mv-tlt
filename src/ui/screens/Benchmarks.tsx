@@ -20,7 +20,7 @@ export default function Benchmarks() {
   }, []);
 
   // Only render counters the stats file actually carries. The Thaana count is
-  // gone: the shipped lexicon is Latin only (Context/LATIN-CORE.md).
+  // gone: the shipped lexicon is Latin only (Context/PROJECT.md).
   const liveKeys: Array<[string, string]> = [
     ['rawDbRows', 'Raw DB rows'],
     ['uniqueLatin', 'Unique Latin'],

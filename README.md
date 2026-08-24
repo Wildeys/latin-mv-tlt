@@ -38,5 +38,6 @@ Translator (main artefact) · Sentence Breakdown (viva) · AI Chat (demo) · Fee
 
 You do **not** need to regenerate the dictionary or training pairs to start the UI. Those files are already in `public/data/` and `data/realize/`.
 
-- Dictionary and frame pairs: [`Context/DATA-IMPROVEMENT.md`](Context/DATA-IMPROVEMENT.md)
-- Colab T5 training: [`Context/COLAB-TRAINING.md`](Context/COLAB-TRAINING.md)
+- Dictionary and frame pairs: [`Context/DATA.md`](Context/DATA.md)
+- Colab T5 training: [`Context/TRAINING.md`](Context/TRAINING.md)
+- Measured state: [`Context/STATUS.md`](Context/STATUS.md)
