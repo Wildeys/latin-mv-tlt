@@ -14,7 +14,7 @@ npm run dev
 
 Open **http://localhost:5173/latin-mv-tlt/** — not the site root. `vite.config.ts` sets `base: '/latin-mv-tlt/'` for GitHub Pages, so the dev server serves the app under that path.
 
-Translator and Breakdown work with the files already in `public/data/`. Fluent output stays **Unavailable** until you set `VITE_EN_REALIZE_MODEL` / `VITE_DV_REALIZE_MODEL` in a `.env` copied from [`.env.example`](.env.example). See [`Context/TRAINING.md`](Context/TRAINING.md).
+Translator and Breakdown work with the files already in `public/data/`. Fluent output loads from `public/models/en-realize` and `public/models/dv-realize` (q8 ONNX). No Hugging Face repo IDs. First load can take a while; after that the browser cache holds the weights. See [`Context/TRAINING.md`](Context/TRAINING.md).
 
 ## Other commands
 

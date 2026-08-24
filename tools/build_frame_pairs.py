@@ -402,7 +402,7 @@ def extract_en(text: str) -> dict:
     # Longest name first, and match whole tokens. Substring matching on the
     # lowercased text made "Hulhumale" contain "male", so every Hulhumale
     # sentence was labelled LOCATION=Male. Slot values are plain ASCII so the
-    # frame string matches the corpus exactly (Context/TRAINING-DATA.md).
+    # frame string matches the corpus exactly (Context/DATA.md).
     if "hulhumale" in tokens or "hulhumalé" in tokens:
         frame["location"] = "Hulhumale"
     elif "maldives" in tokens:

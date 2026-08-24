@@ -366,7 +366,7 @@ def main() -> None:
         entry["english"] = expand_glosses(entry["english"])
     # Only tag the rows whose frequency is a real count. Tagging all 15k as
     # "placeholder" would cost ~380 KB on a file that blocks first paint, so
-    # absence of the field means placeholder -- recorded in DATA-QUALITY.md.
+    # absence of the field means placeholder -- recorded in Context/DATA.md.
     for entry in entries:
         if entry["frequency"] not in PLACEHOLDER_FREQS:
             entry["freqSource"] = "spelling.md"

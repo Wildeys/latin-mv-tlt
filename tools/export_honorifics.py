@@ -19,7 +19,7 @@ def export(tsv_path: Path = DEFAULT_TSV) -> int:
         if len(parts) < 6 or parts[0].strip() == "latin":
             continue
         # Thaana is read from the TSV but not exported: the shipped data is
-        # Latin + English only. See Context/LATIN-CORE.md.
+        # Latin + English only. See Context/PROJECT.md.
         latin, _thaana, english, register, kind, plain = (p.strip() for p in parts[:6])
         if not latin:
             continue

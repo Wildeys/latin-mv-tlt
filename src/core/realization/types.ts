@@ -1,6 +1,6 @@
 /**
- * `not_configured` means no model id is set in the environment at all;
- * `not_loaded` means one is configured but has not been fetched yet.
+ * `not_configured` is unused for the local q8 models (they are always named).
+ * Tests skip loading ONNX and return `not_loaded`.
  */
 export type RealizationStatus =
   | 'not_configured'

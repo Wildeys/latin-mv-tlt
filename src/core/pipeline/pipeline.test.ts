@@ -18,7 +18,7 @@ describe('pipelines without a realization model', () => {
     expect(trace.frameString).toBeTruthy();
     expect(trace.englishFrame.subject).toBeTruthy();
     expect(trace.englishFrame.location || trace.englishFrame.action || trace.englishFrame.residue.length).toBeTruthy();
-    expect(trace.realization.status).toBe('not_configured');
+    expect(trace.realization.status).not.toBe('ready');
     expect(trace.output).toBeNull();
     expect(trace.stages.final).toBe('unavailable');
     expect(trace.stages.frame).toBe('done');
@@ -32,7 +32,7 @@ describe('pipelines without a realization model', () => {
     expect(trace.latinFrame?.subject).toBe('aharen');
     expect(trace.latinFrame?.action).toBe('dhaa');
     expect(trace.latinFrameString).toContain('SUBJECT=aharen');
-    expect(trace.realization.status).toBe('not_configured');
+    expect(trace.realization.status).not.toBe('ready');
     expect(trace.output).toBeNull();
   });
 

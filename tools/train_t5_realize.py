@@ -6,7 +6,7 @@ Example:
 
     python tools/train_t5_realize.py --train data/realize/en_train.jsonl --valid data/realize/en_valid.jsonl --out models/en_realize
 
-Then push the folder to Hugging Face and set VITE_EN_REALIZE_MODEL.
+The website loads q8 ONNX from public/models/, not this PyTorch folder.
 """
 
 from __future__ import annotations

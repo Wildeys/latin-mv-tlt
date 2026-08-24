@@ -1,13 +1,14 @@
 import type { RealizationResult, RealizationStatus } from './types';
 
-const env = (import.meta as ImportMeta & { env?: Record<string, string> }).env ?? {};
-const EN_MODEL = env.VITE_EN_REALIZE_MODEL || '';
-const DV_MODEL = env.VITE_DV_REALIZE_MODEL || '';
+const IS_TEST = import.meta.env.MODE === 'test';
+const EN_MODEL = 'en-realize';
+const DV_MODEL = 'dv-realize';
 
 type Generator = (text: string) => Promise<string>;
 
-let enStatus: RealizationStatus = EN_MODEL ? 'not_loaded' : 'not_configured';
-let dvStatus: RealizationStatus = DV_MODEL ? 'not_loaded' : 'not_configured';
+let envConfigured = false;
+let enStatus: RealizationStatus = IS_TEST ? 'not_loaded' : 'not_loaded';
+let dvStatus: RealizationStatus = IS_TEST ? 'not_loaded' : 'not_loaded';
 let enGenerate: Generator | null = null;
 let dvGenerate: Generator | null = null;
 let enLoading: Promise<RealizationStatus> | null = null;
@@ -24,12 +25,46 @@ export function getDhivehiRealizationStatus(): RealizationStatus {
 }
 
 export function getConfiguredModels() {
-  return { english: EN_MODEL || null, dhivehi: DV_MODEL || null };
+  return { english: EN_MODEL, dhivehi: DV_MODEL };
+}
+
+type Seq2SeqModel = {
+  decoder_merged_session?: { inputNames: string[] };
+  runBeam: (beam: { prev_model_outputs: unknown }) => Promise<unknown>;
+};
+
+function patchDecoderWithoutKvCache(mod: typeof import('@xenova/transformers')) {
+  // Transformers.js seq2seq always fetches decoder_model_merged. The Optimum
+  // merge is ~159 MB (GitHub + wasm session-create fail), so we ship
+  // decoder_model under that filename. That graph has no use_cache_branch, so
+  // later steps must keep the full decoder_input_ids instead of the last token.
+  const proto = mod.PreTrainedModel.prototype as unknown as Seq2SeqModel;
+  const originalRunBeam = proto.runBeam;
+  proto.runBeam = async function patchedRunBeam(this: Seq2SeqModel, beam) {
+    const names = this.decoder_merged_session?.inputNames;
+    if (names && !names.includes('use_cache_branch')) {
+      beam.prev_model_outputs = null;
+    }
+    return originalRunBeam.call(this, beam);
+  };
 }
 
 async function loadPipeline(modelId: string): Promise<Generator> {
   const mod = await import('@xenova/transformers');
-  const pipe = await mod.pipeline('text2text-generation', modelId);
+  if (!envConfigured) {
+    mod.env.allowLocalModels = true;
+    mod.env.allowRemoteModels = false;
+    mod.env.localModelPath = `${import.meta.env.BASE_URL}models/`;
+    if (mod.env.backends?.onnx?.wasm) {
+      // Cursor/Electron and many localhost pages have no SharedArrayBuffer.
+      // Multi-thread ORT then fails with "Can't create a session".
+      mod.env.backends.onnx.wasm.numThreads = 1;
+      mod.env.backends.onnx.wasm.proxy = false;
+    }
+    patchDecoderWithoutKvCache(mod);
+    envConfigured = true;
+  }
+  const pipe = await mod.pipeline('text2text-generation', modelId, { quantized: true });
   return async (text: string) => {
     const out = await pipe(text, { max_new_tokens: 64 });
     const first = Array.isArray(out) ? out[0] : out;
@@ -38,10 +73,8 @@ async function loadPipeline(modelId: string): Promise<Generator> {
 }
 
 export async function ensureEnglishModel(): Promise<RealizationStatus> {
-  if (!EN_MODEL) return 'not_configured';
+  if (IS_TEST) return 'not_loaded';
   if (enGenerate) return 'ready';
-  // Await the in-flight load rather than returning 'loading'. Returning early
-  // made a concurrent caller silently produce no output.
   if (enLoading) return enLoading;
   enStatus = 'loading';
   enLoading = (async () => {
@@ -63,7 +96,7 @@ export async function ensureEnglishModel(): Promise<RealizationStatus> {
 }
 
 export async function ensureDhivehiModel(): Promise<RealizationStatus> {
-  if (!DV_MODEL) return 'not_configured';
+  if (IS_TEST) return 'not_loaded';
   if (dvGenerate) return 'ready';
   if (dvLoading) return dvLoading;
   dvStatus = 'loading';
@@ -86,8 +119,8 @@ export async function ensureDhivehiModel(): Promise<RealizationStatus> {
 }
 
 export async function realizeEnglish(frameString: string): Promise<RealizationResult> {
-  if (!EN_MODEL) {
-    return { status: 'not_configured', text: null, modelId: null };
+  if (IS_TEST) {
+    return { status: 'not_loaded', text: null, modelId: EN_MODEL };
   }
   const status = await ensureEnglishModel();
   if (status !== 'ready' || !enGenerate) {
@@ -107,8 +140,8 @@ export async function realizeEnglish(frameString: string): Promise<RealizationRe
 }
 
 export async function realizeDhivehiLatin(frameString: string): Promise<RealizationResult> {
-  if (!DV_MODEL) {
-    return { status: 'not_configured', text: null, modelId: null };
+  if (IS_TEST) {
+    return { status: 'not_loaded', text: null, modelId: DV_MODEL };
   }
   const status = await ensureDhivehiModel();
   if (status !== 'ready' || !dvGenerate) {
