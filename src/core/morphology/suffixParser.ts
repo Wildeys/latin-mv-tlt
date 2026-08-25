@@ -5,6 +5,8 @@ export type SuffixParse = {
   case?: string;
   tense?: string;
   english?: string;
+  register?: string; // Captures written narrative register 'eve'
+  isNegative?: boolean; // Captures preceding negation 'nu'
 };
 
 export type StemAnalysis = {
@@ -13,21 +15,66 @@ export type StemAnalysis = {
   englishHints: string[];
 };
 
-const NOUN_SUFFIXES: Record<string, { case: string; english: string }> = {
+/**
+ * Reorganized and corrected Noun Suffixes according to Fritz Vol. II.
+ * - Mapped "gai" as the primary Malé standard locative.
+ * - Mapped "eh"/"ek" as the indefinite marker.
+ * - Mapped "un"/"in" as the ablative markers on nouns.
+ * - Added "aku" as the indefinite marker (for persons/places).
+ * - Added "aai" as the sociative marker ("and/with").
+ * - Legacy "ga" and dative "kamah" kept for compatibility.
+ */
+export const NOUN_SUFFIXES: Record<string, { case: string; english: string }> = {
   ge: { case: 'genitive', english: 'of' },
   gey: { case: 'genitive', english: 'of' },
   ah: { case: 'dative', english: 'to' },
-  ga: { case: 'locative', english: 'on/in' },
-  eh: { case: 'ablative', english: 'from' },
-  un: { case: 'nominative', english: '' },
-  kamah: { case: 'indefinite', english: 'some' },
+  gai: { case: 'locative', english: 'in/on/at' }, // Correct standard Malé locative
+  ga: { case: 'locative', english: 'on/in' }, // Legacy compatibility
+  in: { case: 'ablative', english: 'from/by' }, // First-class ablative
+  un: { case: 'ablative', english: 'from' }, // Corrected from nominative
+  ek: { case: 'indefinite', english: 'a' }, // Corrected from ablative
+  eh: { case: 'indefinite', english: 'a' }, // Corrected from ablative
+  aku: { case: 'indefinite', english: 'a' }, // Indefinite person/place marker
+  aai: { case: 'sociative', english: 'and/with' }, // Sociative marker
+  kamah: { case: 'indefinite_dative', english: 'some' }, // Legacy compatibility
 };
 
-const VERB_SUFFIXES: Record<string, { tense: string }> = {
-  nna: { tense: 'present_continuous' },
-  fi: { tense: 'past' },
-  vani: { tense: 'future' },
-  un: { tense: 'verbal_noun' },
+/**
+ * Reorganized and corrected Verb Suffixes according to Fritz Vol. II.
+ * - Mapped "nna" as the purpose infinitive (-an / -aś).
+ * - Mapped "vani" as the present focus copula (from Thaana -ަނީ).
+ * - Added perfective past "-ijje" / "-jje".
+ * - Added future "-ene" / "-aane".
+ * - Added standard past "-i" and converb structures.
+ */
+export const VERB_SUFFIXES: Record<string, { tense: string; english?: string }> = {
+  // Infinitives (Fritz -an / -as, e.g. onnan, dhaas)
+  an: { tense: 'infinitive', english: 'to' },
+  nna: { tense: 'infinitive', english: 'to' }, // Corrected from present_continuous
+  
+  // Past / Preterite Series
+  fi: { tense: 'past', english: 'did' },
+  i: { tense: 'past', english: 'did' },
+  jje: { tense: 'perfective_past', english: 'has' },
+  ijje: { tense: 'perfective_past', english: 'has' },
+  
+  // Future Series
+  aane: { tense: 'future', english: 'will' },
+  ene: { tense: 'future', english: 'will' },
+  
+  // Present Focus Copula Series (-ni, e.g. ulenee, vanee)
+  vani: { tense: 'present_focus', english: 'is' }, // Corrected from future
+  nee: { tense: 'present_focus', english: 'is' },
+  anee: { tense: 'present_focus', english: 'is' },
+  
+  // Progressive
+  amun: { tense: 'progressive', english: 'while' },
+  un: { tense: 'verbal_noun', english: 'doing' }, // Keep verbal noun
+  
+  // Clause-Chaining Converbs (ABS I-III)
+  fai: { tense: 'converb_sequential', english: 'having' },
+  fei: { tense: 'converb_sequential', english: 'having' },
+  gen: { tense: 'converb_completive', english: 'having' },
 };
 
 export const STEM_SUFFIXES: [string, string][] = [
@@ -101,11 +148,6 @@ const MUTATIONS: [string, string][] = [
 const MIN_STEM_LEN = 5;
 const MAX_STRIP_DEPTH = 3;
 const SUFFIX_MIN_STEM: Record<string, number> = {
-  // The two productive case endings attach to genuinely short stems: ge+ah,
-  // male+gai, addu+ah. The default minimum of 5 made every one of them
-  // unstemmable, which is most of what the realization corpus contains.
-  // Over-stripping is harmless here because a candidate is only accepted when
-  // `known()` confirms it is a real headword.
   ah: 2,
   gai: 2,
   ga: 2,
@@ -148,36 +190,137 @@ function minStemFor(suffix: string): number {
   return SUFFIX_MIN_STEM[suffix] ?? MIN_STEM_LEN;
 }
 
-export function parseSuffix(word: string): SuffixParse {
-  const wordLower = word.toLowerCase();
+/**
+ * Intelligent suffix parser grounded in Fritz Vol. II.
+ * - Extracts narrative "eve" first to prevent fusion errors (e.g. gaeeve -> gai + eve).
+ * - Captures preceding negation "nu" and "ni".
+ * - Utilizes dictionary early-exit and POS hinting to disambiguate shared suffixes like "-un".
+ */
+export function parseSuffix(
+  word: string,
+  pos?: 'noun' | 'verb',
+  known?: (latin: string) => boolean
+): SuffixParse {
+  const wordLower = word.toLowerCase().trim();
+  if (!wordLower) {
+    return { input: word, root: '', suffix: null };
+  }
 
-  for (const [suffix, info] of NOUN_BY_LEN) {
-    if (wordLower.endsWith(suffix) && wordLower.length > suffix.length) {
-      return {
-        input: word,
-        root: wordLower.slice(0, -suffix.length),
-        suffix,
-        ...info,
-      };
+  let cleaned = wordLower;
+  let register: string | undefined = undefined;
+  let isNegative = false;
+
+  // 1. Pre-strip Narrative "eve" to handle fused cases
+  if (cleaned.endsWith('eve')) {
+    register = 'written';
+    if (cleaned.endsWith('gaeeve')) {
+      cleaned = cleaned.slice(0, -6) + 'gai'; // Restore locative gai
+    } else if (cleaned.endsWith('eheve')) {
+      cleaned = cleaned.slice(0, -5) + 'eh'; // Restore indefinite eh
+    } else if (cleaned.endsWith('ekeve')) {
+      cleaned = cleaned.slice(0, -5) + 'ek'; // Restore indefinite ek
+    } else if (cleaned.endsWith('aheve')) {
+      cleaned = cleaned.slice(0, -5) + 'ah'; // Restore dative ah
+    } else {
+      cleaned = cleaned.slice(0, -3); // Default strip eve
     }
   }
 
-  for (const [suffix, info] of VERB_BY_LEN) {
-    if (wordLower.endsWith(suffix) && wordLower.length > suffix.length) {
-      return {
-        input: word,
-        root: wordLower.slice(0, -suffix.length),
-        suffix,
-        ...info,
-      };
-    }
+  // 2. Pre-strip negation particles
+  if (cleaned.startsWith('nu-')) {
+    cleaned = cleaned.slice(3);
+    isNegative = true;
+  } else if (cleaned.startsWith('ni-')) {
+    cleaned = cleaned.slice(3);
+    isNegative = true;
   }
 
-  return { input: word, root: wordLower, suffix: null };
+  // 3. Dictionary-Early-Exit: If the entire word (sans eve/negation) is known, do not strip!
+  if (known && known(cleaned)) {
+    return {
+      input: word,
+      root: cleaned,
+      suffix: null,
+      register,
+      isNegative,
+    };
+  }
+
+  // Helper to parse nominal suffixes
+  const tryNoun = (): SuffixParse | null => {
+    for (const [suffix, info] of NOUN_BY_LEN) {
+      if (cleaned.endsWith(suffix) && cleaned.length > suffix.length) {
+        const root = cleaned.slice(0, -suffix.length);
+        if (root.length >= minStemFor(suffix)) {
+          return {
+            input: word,
+            root,
+            suffix,
+            ...info,
+            register,
+            isNegative,
+          };
+        }
+      }
+    }
+    return null;
+  };
+
+  // Helper to parse verbal suffixes
+  const tryVerb = (): SuffixParse | null => {
+    for (const [suffix, info] of VERB_BY_LEN) {
+      if (cleaned.endsWith(suffix) && cleaned.length > suffix.length) {
+        const root = cleaned.slice(0, -suffix.length);
+        if (root.length >= minStemFor(suffix)) {
+          return {
+            input: word,
+            root,
+            suffix,
+            ...info,
+            register,
+            isNegative,
+          };
+        }
+      }
+    }
+    return null;
+  };
+
+  // 4. POS-Aware Parsing order
+  if (pos === 'verb') {
+    const verbResult = tryVerb();
+    if (verbResult) return verbResult;
+    const nounResult = tryNoun();
+    if (nounResult) return nounResult;
+  } else if (pos === 'noun') {
+    const nounResult = tryNoun();
+    if (nounResult) return nounResult;
+    const verbResult = tryVerb();
+    if (verbResult) return verbResult;
+  } else {
+    // Standard logic (nouns first for legacy, except for "-un" disambiguation)
+    if (cleaned.endsWith('un') && known) {
+      // If root as verb lemma is known, or if root + un is known
+      if (known(cleaned)) {
+        return { input: word, root: cleaned, suffix: null, register, isNegative };
+      }
+    }
+    
+    const nounResult = tryNoun();
+    if (nounResult) return nounResult;
+    const verbResult = tryVerb();
+    if (verbResult) return verbResult;
+  }
+
+  return { input: word, root: cleaned, suffix: null, register, isNegative };
 }
 
-export function parseWordList(words: string[]): SuffixParse[] {
-  return words.map(parseSuffix);
+export function parseWordList(
+  words: string[],
+  pos?: 'noun' | 'verb',
+  known?: (latin: string) => boolean
+): SuffixParse[] {
+  return words.map((w) => parseSuffix(w, pos, known));
 }
 
 function desandhi(word: string): string[] {
@@ -186,6 +329,7 @@ function desandhi(word: string): string[] {
   if (word.endsWith('ee')) out.push(word.slice(0, -2) + 'i');
   if (word.endsWith('aa')) out.push(word.slice(0, -2) + 'a');
   if (word.endsWith('oo')) out.push(word.slice(0, -2) + 'u');
+  
   if (
     word.length >= 2 &&
     word.at(-1) === word.at(-2) &&
@@ -220,7 +364,7 @@ function spellingVariants(word: string): string[] {
 export function stemWord(
   word: string,
   known: (latin: string) => boolean,
-  maxDepth = MAX_STRIP_DEPTH,
+  maxDepth = MAX_STRIP_DEPTH
 ): StemAnalysis | null {
   const cleaned = (word || '').trim().toLowerCase();
   if (!cleaned) return null;

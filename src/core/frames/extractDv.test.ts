@@ -47,4 +47,10 @@ describe('Dhivehi frame extractor', () => {
   it('recognises a dative-marked place as the location slot', () => {
     expect(frameFor(['aharen', 'maleah', 'dhaanan']).location).toBeTruthy();
   });
+
+  it('treats a word missing from the dictionary as a proper noun instead of dropping it', () => {
+    const frame = frameFor(['aharen', 'dhaanan', 'rasmaale']);
+    expect(frame.object).toBe('Rasmaale');
+    expect(frame.residue).not.toContain('rasmaale');
+  });
 });

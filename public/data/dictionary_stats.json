@@ -1,14 +1,6 @@
 {
-  "rawDbRows": 16014,
-  "uniqueLatin": 15302,
-  "entriesWithEnglish": 15302,
-  "finalExportedEntries": 15302,
-  "invertedFlipped": 585,
-  "mirrorGlossFixed": 403,
-  "mirrorTies": 315,
-  "quarantined": 26,
-  "keysSplit": 1656,
-  "keysRecovered": 1562,
-  "posFixed": 13,
-  "source": "tools/clean_dictionary.py"
+  "shippedBefore": 15302,
+  "shippedAfter": 15302,
+  "frequencyUpdatedFromCorpus": 198,
+  "source": "C:\\Users\\Moham\\Desktop\\dhivehi\\dhivehi-latin-slm\\data\\dhivehi_dictionary.db"
 }

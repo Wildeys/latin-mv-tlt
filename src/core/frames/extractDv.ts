@@ -108,6 +108,15 @@ export function extractDvFrame(words: string[], lookups: WordTranslation[]): Sem
         assigned.add(i);
         break;
       }
+      // A word the dictionary has no entry for is more likely a person or
+      // place name (e.g. Rasmaale) than a genuinely untranslatable token, so
+      // keep it as-is instead of silently losing it to residue.
+      if (pos === 'unknown') {
+        const surface = (lookup?.stem || lookup?.transliteration || words[i]).toLowerCase();
+        frame.object = surface.charAt(0).toUpperCase() + surface.slice(1);
+        assigned.add(i);
+        break;
+      }
     }
   }
 
