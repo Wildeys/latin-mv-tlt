@@ -4,7 +4,7 @@
     "alakxender/dhivehi-english-translations",
     "alakxender/dhivehi-english-parallel"
   ],
-  "transliteratorSha256": "96cf18ca35337be11001988f31489e3d4d95965263063980c57e5bce7a891593",
+  "transliteratorSha256": "77a097c9eae64d6be44293d063429242705e2271e99a332276dd95fe35215610",
   "prefixes": {
     "dv-en": "translate Dhivehi Latin to English: ",
     "en-dv": "translate English to Dhivehi Latin: "

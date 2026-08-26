@@ -3,22 +3,21 @@
   "field": "dv",
   "samples": 5000,
   "seed": 11,
-  "transliteratorSha256": "96cf18ca35337be11001988f31489e3d4d95965263063980c57e5bce7a891593",
-  "exact": 1343,
-  "exactPercent": 26.86,
+  "transliteratorSha256": "77a097c9eae64d6be44293d063429242705e2271e99a332276dd95fe35215610",
+  "exact": 1375,
+  "exactPercent": 27.5,
   "exactFolded": 1716,
   "exactFoldedPercent": 34.32,
-  "latinStable": 4827,
-  "latinStablePercent": 96.54,
-  "levenshteinTotal": 10163,
-  "levenshteinPerChar": 0.02138,
+  "latinStable": 4990,
+  "latinStablePercent": 99.8,
+  "levenshteinTotal": 9993,
+  "levenshteinPerChar": 0.02102,
   "failingClasses": {
-    "spelling_normalised": 3149,
-    "variant_fold": 373,
-    "coda_h_ambiguity": 84,
-    "unmapped_char": 32,
-    "alifu_onset_ambiguity": 10,
-    "prenasalized": 9
+    "spelling_normalised": 3274,
+    "variant_fold": 341,
+    "coda_h_ambiguity": 6,
+    "unmapped_char": 2,
+    "prenasalized": 2
   },
   "examples": {
     "spelling_normalised": [
@@ -62,12 +61,6 @@
     ],
     "variant_fold": [
       {
-        "thaana": "ކައިޝް މަޑުމަޑުން ހިނގަމުން ދިޔައީ ކޮޓަރިއަށެވެ. ރާނިޔާގެ ކޮޓަރި ހުރަސްކުރި ވަގުތު އެތެރެއިން އިވެމުންދިޔަ އަޑަށް ކައިޝް ހުއްޓުނެވެ. އަދި މަޑުކޮށްލިއެވެ.",
-        "latin": "kaish madumadun hin'gamun dhiyaee kotariasheve. raaniyaage kotari huraskuri vaguthu etherein ivemundhiya adah kaish huttuneve. adhi madukohlieve.",
-        "back": "ކައިށް މަޑުމަޑުން ހިނގަމުން ދިޔައީ ކޮޓަރިއަށެވެ. ރާނިޔާގެ ކޮޓަރި ހުރަސްކުރި ވަގުތު އެތެރެއިން އިވެމުންދިޔަ އަޑަށް ކައިށް ހުއްޓުނެވެ. އަދި މަޑުކޮށްލިއެވެ.",
-        "preserved": []
-      },
-      {
         "thaana": "..ޔޭސް ބުނަން ބިރުގަނޭ.. އަހަރެން ބުނީމެވެ. ޝާންޓޭ ކޮންކަމަކާ ބިރުންތޯ އެހިއެވެ.",
         "latin": "..yeys bunan biruganey.. aharen buneemeve. shaantey konkamakaa birunthoa ehieve.",
         "back": "..ޔޭސް ބުނަން ބިރުގަނޭ.. އަހަރެން ބުނީމެވެ. ށާންޓޭ ކޮންކަމަކާ ބިރުންތޯ އެހިއެވެ.",
@@ -90,15 +83,15 @@
         "latin": "bodu dipreshange thereygai ufan teree akee thamreenu hoadhaigen kaal spitzge milkuveriekeve .",
         "back": "ބޮޑު ޑިޕްރެށަންގެ ތެރޭގައި އުފަން ޓެރީ އަކީ ތަމްރީނު ހޯދައިގެން ކާލް ސްޕިޓްޒްގެ މިލްކުވެރިއެކެވެ .",
         "preserved": []
+      },
+      {
+        "thaana": "އަހަރެން ކަލޭ ގެއަށް ގެންދާނަން.. ދެން ތި ޙާލުގަ ގޭގަ އޮވޭ...",
+        "latin": "aharen kaley geah gendhaanan.. dhen thi haaluga geyga ovey...",
+        "back": "އަހަރެން ކަލޭ ގެއަށް ގެންދާނަން.. ދެން ތި ހާލުގަ ގޭގަ އޮވޭ...",
+        "preserved": []
       }
     ],
     "coda_h_ambiguity": [
-      {
-        "thaana": "ބޮލީވުޑްގެ މަޝްހޫރު އެކްޓަރު އަމީތާބް ބައްޗަން އަށް ލަވައެއް ކިޔައިދޭން...",
-        "latin": "boleevudge mashhooru ektaru ameethaab bachchan ah lavaeh kiyaidheyn...",
-        "back": "ބޮލީވުޑްގެ މަށްހޫރު އެކްޓަރު އަމީތާބް ބައްޗަން އަށް ލަވައެށް ކިޔައިދޭން...",
-        "preserved": []
-      },
       {
         "thaana": "ބަލަ ހުޅުދޫއަށް ނިސްބަތް ވާ ތިޔަ ވިދާޅު ބޭފުޅުން މުއްސަންދި ތިރަށުގަ ވަޔަފާރިކޮށް ތިރަށް ނިސްބަތްވިމަތޯ ތިއުޅެނީ ބަޔަކަ ބުރަ މަސައްކަތް ކޮށްގެނ ފައިސާ ހޯދިމާ ހަސަދެވެރިވެގެނން",
         "latin": "bala hulhudhooah nisbaiy vaa thiya vidhaalhu beyfulhun mussandhi thirashuga vayafaarikoh thirah nisbaiyvimathoa thiulhenee bayaka bura masakkaiy kohgen faisaa hoadhimaa hasadheverivegenn",
@@ -106,55 +99,31 @@
         "preserved": []
       },
       {
-        "thaana": "ބަނގުލަދޭޝް އާއި ރާއްޖެ އާއި ދެމެދު އޮންނަ ގުޅުން ބަދަހިކުރަން މަޝްވަރާކޮށްފި",
-        "latin": "ban'guladheysh aai raajje aai dhemedhu onna gulhun badhahikuran mashvaraakohfi",
-        "back": "ބަނގުލަދޭށް އާއި ރާއްޖެ އާއި ދެމެދު އޮއްނަ ގުޅުން ބަދަހިކުރަން މަށްވަރާކޮށްފި",
+        "thaana": "ހެޔޮލަފާ އަންތބެއްގެ މުހިންމުކަން ޖިމީ ކާޓރގެ ބަސްފުޅުން-",
+        "latin": "heyolafaa anthbegge muhinmukan jimee kaatrge basfulhun-",
+        "back": "ހެޔޮލަފާ އަންތްބެއްގެ މުހިންމުކަން ޖިމީ ކާޓްރްގެ ބަސްފުޅުން-",
         "preserved": []
       },
       {
-        "thaana": "ހޮލީވުޑްގެ މަޝްހޫރު ޓީވީ ސިލްސިލާ ޕްރިޒަން ބްރޭކް ގެ ހިންދީ ވާޝަންއެއް ބެލުންތެރިންނަށް ގެނެސް ދިނުމަށްޓަކައި, އޭގެ ރައިޓްސް ބޮލީވުޑްގެ މަޝްހޫރު އެކްޓަރު އަނިލް ކަޕޫރު ގަނެފި އެވެ.",
-        "latin": "holeevudge mashhooru teevee silsilaa prizan breyk ge hindhee vaashaneh beluntherinnah genes dhinumahtakai, eyge raits boleevudge mashhooru ektaru anil kapooru ganefi eve.",
-        "back": "ހޮލީވުޑްގެ މަށްހޫރު ޓީވީ ސިލްސިލާ ޕްރިޒަން ބްރޭކް ގެ ހިންދީ ވާށަނެށް ބެލުންތެރިއްނަށް ގެނެސް ދިނުމަށްޓަކައި, އޭގެ ރައިޓްސް ބޮލީވުޑްގެ މަށްހޫރު އެކްޓަރު އަނިލް ކަޕޫރު ގަނެފި އެވެ.",
+        "thaana": "ވުޑްސްޓޮކްގެ ބައްޕަ އާޓީ ކޯންފެލްޑް ލެރީ މެކްކްލަރގް އާއި ގުޅިގެން ގުޑްސްޓޮކް މިއުޒިކް ފެސްޓިވަލް ޕްރޮމޯޓްކޮށްފައިވާ ކަމަށް ޕޯލްސްޓާ އިން ރިޕޯޓްކޮށްފި އެވެ .",
+        "latin": "vudstokge bappa aatee koanfeld leree mekklarg aai gulhigen gudstok miuzik festival promoatkohfaivaa kamah poalstaa in ripoatkohfi eve .",
+        "back": "ވުޑްސްޓޮކްގެ ބައްޕަ އާޓީ ކޯންފެލްޑް ލެރީ މެއްކްލަރްގް އާއި ގުޅިގެން ގުޑްސްޓޮކް މިއުޒިކް ފެސްޓިވަލް ޕްރޮމޯޓްކޮށްފައިވާ ކަމަށް ޕޯލްސްޓާ އިން ރިޕޯޓްކޮށްފި އެވެ .",
         "preserved": []
       },
       {
-        "thaana": "އާއި ބަނގުލަދޭޝް ބައްދަލު ކުރި މެޗުގެ ތެރެއިން-- ސަން ފޮޓޯ/ ފަޔާޒު މޫސާ",
-        "latin": "aai ban'guladheysh bahdhalu kuri mechuge therein-- san fotoa/ fayaazu moosaa",
-        "back": "އާއި ބަނގުލަދޭށް ބަށްދަލު ކުރި މެޗުގެ ތެރެއިން-- ސަން ފޮޓޯ/ ފަޔާޒު މޫސާ",
+        "thaana": "ޝްޝްޝް...ކޮންތާކަށް ދާނީ? ޔޫހާ ތުންފަތުގައި އިނގިލި ޖައްސާލަމުން އަޑުމަޑުކުރުމަށް ބުނަމުން ބޭރު ދޮރު ލައްޕާލިއެވެ. އަދި ޒައުލް އާއި ގާތްވެލަމުން ވާހަކަދެއްކިއެވެ.",
+        "latin": "shshsh...konthaakah dhaanee? yoohaa thunfathugai in'gili jassaalamun adumadukurumah bunamun beyru dhoru lappaalieve. adhi zaul aai gaaiyvelamun vaahakadhekkieve.",
+        "back": "އްށްޝް...ކޮންތާކަށް ދާނީ? ޔޫހާ ތުންފަތުގައި އިނގިލި ޖައްސާލަމުން އަޑުމަޑުކުރުމަށް ބުނަމުން ބޭރު ދޮރު ލައްޕާލިއެވެ. އަދި ޒައުލް އާއި ގާތްވެލަމުން ވާހަކަދެއްކިއެވެ.",
+        "preserved": []
+      },
+      {
+        "thaana": "މްމްމް...އެ އާލިޔާ ދޯ....އެއީ ވަރެއްގެ ކުއްޖެއްނު. ތިއްތިއަށް އޭނައަށް ފޯސްކުރަން ނޭގުނީކަމަށް ވާނީ.....\"\"",
+        "latin": "mmm...e aaliyaa dhoa....eee varegge kujjennu. thiththiah eynaah foaskuran neyguneekamah vaanee.....\"\"",
+        "back": "އްމްމް...އެ އާލިޔާ ދޯ....އީއެ ވަރެއްގެ ކުއްޖެއްނު. ތިއްތިއަށް އޭނާށް ފޯސްކުރަން ނޭގުނީކަމަށް ވާނީ.....\"\"",
         "preserved": []
       }
     ],
     "unmapped_char": [
-      {
-        "thaana": "ނިޝާން މުލީގޭ ޝަރަފުގެ ޢިއްޒަތް (ނ.މ.ޝ.ޢ) 2013",
-        "latin": "nishaan muleegey sharafuge izzaiy (n.m.sh.) 2013",
-        "back": "ނިށާން މުލީގޭ ށަރަފުގެ އިއްޒަތް (ން.މް.ށް.) 2013",
-        "preserved": [
-          "2",
-          "0",
-          "1",
-          "3"
-        ]
-      },
-      {
-        "thaana": "1858 ވަނަ އަހަރު ހަތަރު މެމްބަރުންގެ ގްރޫޕަކާއެކު ޑައުނީވިލް އިން މިއަދު ނެވާޑާގެ ނަމުން މަޝްހޫރު ސަރަހައްދުގެ އީގަލް ވެލީއަށް ބަދަލުވިއެވެ .",
-        "latin": "1858 vana aharu hatharu membarunge groopakaaeku dauneevil in miadhu nevaadaage namun mashhooru sarahahdhuge eegal veleeah badhaluvieve .",
-        "back": "1858 ވަނަ އަހަރު ހަތަރު މެމްބަރުންގެ ގްރޫޕަކާއެކު ޑައުނީވިލް އިން މިއަދު ނެވާޑާގެ ނަމުން މަށްހޫރު ސަރަހަށްދުގެ އީގަލް ވެލީއަށް ބަދަލުވިއެވެ .",
-        "preserved": [
-          "1",
-          "8",
-          "5"
-        ]
-      },
-      {
-        "thaana": "ކްލީން ގްރީން އެންޑް ހެލްތީ އިންދޯ ތީމްއަށް ބާއްވާ މި މެރެތަންގައި 20,000އަށް ވުރެ ގިނަ މީހުން ބައިވެރިވާނެ ކަމަށް ބެލެވޭ ކަމުގައިވެސް މިނިސްޓަ ކައިލާޝް ވިދާޅުވި އެވެ.",
-        "latin": "kleen green end helthee indhoa theemah baahvaa mi merethangai 20,000ah vure gina meehun baiverivaane kamah belevey kamugaives minista kailaash vidhaalhuvi eve.",
-        "back": "ކްލީން ގްރީން އެންޑް ހެލްތީ އިންދޯ ތީމަށް ބާށްވާ މި މެރެތަންގައި 20,000އަށް ވުރެ ގިނަ މީހުން ބައިވެރިވާނެ ކަމަށް ބެލެވޭ ކަމުގައިވެސް މިނިސްޓަ ކައިލާށް ވިދާޅުވި އެވެ.",
-        "preserved": [
-          "2",
-          "0"
-        ]
-      },
       {
         "thaana": "'ދަ ކެޓް މީއޯސް ލައުޑްސް' މި ޖުމްލަ ތަފާތު ތިން ފިލި ޖަހައިގެން އަލުން ލިޔެލާށެވެ. 1. ބަނޑޮސް ބާރަށް ޕަރރސް ކުރެއެވެ. 2. ބަނޑޮސް ބާރަށް ހީނލައެވެ. 3. ބަނޑޮސް ބާރަށް ގިސްލައެވެ.",
         "latin": "'dha ket meeoas lauds' mi jumla thafaathu thin fili jahaigen alun liyelaasheve. 1. ban'dos baarah parrs kureeve. 2. ban'dos baarah heenlaeve. 3. ban'dos baarah gislaeve.",
@@ -166,35 +135,16 @@
         ]
       },
       {
-        "thaana": "2004 ވަނަ އަހަރު ޕީޓާ އައިޖެން ވަނީ ބާލިންގައި ގިނަ ދުވަސްތަކެއް ވަންދެން އެކުވެރިޔާ ގެސިން ޝްވާން އާއި އެކު އޭނާގެ ދެވަނަ ކައިވެނި ފާހަގަކޮށްފަ އެވެ .",
-        "latin": "2004 vana aharu peetaa aijen vanee baalingai gina dhuvasthakeh vandhen ekuveriyaa gesin shvaan aai eku eynaage dhevana kaiveni faahagakohfa eve .",
-        "back": "2004 ވަނަ އަހަރު ޕީޓާ އައިޖެން ވަނީ ބާލިންގައި ގިނަ ދުވަސްތަކެށް ވަންދެން އެކުވެރިޔާ ގެސިން ށްވާން އާއި އެކު އޭނާގެ ދެވަނަ ކައިވެނި ފާހަގަކޮށްފަ އެވެ .",
+        "thaana": "ޔުނިކް ޔޫޒަރނޭމް އެއް އުފެއްދުން. ގެލެކްޓިކްކްރޫސޭޑަރ16",
+        "latin": "yunik yoozarneym eh ufehdhun. gelektikkrooseydar16",
+        "back": "ޔުނިކް ޔޫޒަރްނޭމް އެށް އުފެށްދުން. ގެލެކްޓިއްކްރޫސޭޑަރް16",
         "preserved": [
-          "2",
-          "0",
-          "4"
+          "1",
+          "6"
         ]
       }
     ],
     "prenasalized": [
-      {
-        "thaana": "އަހަރެން ބައްޔެއްވެސް ނޫނެއްނު މިހާރު\"\" އަތުގެ މުލައްދަނޑި ދައްކާލަމުން ޒަލަފް ބުނެލީ އަޝްރާގެ މޫނުމައްޗަށް އެރި ކުލަވަރު ފެނުމުންނެވެ.",
-        "latin": "aharen bayyehves noonennu mihaaru\"\" athuge mulahdhan'di dhakkaalamun zalaf bunelee ashraage moonumachchah eri kulavaru fenumunneve.",
-        "back": "އަހަރެން ބައްޔެށްވެސް ނޫނެއްނު މިހާރު\"\" އަތުގެ މުލަށްދަނޑި ދައްކާލަމުން ޒަލަފް ބުނެލީ އަށްރާގެ މޫނުމައްޗަށް އެރި ކުލަވަރު ފެނުމުއްނެވެ.",
-        "preserved": []
-      },
-      {
-        "thaana": "އަޅުގަނޑަކަށް އަދި މަޝްވަރާތައް ފެށިކަމުގެ މައުލޫމާތުވެސް ލިބިފައެއް ނުވޭ. އަމީން އާންމު ވިދާޅުވިއެވެ.",
-        "latin": "alhugan'dakah adhi mashvaraathah feshikamuge mauloomaathuves libifaeh nuvey. ameen aanmu vidhaalhuvieve.",
-        "back": "އަޅުގަނޑަކަށް އަދި މަށްވަރާތަށް ފެށިކަމުގެ މައުލޫމާތުވެސް ލިބިފައެށް ނުވޭ. އަމީން އާންމު ވިދާޅުވިއެވެ.",
-        "preserved": []
-      },
-      {
-        "thaana": "އޭނާ ކައިވެނި ބައްލަވައިގެންނެވީ ސިޔާސީ ލީޑަރު އެންޓަން މާޓިން ޝްވެއިގާޑްގެ ކޮއްކޮ ޓެލެފް ޑަލް ޝްވެއިގާޑް އާއި ފަހުގެ ބޮޑުވަޒީރު ކްރިސްޓިއަން ހޯމަން ޝްވެއިގާޑްގެ ޓަންޓޭގެ ދަރިކަނބަލުން މާރީ މެގްޑެލީން ޝްވެއިގާޑް އާއެވެ .",
-        "latin": "eynaa kaiveni ballavaigennevee siyaasee leedaru entan maatin shveigaadge kokko telef dal shveigaad aai fahuge boduvazeeru kristian hoaman shveigaadge tanteyge dharikan'balun maaree megdeleen shveigaad aaeve .",
-        "back": "އޭނާ ކައިވެނި ބައްލަވައިގެއްނެވީ ސިޔާސީ ލީޑަރު އެންޓަން މާޓިން ށްވެއިގާޑްގެ ކޮއްކޮ ޓެލެފް ޑަލް ށްވެއިގާޑް އާއި ފަހުގެ ބޮޑުވަޒީރު ކްރިސްޓިއަން ހޯމަން ށްވެއިގާޑްގެ ޓަންޓޭގެ ދަރިކަނބަލުން މާރީ މެގްޑެލީން ށްވެއިގާޑް އާއެވެ .",
-        "preserved": []
-      },
       {
         "thaana": "ރޭ ދަންވަރު ޖުމުހޫރީ ގުޅުމުގެ ތ. ކިނބިދޫ ޖަގަހައިގަ އަލިފާން ރޯކޮށްލައިފިއެވެ.",
         "latin": "rey dhanvaru jumuhooree gulhumuge th. kin'bidhoo jagahaiga alifaan roakohlaifieve.",
@@ -202,41 +152,9 @@
         "preserved": []
       },
       {
-        "thaana": "އަލީ އަޝްފާގް (ދަގަނޑޭ) - ޕީޑީއާރްއެމް (މެލޭޝިއާ)",
-        "latin": "alee ashfaag (dhagan'dey) - peedeeaarem (meleyshiaa)",
-        "back": "އަލީ އަށްފާގް (ދަގަނޑޭ) - ޕީޑީއާރެމް (މެލޭށިއާ)",
-        "preserved": []
-      }
-    ],
-    "alifu_onset_ambiguity": [
-      {
-        "thaana": "ޕަޓަލްޕޫރަކީ އިންޑިއާގެ މަދްޔަ ޕްރަދޭޝްގެ ބެރާސިއާ ޑިސްޓްރިކްޓްގައި އޮންނަ ރަށެކެވެ . އެއީ ބޮޕާލް ތަހްސިލްގައި , ކީޓައި ދޭވާޕޫރާ އާއި ޕަޓަލްޕާނީ ކައިރީގައި އޮންނަ ތަނެކެވެ .",
-        "latin": "patalpoorakee indiaage madhya pradheyshge beraasiaa distriktgai onna rashekeve . eee bopaal thahsilgai , keetai dheyvaapooraa aai patalpaanee kaireegai onna thanekeve .",
-        "back": "ޕަޓަލްޕޫރަކީ އިންޑިއާގެ މަދްޔަ ޕްރަދޭށްގެ ބެރާސިއާ ޑިސްޓްރިކްޓްގައި އޮއްނަ ރަށެކެވެ . އީއެ ބޮޕާލް ތަށްސިލްގައި , ކީޓައި ދޭވާޕޫރާ އާއި ޕަޓަލްޕާނީ ކައިރީގައި އޮއްނަ ތަނެކެވެ .",
-        "preserved": []
-      },
-      {
-        "thaana": "އޭނާގެ އަންހެނުން ލޫއިސް މާރީ ޝްވާބް އާއި އެމީހުންގެ އަންހެން ދަރިން އިރްމާ އާއި ގިސެލާ އެމްއޭ ރިކްޓަރ އަކީ ވެސް އާޓް ތާރީޚް ލިޔުންތެރިންނެވެ .",
-        "latin": "eynaage anhenun loois maaree shvaab aai emeehunge anhen dharin irmaa aai giselaa emey riktar akee ves aat thaareekh liyuntherinneve .",
-        "back": "އޭނާގެ އަންހެނުން ލޫއިސް މާރީ ށްވާބް އާއި އެމީހުންގެ އަންހެން ދަރިން އިރްމާ އާއި ގިސެލާ އެމޭ ރިކްޓަރް އަކީ ވެސް އާޓް ތާރީޚް ލިޔުންތެރިއްނެވެ .",
-        "preserved": []
-      },
-      {
-        "thaana": "މެލޭޝިއާގެ ފީލްޑް ރެޓް މަޝްހޫރުވެފައިވަނީ މެލޭޝިއާ އާއި ތައިލެންޑް އާއި ސުމަޓްރާ އާއި ބޯނިއޯ އާއި ފިލިޕީންސް އަދި ކުދި ގިނަ ޖަޒީރާތަކުންނެވެ .",
-        "latin": "meleyshiaage feeld ret mashhooruvefaivanee meleyshiaa aai thailend aai sumatraa aai boanioa aai filipeens adhi kudhi gina jazeeraathakunneve .",
-        "back": "މެލޭށިއާގެ ފީލްޑް ރެޓް މަށްހޫރުވެފައިވަނީ މެލޭށިއާ އާއި ތައިލެންޑް އާއި ސުމަޓްރާ އާއި ބޯނިއޯ އާއި ފިލިޕީންސް އަދި ކުދި ގިނަ ޖަޒީރާތަކުއްނެވެ .",
-        "preserved": []
-      },
-      {
-        "thaana": "އަަޝްރަފް މިހެން ބުނެފައި ހިގައިގެންފިއެވެ.",
-        "latin": "aashraf mihen bunefai higaigenfieve.",
-        "back": "އާށްރަފް މިހެން ބުނެފައި ހިގައިގެންފިއެވެ.",
-        "preserved": []
-      },
-      {
-        "thaana": "ބީލްޚޯ އަކީ އިންޑިއާގެ މަދްޔަ ޕްރަދޭޝްގެ ބެރާސިއާ ޑިސްޓްރިކްޓްގައި އޮންނަ ރަށެކެވެ . އެއީ ބޯޕާލް ތަހްސިލްގައި ހުންނަ ތަނެކެވެ .",
-        "latin": "beelkhoa akee indiaage madhya pradheyshge beraasiaa distriktgai onna rashekeve . eee boapaal thahsilgai hunna thanekeve .",
-        "back": "ބީލްޚޯ އަކީ އިންޑިއާގެ މަދްޔަ ޕްރަދޭށްގެ ބެރާސިއާ ޑިސްޓްރިކްޓްގައި އޮއްނަ ރަށެކެވެ . އީއެ ބޯޕާލް ތަށްސިލްގައި ހުއްނަ ތަނެކެވެ .",
+        "thaana": "މި ފެސްޓިވަލްގެ މައިގަނޑު ޕާޓްނަރުންނަކީ ޕާމިޖިއާނީ ފްލޫރިއާ އާއި މެނަރ އާއި ހައިނެކެން އާއި ވޯޑޯއިސް އެޝުއަރެންސްސް އަދި ޔޫބީއެސް އެވެ .",
+        "latin": "mi festivalge maigan'du paatnarunnakee paamijiaanee flooriaa aai menar aai haineken aai voadoais eshuarenss adhi yoobeees eve .",
+        "back": "މި ފެސްޓިވަލްގެ މައިގަނޑު ޕާޓްނަރުއްނަކީ ޕާމިޖިއާނީ ފްލޫރިއާ އާއި މެނަރް އާއި ހައިނެކެން އާއި ވޯޑޯއިސް އެށުއަރެންއްސް އަދި ޔޫބީއެސް އެވެ .",
         "preserved": []
       }
     ]
