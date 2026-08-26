@@ -1,6 +1,15 @@
 # latin-mv-tlt — Project Requirements Specification
 
-**Version 0.2** · Status: draft · Supersedes v0.1 · Applies to repository version `0.1.0`
+**Version 0.2.1** · Status: draft · Supersedes v0.1 · Applies to repository version `0.1.0`
+
+> **Revision 0.2.1 (2026-08-26).** Incorporates the external review in
+> [`docs/v2_review.md`](v2_review.md). Changes: the training learning rate is
+> lowered (R-9.2), the corpus is staged with an explicit Stage 2 target
+> (R-2.1b, R-2.10), NLLB adoption must estimate size before training (R-3.3),
+> the T5-small size estimate is corrected upward (R-3.2), round-trip accuracy
+> and held-out test-set size are given concrete metric definitions (R-1.8,
+> R-8.9), and four requirements are added for tokenizer profiling (R-9.6),
+> script-aware segmentation (R-5.7), and a low-confidence indicator (R-6.11).
 
 > **Change of architecture.** v0.1 specified translation through a semantic
 > frame with two sentence-realization models. v0.2 replaces that with a single
@@ -82,7 +91,7 @@ are produced by the same code path (R-2.2).
 |---|---|---|
 | Neural components | 2 (`en-realize`, `dv-realize`) | 1 (`dv-en-translate`) |
 | Coverage | ~60 slot-vocabulary content words | Open-domain, corpus-limited |
-| Training data | ~16k/14k synthetic combinatorial pairs | ~92k real parallel pairs |
+| Training data | ~16k/14k synthetic combinatorial pairs | ~92k real parallel pairs (Stage 1); ≥200k target (Stage 2) |
 | Runtime download | ~148 MB (both directions) | ≤80 MB target |
 | Repo weight | 307 MB tracked ONNX | ≤80 MB tracked ONNX |
 | Failure mode | Out-of-vocabulary → unavailable | Out-of-domain → degraded quality |
@@ -112,7 +121,7 @@ the trade-off can be argued rather than hidden.
 | R-1.5 | **Loanword policy:** the transliterator shall emit consistent *phonetic* Latin (`އިންސްޓަގްރާމް` → `instagraam`), not English orthography. Consistency at training time takes precedence over prettiness. | Must |
 | R-1.6 | **Planned** — An optional display-layer loanword dictionary may prettify Latin shown to users (`instagraam` → `Instagram`). It shall apply only at the UI layer and shall never touch model input or training data. | Could |
 | R-1.7 | A Thaana IME shall let a user type Latin keys and receive Thaana in place, with correct caret handling and backspace over a composing sequence. | Must |
-| R-1.8 | **Planned** — Round-trip stability shall be measured: Thaana → Latin → Thaana over a held-out sample, reported as a percentage with the failing classes listed. | Must |
+| R-1.8 | **Planned** — Round-trip stability shall be measured as **exact string match percentage** on a held-out sample of ≥1,000 Thaana words or sentences: Thaana → Latin → Thaana, with the failing classes listed. Character-level Levenshtein distance may be reported as a secondary metric. Exact match is the correct strict standard for a rule-based system; a result **below 98%** shall be treated as a transliterator defect to fix before corpus construction, not as an accepted baseline. | Must |
 
 Traceability: `mappings.ts`, `thaanaToLatin.ts`, `latinToThaana.ts`,
 `useThaanaIme.ts`; tests `transliterator.test.ts`, `useThaanaIme.test.ts`.
@@ -128,14 +137,16 @@ Traceability: `mappings.ts`, `thaanaToLatin.ts`, `latinToThaana.ts`,
 | ID | Requirement | Priority |
 |---|---|---|
 | R-2.1 | **Planned** — Training data shall be built from existing Dhivehi–English parallel corpora, at minimum `alakxender/dhivehi-english-translations` (~92k news pairs), optionally `alakxender/dhivehi-english-parallel`. | Must |
+| R-2.1b | **Planned** — **Corpus staging.** Stage 1 shall use the available ~90k real parallel pairs as a **baseline**, not as the final corpus. Stage 2 shall target **≥200k total pairs** through back-translation (R-2.10) or domain-specific mining, with the augmentation strategy, the real/synthetic ratio, and the resulting counts recorded in the stats file (R-2.7). | Must |
 | R-2.2 | **Planned** — All Thaana in the corpus shall be converted to Latin using **the project's own transliterator**, not a third-party romanizer, so training and inference Latin are byte-identical in convention. | Must |
 | R-2.3 | **Planned** — Pairs shall be deduplicated (exact and near-duplicate) before splitting. | Must |
-| R-2.4 | **Planned** — Pairs with extreme source/target length ratios shall be filtered out as probable alignment errors; the threshold and the number dropped shall be recorded. | Must |
+| R-2.4 | **Planned** — Pairs with extreme source/target length ratios shall be filtered out as probable alignment errors. Starting threshold: ratios outside **[0.4, 2.5]** shall be flagged, with the final threshold fixed and recorded after corpus analysis. The threshold and the number dropped shall be recorded. | Must |
 | R-2.5 | **Planned** — Both directions shall be emitted with explicit T5 task prefixes: `translate Dhivehi Latin to English` and `translate English to Dhivehi Latin`. Direction shall never be left implicit. | Must |
 | R-2.6 | **Planned** — Splits shall be **by domain or source**, not random, so evaluation measures generalisation rather than memorisation. | Must |
 | R-2.7 | **Planned** — The build script shall record corpus provenance, filter counts, split sizes, and vocabulary statistics to a committed stats file, as `tools/clean_dictionary.py` does for the dictionary. | Must |
 | R-2.8 | Untrustworthy rows shall be quarantined to a file, not deleted. | Must |
 | R-2.9 | The application shall run without regenerating any data; shipped artefacts in `public/data/` are sufficient to start the UI. | Must |
+| R-2.10 | **Planned** — **Back-translation.** A back-translation pipeline shall augment the corpus toward the R-2.1b target using a larger pre-trained model (e.g. NLLB-200 or MADLAD-400) over monolingual Dhivehi and English text. Synthetic pairs shall be labelled with **provenance** so they are separable from real pairs, filtered for length-ratio quality (R-2.4) before inclusion, and **excluded from the held-out test set** (R-8.8, R-8.9). | Should |
 
 Retired: the combinatorial frame-pair generator (`tools/build_frame_pairs.py`)
 and `data/realize/*.jsonl`. See Appendix A.
@@ -149,8 +160,8 @@ fixed, 26 quarantined (`public/data/dictionary_stats.json`).
 | ID | Requirement | Priority |
 |---|---|---|
 | R-3.1 | **Planned** — A single seq2seq model shall handle both directions, selected by task prefix. Two separate models shall not be shipped. | Must |
-| R-3.2 | **Planned** — Baseline architecture shall be `t5-small` (or `google/flan-t5-small`), INT8-quantized ONNX, ~60 MB. | Must |
-| R-3.3 | **Planned** — `facebook/nllb-200-distilled-600M` shall be evaluated as an alternative, since NLLB includes Dhivehi. Adoption requires either meeting R-3.4 or an explicit, recorded decision to raise the budget. | Should |
+| R-3.2 | **Planned** — Baseline architecture shall be `t5-small` (or `google/flan-t5-small`), INT8-quantized ONNX. Realistic size estimate: encoder ~35 MB + merged decoder ~42 MB + tokenizer ~2.4 MB ≈ **80 MB** — at, not under, the R-3.4 budget. The earlier ~60 MB figure was optimistic. | Must |
+| R-3.3 | **Planned** — `facebook/nllb-200-distilled-600M` shall be evaluated as an alternative, since NLLB includes Dhivehi. The evaluation shall begin with a **preliminary exported-size estimate, before any training run**. At 600M parameters, INT8 encoder + merged decoder is expected to land at **~120–150 MB minimum**, before tokenizer and config — so it very likely breaks R-3.4. Adoption therefore requires either a measured export meeting R-3.4, or an explicit recorded decision that **NFR-13 and AC-10 are forfeited**. Deferring the size question to "we will quantize it later" is not an acceptable path. | Should |
 | R-3.4 | **Planned** — **Size budget: ≤80 MB total INT8** for everything fetched at runtime, across both directions. | Must |
 | R-3.5 | **Planned** — Max sequence length 128; inference shall use greedy decoding or beam ≤2. | Must |
 | R-3.6 | Models shall load **locally only** — `allowLocalModels` true, `allowRemoteModels` false. No third-party model fetch at runtime. | Must |
@@ -201,6 +212,7 @@ Traceability: `lookup.ts`, `closedClass.ts`, `suffixParser.ts`, `stemWord.ts`,
 | R-5.4 | A multi-sentence result shall be available only if **every** sentence produced output. Empty input shall report unavailable, never empty success. | Must |
 | R-5.5 | Input shall be normalised once and the transliterated form computed once and reused. | Must |
 | R-5.6 | Dictionary glossing shall run **beside** translation, not as an input to it. A gloss failure shall not fail the translation. | Must |
+| R-5.7 | **Planned** — Sentence segmentation (R-5.1) shall be **script-aware and deterministic**, treating Latin full stops, Dhivehi punctuation (e.g. `۔`), and line breaks as sentence boundaries. Dhivehi punctuation conventions differ from English; segmentation shall not assume ASCII terminators alone. | Must |
 
 Traceability: `dvToEn.ts`, `enToDv.ts`, `types.ts`; tests `pipeline.test.ts`,
 `enToDv.output.test.ts`. R-5.4 is enforced by `traces.length > 0 &&
@@ -227,6 +239,7 @@ and `translation` replace them. `dictionary`, `latin`, `thaana`,
 | R-6.8 | Light/dark themes with a persisted user toggle. | Should |
 | R-6.9 | Show a loading state while the dictionary loads; on failure show the error and withhold translation screens. About shall stay reachable. | Must |
 | R-6.10 | **Planned** — First model download shall show progress, since it is tens of MB. A silent multi-second stall is a defect. | Must |
+| R-6.11 | **Planned** — The UI **may** display a low-confidence warning when model output contains tokens unseen in training, or when output length is an extreme outlier relative to the input. This is an advisory indicator only; it shall not suppress or alter the output (R-3.9). | Could |
 
 Traceability: `App.tsx`, `ui/screens/*`, `ui/components/*`, `lib/theme.ts`.
 R-6.2 requires rewriting `TraceView.tsx` and `Breakdown.tsx`.
@@ -255,6 +268,7 @@ Traceability: `adapter.ts`, `storage.ts`, `types.ts`, `.env.example`.
 | R-8.6 | **Planned** — A manual spot-check of ≥50 random test outputs shall verify the generated Latin is **spellable in Dhivehi**. Impossible consonant clusters indicate failure regardless of BLEU. | Must |
 | R-8.7 | The gold set shall cover both directions, Latin-only, and the two directions shall deliberately not be mirrors of each other. | Must |
 | R-8.8 | **Planned** — Held-out evaluation data shall come from a source or domain excluded from training (per R-2.6). | Must |
+| R-8.9 | **Planned** — **Test-set size.** The held-out test set shall contain **≥500 sentence pairs per direction**, drawn from a domain or source not represented in training, and shall be manually verified for alignment quality before use. The current gold set holds **20 pairs per direction** — far too few for BLEU differences to be meaningful. 500 is the floor at which score differences begin to be somewhat reliable. | Must |
 
 Traceability: `lib/feedback.ts`, `evaluation/gold_sentences.json`,
 `evaluation/HUMAN_EVAL.md`, `tools/evaluate.py`.
@@ -264,10 +278,11 @@ Traceability: `lib/feedback.ts`, `evaluation/gold_sentences.json`,
 | ID | Requirement | Priority |
 |---|---|---|
 | R-9.1 | **Planned** — Training shall run on Colab or a local GPU and shall be rerunnable from committed scripts. | Must |
-| R-9.2 | **Planned** — Config shall follow the low-resource profile: LR ~3e-4, 3–5 epochs, batch 32, weight decay 0.01, `predict_with_generate`, `load_best_model_at_end` with `metric_for_best_model` set. | Should |
+| R-9.2 | **Planned** — Config shall follow the low-resource profile: **LR 1e-4**, 3–5 epochs, batch 32, weight decay 0.01, `predict_with_generate`, `load_best_model_at_end` with `metric_for_best_model` set. Raise to 3e-4 only as a recorded ablation if validation loss plateaus within the first two epochs. Batch 32 assumes **T5-small** at sequence length 128 in fp16 on a T4; `flan-t5-base` (250M) shall use **batch 8–16**. | Should |
 | R-9.3 | **Planned** — Export shall use `optimum-cli` to ONNX, then INT8 quantization, producing only the graphs required by R-3.13. | Must |
 | R-9.4 | The site shall consume the quantized ONNX export, never a PyTorch checkpoint folder. | Must |
 | R-9.5 | `*.safetensors`, `*.pt`, and `/models/` shall stay gitignored. | Must |
+| R-9.6 | **Planned** — **Tokenizer profiling.** Before training, the SentencePiece tokenizer shall be profiled on a sample of ≥1,000 Dhivehi Latin words to verify unknown forms are **subworded rather than mapped to `<unk>`**. A `<unk>` rate above 5% shall trigger a vocabulary review. Dhivehi Latin is ASCII so this should pass easily, but long forms such as `bihloorigandu` may split unpredictably and the split behaviour shall be recorded. | Should |
 
 Retired: `colab_train_realize.ipynb` and `tools/train_t5_realize.py` in their
 frame→sentence form. The `FrameDataset` loader generalises to prefixed
@@ -310,12 +325,17 @@ translation pairs and should be adapted rather than discarded.
 | Dictionary stats | `public/data/dictionary_stats.json` | Yes | Retained |
 | Honorifics | `public/data/honorifics.json` | Yes | Retained |
 | Benchmarks | `public/data/benchmarks.json` | Yes | Retained; metrics reset for v0.2 |
-| Gold set | `evaluation/gold_sentences.json` | Yes | Retained; extend per R-8.8 |
+| Gold set | `evaluation/gold_sentences.json` | Yes | Retained; **20 pairs/direction today — extend to ≥500 per R-8.9** |
 | Quarantine | `data/quarantine.json` | Yes | Retained |
 | Translation model | `public/models/dv-en-translate` | **Planned** | New, ≤80 MB |
-| Parallel corpus | `data/parallel/*.jsonl` | No (gitignore) | **Planned** |
+| Parallel corpus | `data/parallel/*.jsonl` | No (gitignore) | **Planned** — Stage 1 ~90k pairs, Stage 2 ≥200k (R-2.1b) |
+| Back-translated pairs | `data/parallel/synthetic/*.jsonl` | No (gitignore) | **Planned** — provenance-labelled (R-2.10) |
 | Realization models | `public/models/{en,dv}-realize` | Yes (307 MB) | **Retired — delete** |
 | Frame pairs | `data/realize/*.jsonl` | No | **Retired** |
+
+Quantity targets are requirements, not aspirations: R-2.1b fixes the corpus
+target and R-8.9 fixes the test-set floor. A corpus or test set below those
+numbers shall be reported as such rather than silently accepted.
 
 ---
 
@@ -329,11 +349,19 @@ translation pairs and should be adapted rather than discarded.
    every downstream metric and is the failure mode hardest to diagnose.
 4. **Corpus-limited coverage.** A news-trained model will be weakest on
    conversational and social-media Dhivehi. This is a known, stated limit.
+   ~90k pairs is a Stage 1 baseline, not a sufficient corpus (R-2.1b).
 5. **The LLM is a demo.** Removing it must not affect translation.
 6. **Quality is not guaranteed to beat v0.1 on in-vocabulary sentences.** The
    frame pipeline, within its ~60-word slot inventory, may produce cleaner
    output. v0.2 trades peak in-domain quality for coverage; §7 AC-9 tests this
    explicitly rather than assuming it.
+7. **The 80 MB budget is tight, not comfortable.** T5-small INT8 lands at
+   roughly 80 MB (R-3.2), so there is no headroom for a larger backbone without
+   an explicit, recorded budget decision (R-3.3).
+8. **Transliterator accuracy caps translation quality.** Every training pair
+   passes through the transliterator, so its round-trip error rate (R-1.8) is a
+   ceiling on everything measured downstream. It is measured before training,
+   not after.
 
 ---
 
@@ -351,12 +379,18 @@ translation pairs and should be adapted rather than discarded.
 - **AC-6** Benchmarks shows no unmeasured metric as if it were measured.
 - **AC-7** Chat sends English only to the LLM and fails clearly with no key.
 - **AC-8** A push to `main` deploys to GitHub Pages.
-- **AC-9** BLEU and chrF++ are measured on a domain-held-out test set and
-  published, together with a ≥50-sentence spellability spot-check.
+- **AC-9** BLEU and chrF++ are measured on a domain-held-out test set of
+  **≥500 sentence pairs per direction** (R-8.9) and published, together with a
+  ≥50-sentence spellability spot-check.
 - **AC-10** Total runtime model download is ≤80 MB, verified in devtools on a
   cold cache; a second load fetches no weights.
-- **AC-11** Round-trip Thaana → Latin → Thaana accuracy is measured and
-  published.
+- **AC-11** Round-trip Thaana → Latin → Thaana accuracy is measured as exact
+  string match over ≥1,000 held-out samples and published, with failing classes
+  listed (R-1.8).
+- **AC-12** The tokenizer profile (R-9.6) is run and its `<unk>` rate published
+  before the training run it gates.
+- **AC-13** The corpus stats file records Stage 1 and, if reached, Stage 2
+  counts with the real/synthetic split (R-2.1b, R-2.10).
 
 ---
 
@@ -367,14 +401,21 @@ Ordered so the app stays runnable throughout.
 | Step | Action | Unblocks |
 |---|---|---|
 | M-1 | Write the corpus builder: download HF datasets, normalise Thaana→Latin with the project transliterator, dedup, length-filter, prefix, domain-split, emit stats. | R-2.x |
-| M-2 | Measure round-trip transliteration accuracy on the corpus **before** training — it caps achievable quality. | R-1.8, AC-11 |
+| M-2 | Measure round-trip transliteration accuracy on the corpus **before** training — it caps achievable quality. Exact-match over ≥1,000 samples; fix the rules if below 98%. | R-1.8, AC-11 |
+| M-2b | Profile the tokenizer on ≥1,000 Latin words and record the `<unk>` rate before committing to the backbone. | R-9.6, AC-12 |
 | M-3 | Adapt `train_t5_realize.py` to prefixed pairs; add BLEU/chrF++ per epoch and best-checkpoint selection. | R-9.x, R-8.5 |
-| M-4 | Train, export ONNX INT8, ship only required graphs into `public/models/dv-en-translate`. | R-3.x |
+| M-4 | Train, export ONNX INT8, ship only required graphs into `public/models/dv-en-translate`. **Measure the exported size against the 80 MB budget here**, not after integration. | R-3.x, AC-10 |
 | M-5 | Add `src/core/translate/` reusing the loader and status machine from `realization/runner.ts`. | R-3.6–3.12 |
 | M-6 | Rewrite `PipelineTrace` and both pipeline entry points; keep the `traces.length > 0` guard and its test. | R-5.x |
 | M-7 | Rewrite `Breakdown.tsx` / `TraceView.tsx` for the new trace; update `About.tsx`. | R-6.2, R-6.6 |
 | M-8 | Delete `src/core/frames/`, `public/models/{en,dv}-realize`, `data/realize/`, `tools/build_frame_pairs.py`, `colab_train_realize.ipynb`, and the frame tests. | NFR-13 |
-| M-9 | Reset `benchmarks.json` for v0.2 metrics; re-run evaluation and publish. | AC-6, AC-9 |
+| M-9 | Extend the gold set to ≥500 verified pairs per direction from a held-out domain, before any score is published. | R-8.9, AC-9 |
+| M-10 | Reset `benchmarks.json` for v0.2 metrics; re-run evaluation and publish. | AC-6, AC-9 |
+| M-11 | **Stage 2** — build the back-translation pipeline and grow the corpus toward ≥200k pairs; retrain and compare against the Stage 1 baseline. | R-2.1b, R-2.10 |
+
+M-1 through M-10 deliver the Stage 1 baseline model. M-11 is Stage 2 and is
+sequenced last deliberately: a back-translation pipeline is only worth building
+once there is a measured Stage 1 score to compare it against.
 
 **M-8 caveat:** deleting 307 MB from the working tree does not shrink the git
 history — the blobs remain in every clone. If repository size matters, history
@@ -392,9 +433,13 @@ force-push, and is **not** authorised by this document.
 | GAP-3 | No human ratings collected (meaning / fluency). | R-8.3 |
 | GAP-4 | The direct translation model does not exist yet — no corpus, no checkpoint, no export. | AC-2, AC-9, AC-10 |
 | GAP-5 | `public/models/` is 307 MB tracked, ~150 MB of it never loaded at runtime. | NFR-13, AC-10 |
-| GAP-6 | README links `Context/PROJECT.md`, `Context/DATA.md`, `Context/TRAINING.md`, `Context/STATUS.md`; `Context/` is absent from the working tree. | Documentation |
+| GAP-6 | ~~README links to a missing `Context/` folder.~~ **Resolved** — `Context/` is present with `PROJECT.md`, `DATA.md`, `TRAINING.md`, `STATUS.md`, `QUALITY.md`. | Closed |
 | GAP-7 | README quickstart hardcodes a Windows path (`C:\Users\Moham\...`). | Documentation |
 | GAP-8 | README, About, and `benchmarks.json` still describe the v0.1 frame architecture. | R-6.6, AC-6 |
+| GAP-9 | Gold set holds 20 pairs per direction against a ≥500 requirement, and is not domain-held-out. | R-8.9, AC-9 |
+| GAP-10 | Corpus is Stage 1 only; no back-translation pipeline exists. | R-2.1b, R-2.10 |
+| GAP-11 | Tokenizer `<unk>` behaviour on Dhivehi Latin is unprofiled. | R-9.6, AC-12 |
+| GAP-12 | Sentence segmentation is not script-aware; Dhivehi punctuation is untreated. | R-5.7 |
 
 ---
 
@@ -456,7 +501,7 @@ verb were not slots. The apparent scale of the training set measured
 combinatorial expansion, not linguistic coverage.
 
 Cost was also inverted against benefit: two models totalling 307 MB tracked
-(~148 MB fetched) for less coverage than one ~60 MB model trained on real
+(~148 MB fetched) for less coverage than one ~80 MB model trained on real
 parallel text.
 
 ### A.4 What survived
