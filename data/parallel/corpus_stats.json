@@ -1,0 +1,114 @@
+{
+  "generatedBy": "tools/build_translation_pairs.py",
+  "sources": [
+    "alakxender/dhivehi-english-translations",
+    "alakxender/dhivehi-english-parallel"
+  ],
+  "transliteratorSha256": "96cf18ca35337be11001988f31489e3d4d95965263063980c57e5bce7a891593",
+  "prefixes": {
+    "dv-en": "translate Dhivehi Latin to English: ",
+    "en-dv": "translate English to Dhivehi Latin: "
+  },
+  "rowsRead": 575892,
+  "pairsKept": 285748,
+  "dropped": {
+    "length_bounds": 88111,
+    "over_max_tokens": 83158,
+    "duplicate_exact": 49752,
+    "latin_in_dhivehi": 23555,
+    "non_ascii_latin": 17492,
+    "too_few_words": 15382,
+    "timestamp_fragment": 9999,
+    "length_ratio": 1643,
+    "duplicate_near": 629,
+    "thaana_in_english": 409,
+    "ui_string": 14
+  },
+  "droppedTotal": 290144,
+  "quarantined": 5000,
+  "lengthRatioBounds": [
+    0.4,
+    2.5
+  ],
+  "maxTokens": 128,
+  "tokenizer": "t5-small",
+  "splitSeed": 11,
+  "splitBy": "domain (whole domains held out, R-2.6 / R-8.8); the `conversational` group is held out by row instead and is present in all three splits",
+  "domainCount": 18,
+  "domains": {
+    "train": [
+      "crime",
+      "local news",
+      "other",
+      "politics",
+      "source:alakxender/dhivehi-english-parallel"
+    ],
+    "valid": [
+      "business",
+      "international",
+      "sports"
+    ],
+    "test": [
+      "education",
+      "entertainment",
+      "environment",
+      "health",
+      "law",
+      "religion",
+      "society",
+      "technology",
+      "tourism"
+    ]
+  },
+  "domainRowCounts": {
+    "source:alakxender/dhivehi-english-parallel": 158462,
+    "conversational": 41415,
+    "politics": 20848,
+    "local news": 11181,
+    "crime": 10846,
+    "business": 9849,
+    "sports": 7685,
+    "international": 6214,
+    "health": 5041,
+    "entertainment": 4125,
+    "education": 3681,
+    "environment": 2448,
+    "technology": 1802,
+    "religion": 1601,
+    "other": 257,
+    "tourism": 189,
+    "society": 59,
+    "law": 45
+  },
+  "conversationalHoldout": {
+    "rows": 41415,
+    "assigned": {
+      "train": 38415,
+      "valid": 1500,
+      "test": 1500
+    },
+    "written": {
+      "train": 76830,
+      "valid": 2984,
+      "test": 2990
+    },
+    "heldOutBy": "row (seeded shuffle), not domain",
+    "note": "Scores on these rows are in-domain and are not comparable to the domain-held-out news splits. Report them separately."
+  },
+  "leakedInputsRemoved": {
+    "valid": 418,
+    "test": 390,
+    "valid_test_overlap": 130
+  },
+  "rows": {
+    "train": 480018,
+    "valid": 49948,
+    "test": 40592
+  },
+  "stage": 1,
+  "stage1Target": 90000,
+  "stage2Target": 200000,
+  "syntheticPairs": 0,
+  "realPairs": 285748,
+  "meetsStage2Target": true
+}

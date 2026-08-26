@@ -68,12 +68,78 @@ def load_words(corpus: Path, limit: int) -> list[str]:
     return types[:limit] if limit else types
 
 
+def measure_truncation(tok, corpus: Path, max_len: int, sample_size: int = 4000) -> dict:
+    """How many corpus rows would be silently truncated at `max_len`?
+
+    R-9.6 asks for the `<unk>` rate, which turns out to be the easy half. The
+    number that bites is fragmentation: Dhivehi Latin averages several subwords
+    per word under T5's English-trained SentencePiece, so sequences run long and
+    the tokenizer quietly drops the tail.
+    """
+    if not corpus.exists() or corpus.suffix != ".jsonl":
+        return {}
+
+    rows = []
+    with corpus.open(encoding="utf-8") as handle:
+        for i, line in enumerate(handle):
+            if i > 200_000:
+                break
+            if line.strip():
+                rows.append(json.loads(line))
+    if not rows:
+        return {}
+
+    sample = random.Random(11).sample(rows, min(sample_size, len(rows)))
+    buckets: dict[str, list[tuple[int, int]]] = {}
+    for row in sample:
+        lengths = (
+            len(tok.encode(row["input"], add_special_tokens=True)),
+            len(tok.encode(row["target"], add_special_tokens=True)),
+        )
+        buckets.setdefault(row.get("direction", "unknown"), []).append(lengths)
+
+    def percentile(values: list[int], p: float) -> int:
+        return sorted(values)[min(len(values) - 1, int(len(values) * p))]
+
+    by_direction = {}
+    for direction, pairs in buckets.items():
+        inputs = [a for a, _ in pairs]
+        targets = [b for _, b in pairs]
+        over = sum(1 for a, b in pairs if a > max_len or b > max_len)
+        by_direction[direction] = {
+            "rows": len(pairs),
+            "inputMedian": percentile(inputs, 0.5),
+            "inputP90": percentile(inputs, 0.9),
+            "inputP99": percentile(inputs, 0.99),
+            "targetMedian": percentile(targets, 0.5),
+            "targetP90": percentile(targets, 0.9),
+            "targetP99": percentile(targets, 0.99),
+            "overLimit": over,
+            "overLimitPercent": round(100 * over / len(pairs), 2),
+        }
+
+    return {
+        "maxLen": max_len,
+        "sampled": len(sample),
+        "byDirection": by_direction,
+        "note": (
+            "A row longer than maxLen is truncated silently at training time, "
+            "teaching the model to map a partial source to a complete target. "
+            "This is measured before training precisely because nothing reports it "
+            "during training."
+        ),
+    }
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--model", default="t5-small")
     ap.add_argument("--corpus", type=Path, default=DEFAULT_CORPUS)
     ap.add_argument("--n", type=int, default=2000, help="word types to profile (R-9.6 wants ≥1,000)")
     ap.add_argument("--gate", type=float, default=5.0, help="max %% of words containing <unk>")
+    ap.add_argument("--max-len", type=int, default=128, help="R-3.5 sequence limit to check against")
+    ap.add_argument("--truncation-gate", type=float, default=2.0,
+                    help="max %% of corpus rows allowed to exceed --max-len")
     ap.add_argument("--out", type=Path, default=OUT)
     args = ap.parse_args()
 
@@ -110,6 +176,12 @@ def main() -> int:
     unk_words = sum(1 for w in words if unk_id in tok.encode(w, add_special_tokens=False))
     unk_percent = round(100 * unk_words / total, 3) if total else 0.0
 
+    # Sequence lengths against R-3.5's limit. This is the number the fragmentation
+    # rate actually cashes out into: a row longer than max_len is not an error at
+    # training time, it is silently truncated — so the model learns to map half a
+    # sentence to a whole translation, or to stop early. Nothing surfaces that.
+    truncation = measure_truncation(tok, args.corpus, args.max_len)
+
     profile = {
         "generatedBy": "tools/profile_tokenizer.py",
         "model": args.model,
@@ -124,6 +196,7 @@ def main() -> int:
         "piecesPerWordHistogram": dict(sorted(piece_counts.items())),
         "examplesWithUnk": with_unk[:20],
         "longFormExamples": longest,
+        "sequenceLengths": truncation,
         "note": (
             "Measured over word TYPES, not tokens: a token-weighted rate would be "
             "dominated by common words and could hide a broken tail. Dhivehi Latin "
@@ -139,10 +212,32 @@ def main() -> int:
     print(f"word types         {total}")
     print(f"contain <unk>      {unk_words}  ({unk_percent:.2f}%)")
     print(f"mean pieces/word   {profile['meanPiecesPerWord']}")
+    if truncation:
+        print(f"\nsequence lengths vs max_len={args.max_len} (sampled {truncation['sampled']} rows)")
+        for direction, d in truncation["byDirection"].items():
+            print(
+                f"  {direction:<6} input median {d['inputMedian']:>4} p90 {d['inputP90']:>4}"
+                f"  | target median {d['targetMedian']:>4} p90 {d['targetP90']:>4}"
+                f"  | over limit {d['overLimitPercent']:5.1f}%"
+            )
     if longest:
         example = longest[0]
         print(f"e.g. {example['word']} → {' '.join(example['pieces'])}")
     print(f"\nwrote {args.out.relative_to(ROOT)}")
+
+    worst = max((d["overLimitPercent"] for d in truncation["byDirection"].values()), default=0.0)
+    if worst > args.truncation_gate:
+        print(
+            f"\nWARNING: {worst:.1f}% of rows exceed max_len={args.max_len} and would be "
+            f"SILENTLY TRUNCATED during training (limit {args.truncation_gate}%).\n"
+            "  Dhivehi Latin fragments far more than English under T5's SentencePiece, so the\n"
+            "  Dhivehi side dominates the sequence budget. Three ways out, in order:\n"
+            "    1. Filter the corpus to rows that fit. Clean, costs those rows.\n"
+            "    2. Raise max_len (amends R-3.5). Costs memory and compute quadratically.\n"
+            "    3. Trim/retrain the tokenizer. Also the R-3.2 size lever, so it pays twice.\n"
+            "  Truncating silently is the one option that is not acceptable.",
+            file=sys.stderr,
+        )
 
     if unk_percent > args.gate:
         print(

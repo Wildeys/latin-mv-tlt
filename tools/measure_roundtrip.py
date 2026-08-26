@@ -72,6 +72,20 @@ SHAVIYANI = "ށ"
 PRENASAL_STOPS = "ބޑދޓތޒ"  # b d dh t th g
 
 
+
+def rel_to_root(path: Path) -> str:
+    """Path relative to the repo root, for stats and log lines.
+
+    `Path.relative_to` compares lexically, so a relative argument raises even
+    when it points inside the repo — and it raises *after* the measurement has
+    run, discarding the result. Resolve first, and degrade to the path as given
+    when it genuinely lies outside the tree.
+    """
+    try:
+        return str(path.resolve().relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
 def levenshtein(a: str, b: str) -> int:
     if a == b:
         return 0
@@ -232,7 +246,7 @@ def main() -> int:
 
     total = len(samples)
     stats = {
-        "source": str(args.source.relative_to(ROOT)),
+        "source": rel_to_root(args.source),
         "field": args.field,
         "samples": total,
         "seed": args.seed,
@@ -276,7 +290,7 @@ def main() -> int:
         print("\nfailing classes")
         for cls, count in classes.most_common():
             print(f"  {cls:<16} {count:>6}  {100 * count / total:.2f}%")
-    print(f"\nwrote {args.out.relative_to(ROOT)}")
+    print(f"\nwrote {rel_to_root(args.out)}")
 
     if stats["latinStablePercent"] < args.gate:
         print(

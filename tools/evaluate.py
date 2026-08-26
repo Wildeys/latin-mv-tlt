@@ -61,6 +61,7 @@ def load_pairs(path: Path, args_block: str = "test") -> list[dict]:
                         "direction": row.get("direction", "unknown"),
                         "source": row["input"],
                         "reference": row["target"],
+                        "domain": (row.get("provenance") or {}).get("domain", ""),
                     }
                 )
         return rows
@@ -95,6 +96,15 @@ def main() -> int:
                     help='JSONL of {"source", "prediction"} aligned to --test')
     ap.add_argument("--block", default="test", choices=["test", "smoke"],
                     help="gold_sentences.json block. `smoke` is a wiring check, not a result (R-8.3)")
+    # The test split holds two kinds of row and averaging them is misleading. The
+    # news domains are held out whole, so their score measures generalisation to
+    # unseen subject matter. The `conversational` rows are a row-level holdout
+    # from a register the model does train on, so their score is in-domain and
+    # will read higher. One number over both describes neither, so scoring is
+    # filterable and the two are reported separately.
+    ap.add_argument("--domain", default="",
+                    help="only score rows whose provenance.domain equals this "
+                         "(e.g. `conversational`); `--domain !conversational` inverts")
     ap.add_argument("--spot-check", type=int, default=50, help="R-8.6 spellability sample")
     ap.add_argument("--out", type=Path, default=OUT)
     args = ap.parse_args()
@@ -105,6 +115,18 @@ def main() -> int:
         raise SystemExit("sacrebleu is not installed. pip install -r tools/requirements.txt")
 
     pairs = load_pairs(args.test, args.block)
+
+    if args.domain:
+        wanted, invert = args.domain.lstrip("!"), args.domain.startswith("!")
+        before = len(pairs)
+        pairs = [p for p in pairs if (p.get("domain") == wanted) != invert]
+        if not pairs:
+            raise SystemExit(
+                f"--domain {args.domain!r} matched 0 of {before} rows. "
+                "Domains come from provenance.domain and only exist on corpus JSONL, "
+                "not on the gold-set JSON."
+            )
+        print(f"scoring {len(pairs)} of {before} rows matching --domain {args.domain!r}")
     if args.block == "smoke":
         print(
             "NOTE: scoring the `smoke` block. It shares the v0.1 slot vocabulary with the "

@@ -1,32 +1,32 @@
-# Offline pipeline dependencies (R-9.1: "rerunnable from committed scripts").
-#
-# v0.1 declared these nowhere — they existed only as a `%pip install` line inside
-# the Colab notebook and as prose in the requirements document, so "rerunnable"
-# was not actually true.
+# Local offline pipeline (R-9.1: "rerunnable from committed scripts").
 #
 #   python -m venv .venv && . .venv/bin/activate
 #   pip install -r tools/requirements.txt
 #
-# Note tools/build_translation_pairs.py and tools/measure_roundtrip.py also need
-# **Node.js**, because they call the project's own TypeScript transliterator
-# through tools/transliterate.mjs (R-2.2). That is why the corpus is built
-# locally rather than on Colab.
+# This file is deliberately torch-free. The pipeline runs in two places and they
+# need different things:
+#
+#   here (laptop)  corpus build, round-trip measurement, tokenizer profiling,
+#                  scoring. Needs **Node.js**, because these call the project's
+#                  own TypeScript transliterator through tools/transliterate.mjs
+#                  (R-2.2) — which is exactly why they cannot run on Colab.
+#
+#   Colab (GPU)    training and ONNX export. See tools/requirements-train.txt.
+#
+# Keeping them separate is not tidiness. `torch>=2.4` has no wheel for x86_64
+# macOS (PyTorch stopped shipping Intel Mac builds after 2.2.2), so a combined
+# file makes the local install fail outright on that hardware — for packages the
+# local scripts never import.
 
-# Corpus construction
+# Corpus construction (tools/build_translation_pairs.py)
 datasets>=3.0
 huggingface-hub>=0.26
 
-# Training (M-3). transformers>=4.46 for `processing_class` on Trainer.
-torch>=2.4
+# Tokenizer profiling (tools/profile_tokenizer.py). AutoTokenizer needs no
+# modelling backend, so transformers installs fine without torch.
 transformers>=4.46
-accelerate>=1.1
 sentencepiece>=0.2
 
-# Metrics. R-8.4 requires chrF++, which is sacrebleu.CHRF(word_order=2) —
-# bare CHRF() is chrF, not chrF++.
+# Metrics (tools/evaluate.py). R-8.4 requires chrF++, which is
+# sacrebleu.CHRF(word_order=2) — bare CHRF() is chrF, a different metric.
 sacrebleu>=2.4
-
-# ONNX export and INT8 quantization (M-4, R-9.3)
-optimum[onnxruntime]>=1.23
-onnx>=1.17
-onnxruntime>=1.19

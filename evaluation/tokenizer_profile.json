@@ -1,0 +1,305 @@
+{
+  "generatedBy": "tools/profile_tokenizer.py",
+  "model": "t5-small",
+  "corpus": "data/parallel/train.jsonl",
+  "wordTypes": 2000,
+  "unkToken": "<unk>",
+  "wordsContainingUnk": 0,
+  "unkPercent": 0.0,
+  "gate": 5.0,
+  "passes": true,
+  "meanPiecesPerWord": 5.697,
+  "piecesPerWordHistogram": {
+    "1": 18,
+    "2": 71,
+    "3": 223,
+    "4": 300,
+    "5": 387,
+    "6": 352,
+    "7": 255,
+    "8": 181,
+    "9": 111,
+    "10": 60,
+    "11": 25,
+    "12": 13,
+    "13": 1,
+    "14": 2,
+    "15": 1
+  },
+  "examplesWithUnk": [],
+  "longFormExamples": [
+    {
+      "word": "minivankohfi",
+      "pieces": [
+        "▁mini",
+        "van",
+        "k",
+        "o",
+        "h",
+        "f",
+        "i"
+      ]
+    },
+    {
+      "word": "medhukan'daalee",
+      "pieces": [
+        "▁",
+        "med",
+        "h",
+        "u",
+        "kan",
+        "'",
+        "d",
+        "a",
+        "a",
+        "le",
+        "e"
+      ]
+    },
+    {
+      "word": "olhuvaalamun",
+      "pieces": [
+        "▁",
+        "o",
+        "l",
+        "h",
+        "u",
+        "va",
+        "al",
+        "am",
+        "un"
+      ]
+    },
+    {
+      "word": "hamanujehumuge",
+      "pieces": [
+        "▁ha",
+        "man",
+        "u",
+        "je",
+        "hum",
+        "uge"
+      ]
+    },
+    {
+      "word": "imigreyshanaa",
+      "pieces": [
+        "▁imi",
+        "gre",
+        "y",
+        "s",
+        "han",
+        "a",
+        "a"
+      ]
+    },
+    {
+      "word": "dhathurukuri",
+      "pieces": [
+        "▁",
+        "d",
+        "hat",
+        "hur",
+        "uk",
+        "uri"
+      ]
+    },
+    {
+      "word": "saabithuvaane",
+      "pieces": [
+        "▁",
+        "s",
+        "a",
+        "abi",
+        "th",
+        "u",
+        "va",
+        "an",
+        "e"
+      ]
+    },
+    {
+      "word": "dhookohlaifi",
+      "pieces": [
+        "▁",
+        "d",
+        "hook",
+        "o",
+        "h",
+        "la",
+        "if",
+        "i"
+      ]
+    },
+    {
+      "word": "inthihaabuge",
+      "pieces": [
+        "▁in",
+        "thi",
+        "ha",
+        "a",
+        "bug",
+        "e"
+      ]
+    },
+    {
+      "word": "dharivarunge",
+      "pieces": [
+        "▁",
+        "d",
+        "hari",
+        "var",
+        "ung",
+        "e"
+      ]
+    },
+    {
+      "word": "foruvafaanethee",
+      "pieces": [
+        "▁for",
+        "u",
+        "va",
+        "f",
+        "a",
+        "a",
+        "net",
+        "he",
+        "e"
+      ]
+    },
+    {
+      "word": "hirilandhoon",
+      "pieces": [
+        "▁",
+        "hir",
+        "il",
+        "and",
+        "h",
+        "o",
+        "on"
+      ]
+    },
+    {
+      "word": "presharuthakaa",
+      "pieces": [
+        "▁pre",
+        "s",
+        "har",
+        "u",
+        "th",
+        "aka",
+        "a"
+      ]
+    },
+    {
+      "word": "bodukurumuge",
+      "pieces": [
+        "▁bo",
+        "du",
+        "kur",
+        "um",
+        "uge"
+      ]
+    },
+    {
+      "word": "vagahnagaifi",
+      "pieces": [
+        "▁va",
+        "g",
+        "a",
+        "h",
+        "nag",
+        "a",
+        "if",
+        "i"
+      ]
+    },
+    {
+      "word": "jamaanukuraa",
+      "pieces": [
+        "▁jam",
+        "a",
+        "an",
+        "uk",
+        "ura",
+        "a"
+      ]
+    },
+    {
+      "word": "bahdhaluvunthah",
+      "pieces": [
+        "▁",
+        "bah",
+        "d",
+        "hal",
+        "u",
+        "v",
+        "un",
+        "th",
+        "a",
+        "h"
+      ]
+    },
+    {
+      "word": "faisaathakeh",
+      "pieces": [
+        "▁fais",
+        "a",
+        "at",
+        "hak",
+        "e",
+        "h"
+      ]
+    },
+    {
+      "word": "minivankuraa",
+      "pieces": [
+        "▁mini",
+        "van",
+        "kur",
+        "a",
+        "a"
+      ]
+    },
+    {
+      "word": "hallukuraanan",
+      "pieces": [
+        "▁hall",
+        "uk",
+        "ura",
+        "an",
+        "an"
+      ]
+    }
+  ],
+  "sequenceLengths": {
+    "maxLen": 128,
+    "sampled": 4000,
+    "byDirection": {
+      "dv-en": {
+        "rows": 1985,
+        "inputMedian": 59,
+        "inputP90": 104,
+        "inputP99": 124,
+        "targetMedian": 19,
+        "targetP90": 35,
+        "targetP99": 48,
+        "overLimit": 0,
+        "overLimitPercent": 0.0
+      },
+      "en-dv": {
+        "rows": 2015,
+        "inputMedian": 29,
+        "inputP90": 46,
+        "inputP99": 59,
+        "targetMedian": 50,
+        "targetP90": 95,
+        "targetP99": 114,
+        "overLimit": 0,
+        "overLimitPercent": 0.0
+      }
+    },
+    "note": "A row longer than maxLen is truncated silently at training time, teaching the model to map a partial source to a complete target. This is measured before training precisely because nothing reports it during training."
+  },
+  "note": "Measured over word TYPES, not tokens: a token-weighted rate would be dominated by common words and could hide a broken tail. Dhivehi Latin is ASCII so a low rate is expected; the point is to confirm it rather than assume it (R-9.6)."
+}
