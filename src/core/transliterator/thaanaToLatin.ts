@@ -6,8 +6,23 @@ import {
   THAANA_VOWELS,
 } from './mappings';
 
-export function transliterateThaana(text: string): string {
+export type ThaanaToLatinResult = {
+  latin: string;
+  /** Characters passed through unconverted, de-duplicated. */
+  preserved: string[];
+};
+
+/**
+ * Thaana → Latin, reporting what could not be converted.
+ *
+ * The reverse direction has always reported preserved segments (R-1.3), but this
+ * direction pushed unmapped characters through silently. R-1.8's round-trip
+ * metric needs to attribute failures to a class, and "there was a character we
+ * had no rule for" is one of them — invisible without this.
+ */
+export function transliterateThaanaDetailed(text: string): ThaanaToLatinResult {
   const result: string[] = [];
+  const preserved: string[] = [];
   let i = 0;
   const n = text.length;
 
@@ -19,6 +34,9 @@ export function transliterateThaana(text: string): string {
       (!(char in THAANA_CONSONANTS) && !(char in THAANA_VOWELS))
     ) {
       result.push(char);
+      // Whitespace and ASCII punctuation are passed through by design; only
+      // Thaana-block characters we have no rule for are a real gap.
+      if (/[ހ-޿]/.test(char)) preserved.push(char);
       i += 1;
       continue;
     }
@@ -78,10 +96,15 @@ export function transliterateThaana(text: string): string {
     }
 
     result.push(char);
+    if (/[ހ-޿]/.test(char)) preserved.push(char);
     i += 1;
   }
 
-  return result.join('');
+  return { latin: result.join(''), preserved: [...new Set(preserved)] };
+}
+
+export function transliterateThaana(text: string): string {
+  return transliterateThaanaDetailed(text).latin;
 }
 
 export function transliterateWord(word: string): string {

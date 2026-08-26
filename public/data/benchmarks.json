@@ -1,15 +1,108 @@
 {
-  "notes": "Fill values only after a script has measured them on this pipeline. Tokenization figures from dhivehi-latin-slm are supporting research, not the main claim.",
+  "notes": "Fill values only after a script has measured them on this pipeline (NFR-8). Every number here names the script that produced it. v0.2 dropped the v0.1 SEGMENTATION group (frame-slot detection) and REALIZATION group: neither exists under a direct translation model. Tokenization figures from dhivehi-latin-slm are supporting research, not this system's results.",
+  "architecture": "v0.2 — one direct Dhivehi Latin <-> English seq2seq model, rule-based transliterator as the Thaana pivot",
   "metrics": [
-    { "group": "TRANSLITERATION", "name": "Thaana → Latin accuracy", "value": "not measured on this repo yet", "source": "pending" },
-    { "group": "SEGMENTATION", "name": "Subject detection", "value": "not measured", "source": "pending" },
-    { "group": "SEGMENTATION", "name": "Action detection", "value": "not measured", "source": "pending" },
-    { "group": "SEGMENTATION", "name": "Location detection", "value": "not measured", "source": "pending" },
-    { "group": "TRANSLATION", "name": "BLEU", "value": "not measured — gold set still small", "source": "evaluation/gold_sentences.json" },
-    { "group": "TRANSLATION", "name": "chrF", "value": "not measured — gold set still small", "source": "evaluation/gold_sentences.json" },
-    { "group": "REALIZATION", "name": "Before model", "value": "Unavailable (by design)", "source": "T5-only rule" },
-    { "group": "REALIZATION", "name": "After model", "value": "not measured — model not exported", "source": "pending" },
-    { "group": "HUMAN EVALUATION", "name": "Meaning", "value": "no ratings yet", "source": "Feedback store" },
-    { "group": "HUMAN EVALUATION", "name": "Fluency", "value": "no ratings yet", "source": "Feedback store" }
+    {
+      "group": "TRANSLITERATION",
+      "name": "Round-trip Latin stability",
+      "value": "99.28% (15092 / 15201)",
+      "source": "tools/measure_roundtrip.py → evaluation/roundtrip_stats.json"
+    },
+    {
+      "group": "TRANSLITERATION",
+      "name": "Round-trip exact Thaana match",
+      "value": "88.07% raw, 88.96% folding the 10 Arabic-derived letters",
+      "source": "tools/measure_roundtrip.py → evaluation/roundtrip_stats.json"
+    },
+    {
+      "group": "TRANSLITERATION",
+      "name": "Largest failing class",
+      "value": "spelling_normalised — source Thaana is nonstandard and the round trip corrects it; the Latin is unchanged",
+      "source": "evaluation/roundtrip_stats.json"
+    },
+    {
+      "group": "TOKENIZER",
+      "name": "Dhivehi Latin <unk> rate",
+      "value": "not measured",
+      "source": "tools/profile_tokenizer.py (M-2b)"
+    },
+    {
+      "group": "TOKENIZER",
+      "name": "Mean subwords per Latin word",
+      "value": "not measured",
+      "source": "tools/profile_tokenizer.py (M-2b)"
+    },
+    {
+      "group": "CORPUS",
+      "name": "Stage 1 real parallel pairs",
+      "value": "not built yet",
+      "source": "tools/build_translation_pairs.py (M-1)"
+    },
+    {
+      "group": "CORPUS",
+      "name": "Stage 2 target (≥200k, R-2.1b)",
+      "value": "not started",
+      "source": "tools/build_translation_pairs.py (M-11)"
+    },
+    {
+      "group": "TRANSLATION",
+      "name": "BLEU — Dhivehi to English",
+      "value": "not measured — no model yet",
+      "source": "tools/evaluate.py"
+    },
+    {
+      "group": "TRANSLATION",
+      "name": "chrF++ — Dhivehi to English",
+      "value": "not measured — no model yet",
+      "source": "tools/evaluate.py"
+    },
+    {
+      "group": "TRANSLATION",
+      "name": "BLEU — English to Dhivehi",
+      "value": "not measured — no model yet",
+      "source": "tools/evaluate.py"
+    },
+    {
+      "group": "TRANSLATION",
+      "name": "chrF++ — English to Dhivehi",
+      "value": "not measured — no model yet",
+      "source": "tools/evaluate.py"
+    },
+    {
+      "group": "TRANSLATION",
+      "name": "Held-out test set size",
+      "value": "20 pairs per direction — below R-8.9's 500 floor, and not domain-held-out",
+      "source": "evaluation/gold_sentences.json"
+    },
+    {
+      "group": "TRANSLATION",
+      "name": "Spellability spot-check",
+      "value": "not measured — no model yet",
+      "source": "tools/evaluate.py (R-8.6)"
+    },
+    {
+      "group": "MODEL",
+      "name": "Runtime download vs 80 MB budget",
+      "value": "not measured — no model yet",
+      "source": "tools/export_onnx.py → export_stats.json; npm run check:models"
+    },
+    {
+      "group": "MODEL",
+      "name": "ONNX Runtime WASM (separate from the model budget)",
+      "value": "21.6 MB, served from public/ort/",
+      "source": "scripts/copy-ort.mjs"
+    },
+    {
+      "group": "HUMAN EVALUATION",
+      "name": "Meaning (1-5)",
+      "value": "no ratings yet",
+      "source": "Feedback store"
+    },
+    {
+      "group": "HUMAN EVALUATION",
+      "name": "Fluency (1-5)",
+      "value": "no ratings yet",
+      "source": "Feedback store"
+    }
   ]
 }

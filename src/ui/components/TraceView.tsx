@@ -1,20 +1,29 @@
 import type { ReactNode } from 'react';
-import type { PipelineTrace } from '../../core/pipeline/types';
+import type { PipelineTrace, StageState } from '../../core/pipeline/types';
 import { hasThaana } from '../../core/segmenter/textProcessor';
 
-function Badge({ state }: { state: string }) {
-  const label =
-    state === 'done' ? 'Done' : state === 'not_loaded' || state === 'not_configured' ? 'Not loaded' : state === 'unavailable' ? 'Unavailable' : 'Empty';
+const LABELS: Record<StageState, string> = {
+  done: 'Done',
+  not_loaded: 'Not loaded',
+  unavailable: 'Unavailable',
+  error: 'Error',
+  empty: 'Empty',
+};
+
+function Badge({ state }: { state: StageState }) {
+  const label = LABELS[state] ?? 'Empty';
   const cls =
     state === 'done'
       ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200'
-      : state === 'not_loaded' || state === 'unavailable'
-        ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200'
-        : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300';
+      : state === 'error'
+        ? 'bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-200'
+        : state === 'not_loaded' || state === 'unavailable'
+          ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200'
+          : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300';
   return <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${cls}`}>{label}</span>;
 }
 
-function Block({ title, state, children }: { title: string; state: string; children: ReactNode }) {
+function Block({ title, state, children }: { title: string; state: StageState; children: ReactNode }) {
   return (
     <section className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 space-y-2">
       <div className="flex items-center justify-between gap-3">
@@ -26,57 +35,72 @@ function Block({ title, state, children }: { title: string; state: string; child
   );
 }
 
+/**
+ * R-6.2. The Breakdown is a first-class deliverable, not a debug view: it is
+ * where the method is inspected rather than taken on trust.
+ *
+ * v0.2 removes the semantic-frame block and puts the model's actual input and
+ * output in its place. That is a more honest view than v0.1 offered — the frame
+ * string was a *rule-based* artefact displayed where a reader would reasonably
+ * expect to see what the neural model was given.
+ */
 export default function TraceView({ trace }: { trace: PipelineTrace }) {
-  const frame = trace.direction === 'en-dv' ? trace.latinFrame : trace.englishFrame;
-  const thaanaState = trace.thaana ? 'done' : 'unavailable';
+  const isDvEn = trace.direction === 'dv-en';
+
   return (
     <div className="space-y-3">
       <Block title="Original" state={trace.stages.original}>
         <p className={hasThaana(trace.input) ? 'font-thaana' : ''}>{trace.input}</p>
       </Block>
-      <Block title="Latin" state={trace.stages.transliteration}>
-        {trace.latin || '—'}
-      </Block>
+
+      {isDvEn && (
+        <Block title="Latin transliteration" state={trace.stages.transliteration}>
+          {trace.latin || '—'}
+        </Block>
+      )}
+
       <Block title="Dictionary" state={trace.stages.dictionary}>
         {trace.dictionary.length === 0
           ? '—'
-          : trace.dictionary.map((w) => {
-              const gloss = w.translations[0]?.english[0] ?? '';
-              const latin = w.stem || w.transliteration || w.input;
-              return `${latin} → ${gloss}${w.caseGloss ? ` (${w.caseGloss})` : ''}`;
-            }).join('\n')}
+          : trace.dictionary
+              .map((w) => {
+                const gloss = w.translations[0]?.english[0] ?? '';
+                const latin = w.stem || w.transliteration || w.input;
+                return `${latin} → ${gloss}${w.caseGloss ? ` (${w.caseGloss})` : ''}`;
+              })
+              .join('\n')}
       </Block>
-      <Block title="Semantic frame" state={trace.stages.frame}>
-        <p className="font-mono text-xs">{trace.frameString || '—'}</p>
-        {trace.latinFrameString && (
-          <p className="font-mono text-xs mt-2 text-slate-500">Latin slots: {trace.latinFrameString}</p>
-        )}
-        {frame && frame.residue.length > 0 && (
-          <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">
-            Residue (unassigned): {frame.residue.join(', ')}
+
+      <Block title="Model input" state={trace.stages.translation}>
+        {/* Verbatim, prefix included. The task prefix is how one model serves
+            both directions (R-2.5, R-3.1), so it belongs on screen. */}
+        <p className="font-mono text-xs">{trace.modelInput || '—'}</p>
+      </Block>
+
+      <Block title="Model output" state={trace.stages.translation}>
+        {trace.modelOutput ? (
+          <p className={hasThaana(trace.modelOutput) ? 'font-thaana' : 'font-mono text-xs'}>
+            {trace.modelOutput}
           </p>
-        )}
-        {frame && (
-          <pre className="mt-2 text-[11px] font-mono text-slate-500 overflow-x-auto">
-            {JSON.stringify(frame, null, 2)}
-          </pre>
+        ) : trace.translation.status === 'error' ? (
+          <p className="text-rose-700 dark:text-rose-300">{trace.translation.error ?? 'Model error.'}</p>
+        ) : (
+          'Not loaded. No translation is produced without the model — see About.'
         )}
       </Block>
-      <Block title="Realization model" state={trace.stages.realization}>
-        {trace.realization.status === 'ready'
-          ? trace.realization.text
-          : 'Not loaded. The frame is the current output of the research pipeline.'}
-      </Block>
-      {trace.direction === 'en-dv' && (
-        <Block title="Thaana conversion" state={thaanaState}>
+
+      {!isDvEn && (
+        <Block title="Back-transliteration" state={trace.stages.backTransliteration}>
           {trace.thaana ? <p className="font-thaana">{trace.thaana}</p> : '—'}
           {trace.thaanaPreserved?.length > 0 && (
             <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">
+              {/* R-1.3: preserved segments are reported, never dropped silently. */}
               Unconverted: {trace.thaanaPreserved.join(', ')}
             </p>
           )}
         </Block>
       )}
+
       <Block title="Final translation" state={trace.stages.final}>
         {trace.output ? (
           <p className={hasThaana(trace.output) ? 'font-thaana' : ''}>{trace.output}</p>

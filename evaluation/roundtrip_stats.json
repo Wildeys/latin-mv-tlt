@@ -1,0 +1,229 @@
+{
+  "source": "data/dictionary_full.json",
+  "field": "dhivehi",
+  "samples": 15201,
+  "seed": 11,
+  "transliteratorSha256": "96cf18ca35337be11001988f31489e3d4d95965263063980c57e5bce7a891593",
+  "exact": 13388,
+  "exactPercent": 88.073,
+  "exactFolded": 13523,
+  "exactFoldedPercent": 88.961,
+  "latinStable": 15092,
+  "latinStablePercent": 99.283,
+  "levenshteinTotal": 3105,
+  "levenshteinPerChar": 0.01888,
+  "failingClasses": {
+    "spelling_normalised": 1584,
+    "variant_fold": 135,
+    "alifu_onset_ambiguity": 41,
+    "other": 33,
+    "coda_h_ambiguity": 20
+  },
+  "examples": {
+    "spelling_normalised": [
+      {
+        "thaana": "ނ",
+        "latin": "n",
+        "back": "ން",
+        "preserved": []
+      },
+      {
+        "thaana": "އިއްޔެ",
+        "latin": "iyye",
+        "back": "ތްޔެ",
+        "preserved": []
+      },
+      {
+        "thaana": "އަންނަން",
+        "latin": "annan",
+        "back": "އައްނަން",
+        "preserved": []
+      },
+      {
+        "thaana": "ކީއްވެ",
+        "latin": "keehve",
+        "back": "ކީށްވެ",
+        "preserved": []
+      },
+      {
+        "thaana": "ކިހިނެއް",
+        "latin": "kihineh",
+        "back": "ކިހިނެށް",
+        "preserved": []
+      }
+    ],
+    "variant_fold": [
+      {
+        "thaana": "ޝުކުރިއްޔާ",
+        "latin": "shukuriyyaa",
+        "back": "ށުކުރިއްޔާ",
+        "preserved": []
+      },
+      {
+        "thaana": "މަޢުލޫމާތު",
+        "latin": "mauloomaathu",
+        "back": "މައުލޫމާތު",
+        "preserved": []
+      },
+      {
+        "thaana": "އޮޕަރޭޝަން",
+        "latin": "opareyshan",
+        "back": "އޮޕަރޭށަން",
+        "preserved": []
+      },
+      {
+        "thaana": "ޢާއްމު",
+        "latin": "aammu",
+        "back": "އާއްމު",
+        "preserved": []
+      },
+      {
+        "thaana": "އިޚްލާޞްތެރި",
+        "latin": "ikhlaastheri",
+        "back": "އިޚްލާސްތެރި",
+        "preserved": []
+      }
+    ],
+    "coda_h_ambiguity": [
+      {
+        "thaana": "އަބޮލިށް ޑިސްސޮލްވެ ޑިސްމިސްސް",
+        "latin": "abolih dissolve dismiss",
+        "back": "އަބޮލިށް ޑިއްސޮލްވެ ޑިސްމިއްސް",
+        "preserved": []
+      },
+      {
+        "thaana": "އަބޮލިށް ޑިސްސޮލްވެ ޑިސްމިސްސް",
+        "latin": "abolih dissolve dismiss",
+        "back": "އަބޮލިށް ޑިއްސޮލްވެ ޑިސްމިއްސް",
+        "preserved": []
+      },
+      {
+        "thaana": "އަބޮލިށް ޑިސްސޮލްވެ ޑިސްމިސްސް",
+        "latin": "abolih dissolve dismiss",
+        "back": "އަބޮލިށް ޑިއްސޮލްވެ ޑިސްމިއްސް",
+        "preserved": []
+      },
+      {
+        "thaana": "ޗަންނެލް ތްރޮއުގްހް ރީފް އުސުއަލްލްޔް މަންމަޑެ",
+        "latin": "channel iyrough reef usually manmade",
+        "back": "ޗައްނެލް ތްރޮއުޣް ރީފް އުސުއައްލްޔް މަންމަޑެ",
+        "preserved": []
+      },
+      {
+        "thaana": "ޗަންނެލް ތްރޮއުގްހް ރީފް އުސުއަލްލްޔް މަންމަޑެ",
+        "latin": "channel iyrough reef usually manmade",
+        "back": "ޗައްނެލް ތްރޮއުޣް ރީފް އުސުއައްލްޔް މަންމަޑެ",
+        "preserved": []
+      }
+    ],
+    "alifu_onset_ambiguity": [
+      {
+        "thaana": "އަންޗޮރް އޮރިގިނަލްލްޔް އަން އަންޗޮރް",
+        "latin": "anchor originally an anchor",
+        "back": "އަންޗޮރް އޮރިގިނައްލްޔް އަން އަންޗޮރް",
+        "preserved": []
+      },
+      {
+        "thaana": "އަންޗޮރް އޮރިގިނަލްލްޔް އަން އަންޗޮރް",
+        "latin": "anchor originally an anchor",
+        "back": "އަންޗޮރް އޮރިގިނައްލްޔް އަން އަންޗޮރް",
+        "preserved": []
+      },
+      {
+        "thaana": "އަންނުއަލްލްޔް",
+        "latin": "annually",
+        "back": "އައްނުއައްލްޔް",
+        "preserved": []
+      },
+      {
+        "thaana": "ބެއައުޓިފުލް ޕްރެޓްޓްޔް",
+        "latin": "beautiful pretty",
+        "back": "ބެއައުޓިފުލް ޕްރެއްޓްޔް",
+        "preserved": []
+      },
+      {
+        "thaana": "ބެއައުޓިފުލް ޕްރެޓްޓްޔް",
+        "latin": "beautiful pretty",
+        "back": "ބެއައުޓިފުލް ޕްރެއްޓްޔް",
+        "preserved": []
+      }
+    ],
+    "other": [
+      {
+        "thaana": "ބްރަސްސް",
+        "latin": "brass",
+        "back": "ބްރައްސް",
+        "preserved": []
+      },
+      {
+        "thaana": "ބުބްބްލެ",
+        "latin": "bubble",
+        "back": "ބުއްބްލެ",
+        "preserved": []
+      },
+      {
+        "thaana": "ބުބްބްލެސް",
+        "latin": "bubbles",
+        "back": "ބުއްބްލެސް",
+        "preserved": []
+      },
+      {
+        "thaana": "ޗިލްލް",
+        "latin": "chill",
+        "back": "ޗިއްލް",
+        "preserved": []
+      },
+      {
+        "thaana": "ޑިލްލް ސީޑް",
+        "latin": "dill seed",
+        "back": "ޑިއްލް ސީޑް",
+        "preserved": []
+      }
+    ]
+  },
+  "variantCollisions": {
+    "h": [
+      "ހ",
+      "ޙ"
+    ],
+    "sh": [
+      "ށ",
+      "ޝ"
+    ],
+    "n": [
+      "ނ",
+      "ޱ"
+    ],
+    "": [
+      "އ",
+      "ޢ"
+    ],
+    "dh": [
+      "ދ",
+      "ޛ"
+    ],
+    "th": [
+      "ތ",
+      "ޘ"
+    ],
+    "s": [
+      "ސ",
+      "ޞ"
+    ],
+    "d": [
+      "ޑ",
+      "ޟ"
+    ],
+    "z": [
+      "ޒ",
+      "ޡ"
+    ],
+    "t": [
+      "ޓ",
+      "ޠ"
+    ]
+  },
+  "gate": 98.0,
+  "note": "Three metrics, weakest claim to strongest. exact is raw Thaana equality. exactFolded folds the ten Arabic-derived letters onto their native counterparts; those ten are many-to-one under R-1.2's single-romanization rule and can never round-trip exactly. latinStable asks whether the round-tripped Thaana reads out to the SAME Latin - which is what actually bounds training quality (REQUIREMENTS 6.8), because the model only ever sees the Latin. A Thaana spelling variant that yields identical Latin costs the model nothing.",
+  "generatedBy": "tools/measure_roundtrip.py"
+}

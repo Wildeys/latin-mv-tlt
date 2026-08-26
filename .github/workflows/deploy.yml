@@ -3,6 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: ["main"]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -15,7 +16,41 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Until v0.2 there was no test job at all: CI built and deployed, so AC-1 was
+  # unenforced and R-3.13 could regress silently. Deploy now depends on this.
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npx tsc -b
+
+      # NFR-6: these touch no model and no network. The MODE=test short-circuit
+      # in core/translate/runner.ts returns before the dynamic import, so ONNX
+      # Runtime is never loaded.
+      - name: Unit tests
+        run: npm test
+
+      # R-3.4 / R-3.13 / NFR-13. Fails on an over-budget model directory, and on
+      # any ONNX graph the runtime never loads.
+      - name: Model budget
+        run: npm run check:models
+
   deploy:
+    needs: test
+    if: github.event_name != 'pull_request'
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -35,6 +70,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # `prebuild` vendors the ONNX Runtime WASM into public/ort/ and `postbuild`
+      # drops the bundler's duplicate copy. Both run automatically via npm.
       - name: Build Vite app
         run: npm run build
 

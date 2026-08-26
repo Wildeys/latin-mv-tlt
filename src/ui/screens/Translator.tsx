@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { translate } from '../../core/pipeline';
 import type { Direction, PipelineResult } from '../../core/pipeline/types';
+import { onLoadProgress } from '../../core/translate/runner';
+import type { LoadProgress } from '../../core/translate/types';
 import { hasThaana } from '../../core/segmenter/textProcessor';
 import { saveLastResult } from '../../lib/lastTrace';
 import { useThaanaIme } from '../hooks/useThaanaIme';
@@ -14,7 +16,12 @@ export default function Translator({ onOpenBreakdown }: { onOpenBreakdown: () =>
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<PipelineResult | null>(null);
+  // R-6.10: the weights are tens of megabytes. A silent multi-second stall is a
+  // defect, so the first download reports progress rather than just spinning.
+  const [progress, setProgress] = useState<LoadProgress | null>(null);
   const ime = useThaanaIme(direction === 'dv-en');
+
+  useEffect(() => onLoadProgress(setProgress), []);
 
   async function run() {
     setBusy(true);
@@ -87,13 +94,14 @@ export default function Translator({ onOpenBreakdown }: { onOpenBreakdown: () =>
               <div className="space-y-2">
                 <p className="text-amber-700 dark:text-amber-300 font-medium">Final translation: Unavailable</p>
                 <p className="text-xs text-slate-500">
-                  Realization model is not loaded. The extracted frame is shown below — that is the honest output of the
-                  current pipeline.
+                  {trace?.translation.status === 'error'
+                    ? (trace.translation.error ?? 'The translation model failed to load.')
+                    : 'The translation model is not loaded. Nothing is invented in its place — see the Breakdown for the transliteration, glosses and the exact model input.'}
                 </p>
-                <p className="font-mono text-xs">{trace?.frameString}</p>
+                {trace?.modelInput && <p className="font-mono text-xs">{trace.modelInput}</p>}
               </div>
             ) : (
-              <p className="text-slate-400">Translate to see the frame and, if a model is loaded, the sentence.</p>
+              <p className="text-slate-400">Translate to see the breakdown and, if the model is loaded, the sentence.</p>
             )}
           </div>
         </div>
@@ -115,6 +123,23 @@ export default function Translator({ onOpenBreakdown }: { onOpenBreakdown: () =>
           View sentence breakdown
         </button>
       </div>
+      {progress && (
+        <div className="space-y-1" role="status" aria-live="polite">
+          <div className="flex justify-between text-xs text-slate-500">
+            <span>Downloading model — {progress.file}</span>
+            <span>{progress.progress}%</span>
+          </div>
+          <div className="h-1.5 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+            <div
+              className="h-full bg-emerald-500 transition-[width] duration-200"
+              style={{ width: `${progress.progress}%` }}
+            />
+          </div>
+          <p className="text-xs text-slate-400">
+            First load only. The weights are cached afterwards, so later translations need no network.
+          </p>
+        </div>
+      )}
       {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );

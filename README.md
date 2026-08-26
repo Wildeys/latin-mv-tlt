@@ -1,30 +1,53 @@
 # latin-mv-tlt
 
-Browser-only **Dhivehi–English** translation through a Latin intermediate representation, semantic frames, and small sentence-realization models. The LLM is optional. Research notes: [`Context/PROJECT.md`](Context/PROJECT.md).
+Browser-only **Dhivehi–English** translation through a Latin intermediate representation.
+
+A rule-based transliterator converts Thaana to one canonical romanization, and a single small
+sequence-to-sequence model translates between that Latin and English in both directions, selected by
+a task prefix. The model never sees Thaana. The LLM is optional and never sits on the translation
+path. Research notes: [`Context/PROJECT.md`](Context/PROJECT.md), requirements:
+[`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md).
+
+```
+Dhivehi → English
+  Thaana ──[rule-based transliterator]──▶ Latin ──[T5 ONNX q8]──▶ English
+
+English → Dhivehi
+  English ──[T5 ONNX q8]──▶ Latin ──[rule-based reverse transliterator]──▶ Thaana
+```
+
+> **Status.** v0.2 replaced the v0.1 semantic-frame architecture (two sentence-realization models,
+> coverage capped at ~60 content words). The application code is migrated; the translation model
+> itself is **not yet trained**, so the Translator reports *Unavailable* rather than inventing a
+> sentence. Transliteration, the dictionary breakdown and the IME work with no model at all. See
+> [`docs/REQUIREMENTS.md` §9](docs/REQUIREMENTS.md) for the open gaps.
 
 ## Run locally
 
-Need **Node.js 18+** (npm comes with it). If `npm` is missing, install from https://nodejs.org and reopen the terminal.
+Needs **Node.js 18+** (npm comes with it). If `npm` is missing, install from https://nodejs.org and
+reopen the terminal.
 
-```powershell
-cd C:\Users\Moham\Desktop\dhivehi\latin-mv-tlt
+```sh
+cd latin-mv-tlt
 npm install
 npm run dev
 ```
 
-Open **http://localhost:5173/latin-mv-tlt/** — not the site root. `vite.config.ts` sets `base: '/latin-mv-tlt/'` for GitHub Pages, so the dev server serves the app under that path.
+Open **http://localhost:5173/latin-mv-tlt/** — not the site root. `vite.config.ts` sets
+`base: '/latin-mv-tlt/'` for GitHub Pages, so the dev server serves the app under that path.
 
-Translator and Breakdown work with the files already in `public/data/`. Fluent output loads from `public/models/en-realize` and `public/models/dv-realize` (q8 ONNX). No Hugging Face repo IDs. First load can take a while; after that the browser cache holds the weights. See [`Context/TRAINING.md`](Context/TRAINING.md).
+Translator and Breakdown work with the files already in `public/data/`. `npm run dev` and
+`npm run build` also vendor the ONNX Runtime WASM into `public/ort/` (~21 MB, gitignored) so no
+translation ever depends on a third-party CDN.
 
 ## Other commands
 
-```powershell
-npm test
-npm run build
-npm run preview
+```sh
+npm test              # unit tests; touches no model and no network
+npm run build         # tsc -b && vite build
+npm run preview       # serve the production build at the same /latin-mv-tlt/ path
+npm run check:models  # enforce the 80 MB runtime model budget
 ```
-
-`npm run preview` serves the production `dist/` build locally (same `/latin-mv-tlt/` path).
 
 ## Screens
 
@@ -32,12 +55,29 @@ Translator (main artefact) · Sentence Breakdown (viva) · AI Chat (demo) · Fee
 
 ## Deploy
 
-`npm run build` writes static files to `dist/`. GitHub Pages hosts that folder; `base` is `/latin-mv-tlt/` (see `vite.config.ts`), which matches the project-pages URL.
+`npm run build` writes static files to `dist/`. GitHub Pages hosts that folder. Pushing to `main`
+runs tests, the typecheck and the model-budget gate before deploying.
 
-## Optional data and training
+## Offline pipeline
 
-You do **not** need to regenerate the dictionary or training pairs to start the UI. Those files are already in `public/data/` and `data/realize/`.
+You do **not** need any of this to run the UI — the dictionary and honorifics already ship in
+`public/data/`.
 
-- Dictionary and frame pairs: [`Context/DATA.md`](Context/DATA.md)
-- Colab T5 training: [`Context/TRAINING.md`](Context/TRAINING.md)
+```sh
+pip install -r tools/requirements.txt
+
+python tools/build_translation_pairs.py     # M-1  build the parallel corpus
+python tools/measure_roundtrip.py           # M-2  transliterator round-trip, gates training
+python tools/profile_tokenizer.py           # M-2b tokenizer <unk> rate
+#    training and export run on Colab: colab_train_translate.ipynb
+node tools/smoke_translate.mjs "aharen maleah dhaanan"   # check an export before the browser
+```
+
+The corpus builder and round-trip tool call the project's **own** TypeScript transliterator through
+`tools/transliterate.mjs`, so training-time and inference-time Latin are produced by the same code.
+That is also why they run locally rather than on Colab — they need Node.
+
+- Dictionary: [`Context/DATA.md`](Context/DATA.md)
+- Training: [`Context/TRAINING.md`](Context/TRAINING.md)
 - Measured state: [`Context/STATUS.md`](Context/STATUS.md)
+- Known issues: [`Context/QUALITY.md`](Context/QUALITY.md)

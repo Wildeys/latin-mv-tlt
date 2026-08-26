@@ -5,7 +5,10 @@ import { loadLastResult } from '../../lib/lastTrace';
 export default function Feedback() {
   const last = useMemo(() => loadLastResult(), []);
   const [original, setOriginal] = useState(last?.input ?? '');
-  const [generated, setGenerated] = useState(last?.output ?? last?.traces[0]?.frameString ?? '');
+  // v0.1 fell back to the frame string here, which meant a rating could be
+  // recorded against a rule-based artefact rather than model output. R-8.3
+  // forbids reporting those as results, so there is no fallback now.
+  const [generated, setGenerated] = useState(last?.output ?? '');
   const [meaning, setMeaning] = useState(3);
   const [naturalness, setNaturalness] = useState(3);
   const [correction, setCorrection] = useState('');

@@ -1,0 +1,32 @@
+# Offline pipeline dependencies (R-9.1: "rerunnable from committed scripts").
+#
+# v0.1 declared these nowhere — they existed only as a `%pip install` line inside
+# the Colab notebook and as prose in the requirements document, so "rerunnable"
+# was not actually true.
+#
+#   python -m venv .venv && . .venv/bin/activate
+#   pip install -r tools/requirements.txt
+#
+# Note tools/build_translation_pairs.py and tools/measure_roundtrip.py also need
+# **Node.js**, because they call the project's own TypeScript transliterator
+# through tools/transliterate.mjs (R-2.2). That is why the corpus is built
+# locally rather than on Colab.
+
+# Corpus construction
+datasets>=3.0
+huggingface-hub>=0.26
+
+# Training (M-3). transformers>=4.46 for `processing_class` on Trainer.
+torch>=2.4
+transformers>=4.46
+accelerate>=1.1
+sentencepiece>=0.2
+
+# Metrics. R-8.4 requires chrF++, which is sacrebleu.CHRF(word_order=2) —
+# bare CHRF() is chrF, not chrF++.
+sacrebleu>=2.4
+
+# ONNX export and INT8 quantization (M-4, R-9.3)
+optimum[onnxruntime]>=1.23
+onnx>=1.17
+onnxruntime>=1.19

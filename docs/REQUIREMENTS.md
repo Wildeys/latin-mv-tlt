@@ -1,6 +1,6 @@
 # latin-mv-tlt — Project Requirements Specification
 
-**Version 0.2.1** · Status: draft · Supersedes v0.1 · Applies to repository version `0.1.0`
+**Version 0.2.2** · Status: draft · Supersedes v0.1 · Applies to repository version `0.2.0`
 
 > **Revision 0.2.1 (2026-08-26).** Incorporates the external review in
 > [`docs/v2_review.md`](v2_review.md). Changes: the training learning rate is
@@ -10,6 +10,11 @@
 > and held-out test-set size are given concrete metric definitions (R-1.8,
 > R-8.9), and four requirements are added for tokenizer profiling (R-9.6),
 > script-aware segmentation (R-5.7), and a low-confidence indicator (R-6.11).
+
+> **Revision 0.2.2 (2026-08-26).** Amendments forced by implementing the §8
+> migration. Each is a case where the spec as written was unachievable, factually
+> wrong about the runtime, or ambiguous enough that two readings produce
+> different code. They are listed with their evidence at **§11**.
 
 > **Change of architecture.** v0.1 specified translation through a semantic
 > frame with two sentence-realization models. v0.2 replaces that with a single
@@ -121,7 +126,7 @@ the trade-off can be argued rather than hidden.
 | R-1.5 | **Loanword policy:** the transliterator shall emit consistent *phonetic* Latin (`އިންސްޓަގްރާމް` → `instagraam`), not English orthography. Consistency at training time takes precedence over prettiness. | Must |
 | R-1.6 | **Planned** — An optional display-layer loanword dictionary may prettify Latin shown to users (`instagraam` → `Instagram`). It shall apply only at the UI layer and shall never touch model input or training data. | Could |
 | R-1.7 | A Thaana IME shall let a user type Latin keys and receive Thaana in place, with correct caret handling and backspace over a composing sequence. | Must |
-| R-1.8 | **Planned** — Round-trip stability shall be measured as **exact string match percentage** on a held-out sample of ≥1,000 Thaana words or sentences: Thaana → Latin → Thaana, with the failing classes listed. Character-level Levenshtein distance may be reported as a secondary metric. Exact match is the correct strict standard for a rule-based system; a result **below 98%** shall be treated as a transliterator defect to fix before corpus construction, not as an accepted baseline. | Must |
+| R-1.8 | Round-trip stability shall be measured on a held-out sample of ≥1,000 Thaana words or sentences, reporting **three** figures with the failing classes listed: (a) **exact** Thaana match; (b) **exact after folding** the ten many-to-one Arabic-derived letters; (c) **Latin-stable** — whether the round-tripped Thaana reads out to the *same Latin*. Levenshtein distance is secondary. **(c) is the gated figure, at ≥98%**, because the model only ever sees the Latin, so Latin stability is what actually bounds training quality (§6.8). Falling short is a transliterator defect to fix before corpus construction, not an accepted baseline. | Must |
 
 Traceability: `mappings.ts`, `thaanaToLatin.ts`, `latinToThaana.ts`,
 `useThaanaIme.ts`; tests `transliterator.test.ts`, `useThaanaIme.test.ts`.
@@ -141,7 +146,7 @@ Traceability: `mappings.ts`, `thaanaToLatin.ts`, `latinToThaana.ts`,
 | R-2.2 | **Planned** — All Thaana in the corpus shall be converted to Latin using **the project's own transliterator**, not a third-party romanizer, so training and inference Latin are byte-identical in convention. | Must |
 | R-2.3 | **Planned** — Pairs shall be deduplicated (exact and near-duplicate) before splitting. | Must |
 | R-2.4 | **Planned** — Pairs with extreme source/target length ratios shall be filtered out as probable alignment errors. Starting threshold: ratios outside **[0.4, 2.5]** shall be flagged, with the final threshold fixed and recorded after corpus analysis. The threshold and the number dropped shall be recorded. | Must |
-| R-2.5 | **Planned** — Both directions shall be emitted with explicit T5 task prefixes: `translate Dhivehi Latin to English` and `translate English to Dhivehi Latin`. Direction shall never be left implicit. | Must |
+| R-2.5 | **Planned** — Both directions shall be emitted with explicit T5 task prefixes, pinned to the exact literals **`translate Dhivehi Latin to English: `** and **`translate English to Dhivehi Latin: `** — the trailing `": "` is part of the prefix. Direction shall never be left implicit. The literals shall have a **single definition** (`src/core/translate/prefixes.ts`), read by both the app and the corpus builder rather than restated in each. | Must |
 | R-2.6 | **Planned** — Splits shall be **by domain or source**, not random, so evaluation measures generalisation rather than memorisation. | Must |
 | R-2.7 | **Planned** — The build script shall record corpus provenance, filter counts, split sizes, and vocabulary statistics to a committed stats file, as `tools/clean_dictionary.py` does for the dictionary. | Must |
 | R-2.8 | Untrustworthy rows shall be quarantined to a file, not deleted. | Must |
@@ -162,7 +167,7 @@ fixed, 26 quarantined (`public/data/dictionary_stats.json`).
 | R-3.1 | **Planned** — A single seq2seq model shall handle both directions, selected by task prefix. Two separate models shall not be shipped. | Must |
 | R-3.2 | **Planned** — Baseline architecture shall be `t5-small` (or `google/flan-t5-small`), INT8-quantized ONNX. Realistic size estimate: encoder ~35 MB + merged decoder ~42 MB + tokenizer ~2.4 MB ≈ **80 MB** — at, not under, the R-3.4 budget. The earlier ~60 MB figure was optimistic. | Must |
 | R-3.3 | **Planned** — `facebook/nllb-200-distilled-600M` shall be evaluated as an alternative, since NLLB includes Dhivehi. The evaluation shall begin with a **preliminary exported-size estimate, before any training run**. At 600M parameters, INT8 encoder + merged decoder is expected to land at **~120–150 MB minimum**, before tokenizer and config — so it very likely breaks R-3.4. Adoption therefore requires either a measured export meeting R-3.4, or an explicit recorded decision that **NFR-13 and AC-10 are forfeited**. Deferring the size question to "we will quantize it later" is not an acceptable path. | Should |
-| R-3.4 | **Planned** — **Size budget: ≤80 MB total INT8** for everything fetched at runtime, across both directions. | Must |
+| R-3.4 | **Planned** — **Size budget: ≤80 MB total INT8** for the model directory `public/models/dv-en-translate/**`, across both directions. The ONNX Runtime WASM (~21 MB) and the application bundle sit **outside** this budget and are reported as separate measured line items. The scoping is load-bearing: read as "everything fetched at runtime", the budget is unachievable at *any* model size, because the runtime alone is 21 MB. | Must |
 | R-3.5 | **Planned** — Max sequence length 128; inference shall use greedy decoding or beam ≤2. | Must |
 | R-3.6 | Models shall load **locally only** — `allowLocalModels` true, `allowRemoteModels` false. No third-party model fetch at runtime. | Must |
 | R-3.7 | Each model shall load at most once; concurrent requests shall share one in-flight promise. | Must |
@@ -170,7 +175,7 @@ fixed, 26 quarantined (`public/data/dictionary_stats.json`).
 | R-3.9 | When the model is not ready the system shall report output **unavailable** and shall not emit a fabricated or rule-generated sentence in its place. | Must |
 | R-3.10 | Under `MODE === 'test'` the translator shall short-circuit so unit tests never load ONNX or touch the network. | Must |
 | R-3.11 | ONNX shall run single-threaded with the WASM proxy disabled, so the app works on pages without `SharedArrayBuffer`. | Must |
-| R-3.12 | **Planned** — Weights shall be cached in the browser (IndexedDB via Transformers.js) so only the first load pays the download. | Must |
+| R-3.12 | **Planned** — Weights shall be cached in the browser (the **Cache Storage API** via Transformers.js — *not* IndexedDB; verify under Application → Cache Storage) so only the first load pays the download. | Must |
 | R-3.13 | **Planned** — The ONNX export shall ship only the graphs actually loaded at runtime. Unused variants shall not be committed. | Must |
 
 Traceability: `src/core/realization/runner.ts` is the reference implementation
@@ -208,7 +213,7 @@ Traceability: `lookup.ts`, `closedClass.ts`, `suffixParser.ts`, `stemWord.ts`,
 |---|---|---|
 | R-5.1 | Input shall be segmented into sentences and each sentence translated independently. | Must |
 | R-5.2 | Every translation shall produce a trace recording: input, Latin form, Thaana form, preserved segments, prefixed model input, raw model output, dictionary glosses, register, and per-stage state. | Must |
-| R-5.3 | Stage state shall be one of `done` / `empty` / `not_loaded` / `unavailable`, over the stages: original, transliteration, translation, back-transliteration, final. | Must |
+| R-5.3 | Stage state shall be one of `done` / `empty` / `not_loaded` / `unavailable` / **`error`**, over the stages: original, transliteration, **dictionary**, translation, back-transliteration, final. `error` is required because R-3.8 obliges the system to surface a load failure, and without it a failed ONNX load renders identically to "never requested". `dictionary` is required because R-5.2 puts the glosses on the trace and R-6.2 renders them. | Must |
 | R-5.4 | A multi-sentence result shall be available only if **every** sentence produced output. Empty input shall report unavailable, never empty success. | Must |
 | R-5.5 | Input shall be normalised once and the transliterated form computed once and reused. | Must |
 | R-5.6 | Dictionary glossing shall run **beside** translation, not as an input to it. A gloss failure shall not fail the translation. | Must |
@@ -298,7 +303,7 @@ translation pairs and should be adapted rather than discarded.
 | NFR-2 | **Offline after first load.** Once weights are cached (R-3.12), translation shall require no network. |
 | NFR-3 | **Privacy.** Input shall not leave the device unless the user explicitly uses the optional LLM chat. Feedback and settings stay in `localStorage`. |
 | NFR-4 | **Type safety.** Strict `tsc -b` shall pass as part of `npm run build`. |
-| NFR-5 | **Tested core.** Transliterator, dictionary, morphology, pipeline, and IME shall each have unit tests; `npm test` shall pass. Currently 11 test files; frame tests are removed and pipeline tests rewritten under v0.2. |
+| NFR-5 | **Tested core.** Transliterator, dictionary, morphology, segmenter, pipeline, translation runner and IME shall each have unit tests; `npm test` shall pass. **9 test files, 70 tests** under v0.2 (4 frame test files deleted, 2 rewritten, 3 added). CI runs them; before v0.2 it did not. |
 | NFR-6 | **Tests do not touch models or network.** |
 | NFR-7 | **Determinism.** Transliteration, lookup, and morphology shall stay deterministic and side-effect free. Only the translation model is stochastic, and with greedy decoding (R-3.5) it should be reproducible too. |
 | NFR-8 | **Honest reporting.** Any metric not measured on this pipeline shall be labelled unmeasured. Results from other repos shall never be presented as this system's. |
@@ -312,8 +317,22 @@ translation pairs and should be adapted rather than discarded.
 
 - Node.js 18+ (CI uses Node 22), npm.
 - React 19, Vite 8, TypeScript 5.8, Tailwind 3.4, Vitest 4.
-- `@xenova/transformers` 2.17 for in-browser ONNX seq2seq.
-- Python 3 with PyTorch, Transformers, Optimum, and `sacrebleu` (BLEU + chrF++).
+- `@huggingface/transformers` ^3.8.1 for in-browser ONNX seq2seq. v0.1 used the
+  legacy `@xenova/transformers` 2.17; the successor is the maintained line and
+  its `dtype` option removes the need for v0.1's duplicate-decoder file hack.
+  A move to the 4.x line is deferred until there is a trained model to
+  regression-test the upgrade against.
+- ONNX Runtime WASM is **vendored** into `public/ort/` at build time
+  (`scripts/copy-ort.mjs`). The library otherwise defaults `wasmPaths` to a
+  jsDelivr CDN, which would put a third-party network call on the translation
+  path in breach of §1.2, NFR-2 and NFR-3.
+- Python 3; dependencies pinned in **`tools/requirements.txt`** (PyTorch,
+  Transformers ≥4.46, Optimum, `sacrebleu`). R-9.1 requires the offline pipeline
+  be rerunnable from committed scripts, which a prose list does not satisfy.
+- **Node.js is required for the offline pipeline too.** `build_translation_pairs.py`
+  and `measure_roundtrip.py` call the project's own transliterator through
+  `tools/transliterate.mjs` (R-2.2), which is why the corpus is built locally
+  rather than on Colab.
 
 ---
 
@@ -327,6 +346,11 @@ translation pairs and should be adapted rather than discarded.
 | Benchmarks | `public/data/benchmarks.json` | Yes | Retained; metrics reset for v0.2 |
 | Gold set | `evaluation/gold_sentences.json` | Yes | Retained; **20 pairs/direction today — extend to ≥500 per R-8.9** |
 | Quarantine | `data/quarantine.json` | Yes | Retained |
+| Round-trip stats | `evaluation/roundtrip_stats.json` | Yes | **New — measured** |
+| Tokenizer profile | `evaluation/tokenizer_profile.json` | Yes | **Planned** (M-2b) |
+| Corpus stats | `data/parallel/corpus_stats.json` | Yes | **Planned** (M-1) |
+| Export stats | `public/models/dv-en-translate/export_stats.json` | Yes | **Planned** (M-4) |
+| ONNX Runtime WASM | `public/ort/` | No (gitignore) | Vendored at build time |
 | Translation model | `public/models/dv-en-translate` | **Planned** | New, ≤80 MB |
 | Parallel corpus | `data/parallel/*.jsonl` | No (gitignore) | **Planned** — Stage 1 ~90k pairs, Stage 2 ≥200k (R-2.1b) |
 | Back-translated pairs | `data/parallel/synthetic/*.jsonl` | No (gitignore) | **Planned** — provenance-labelled (R-2.10) |
@@ -382,11 +406,15 @@ numbers shall be reported as such rather than silently accepted.
 - **AC-9** BLEU and chrF++ are measured on a domain-held-out test set of
   **≥500 sentence pairs per direction** (R-8.9) and published, together with a
   ≥50-sentence spellability spot-check.
-- **AC-10** Total runtime model download is ≤80 MB, verified in devtools on a
-  cold cache; a second load fetches no weights.
-- **AC-11** Round-trip Thaana → Latin → Thaana accuracy is measured as exact
-  string match over ≥1,000 held-out samples and published, with failing classes
-  listed (R-1.8).
+- **AC-10** `public/models/dv-en-translate/**` is ≤80 MB, verified three ways:
+  `tools/export_onnx.py` refuses to write over budget, `npm run check:models`
+  blocks the deploy, and a devtools check on a cold cache confirms it — then a
+  hard reload fetches no weights (Application → **Cache Storage**, not IndexedDB).
+  The ONNX Runtime WASM (~21.6 MB) is reported separately.
+- **AC-11** Round-trip Thaana → Latin → Thaana is measured over ≥1,000 held-out
+  samples and published as all three figures of R-1.8, with failing classes
+  listed. **Met**: 99.28% Latin-stable over 15,201 entries
+  (`evaluation/roundtrip_stats.json`); re-run on the news corpus after M-1.
 - **AC-12** The tokenizer profile (R-9.6) is run and its `<unk>` rate published
   before the training run it gates.
 - **AC-13** The corpus stats file records Stage 1 and, if reached, Stage 2
@@ -408,7 +436,8 @@ Ordered so the app stays runnable throughout.
 | M-5 | Add `src/core/translate/` reusing the loader and status machine from `realization/runner.ts`. | R-3.6–3.12 |
 | M-6 | Rewrite `PipelineTrace` and both pipeline entry points; keep the `traces.length > 0` guard and its test. | R-5.x |
 | M-7 | Rewrite `Breakdown.tsx` / `TraceView.tsx` for the new trace; update `About.tsx`. | R-6.2, R-6.6 |
-| M-8 | Delete `src/core/frames/`, `public/models/{en,dv}-realize`, `data/realize/`, `tools/build_frame_pairs.py`, `colab_train_realize.ipynb`, and the frame tests. | NFR-13 |
+| M-8a | Delete `src/core/frames/`, `src/core/realization/`, `data/realize/`, `tools/build_frame_pairs.py`, `colab_train_realize.ipynb`, `evaluation/en_frames.python.json`, and the frame tests. Code only, no size impact — runs early so `tsc -b` catches stragglers. | R-5.x |
+| M-8b | Delete `public/models/{en,dv}-realize` (307 MB). **Last**, only once the v0.2 model is verified in a browser, so the app is never left with no model path at all. | NFR-13 |
 | M-9 | Extend the gold set to ≥500 verified pairs per direction from a held-out domain, before any score is published. | R-8.9, AC-9 |
 | M-10 | Reset `benchmarks.json` for v0.2 metrics; re-run evaluation and publish. | AC-6, AC-9 |
 | M-11 | **Stage 2** — build the back-translation pipeline and grow the corpus toward ≥200k pairs; retrain and compare against the Stage 1 baseline. | R-2.1b, R-2.10 |
@@ -428,7 +457,7 @@ force-push, and is **not** authorised by this document.
 
 | ID | Gap | Blocking |
 |---|---|---|
-| GAP-1 | Round-trip transliteration accuracy unmeasured. | AC-11, and it bounds all translation quality |
+| GAP-1 | ~~Round-trip transliteration accuracy unmeasured.~~ **Measured** over 15,201 dictionary entries: **99.28% Latin-stable** (gate ≥98%), 88.07% exact Thaana. `evaluation/roundtrip_stats.json`. Re-run on the news corpus once M-1 has produced it. | Closed for now |
 | GAP-2 | BLEU / chrF++ unmeasured; no domain-held-out test set yet. | AC-9 |
 | GAP-3 | No human ratings collected (meaning / fluency). | R-8.3 |
 | GAP-4 | The direct translation model does not exist yet — no corpus, no checkpoint, no export. | AC-2, AC-9, AC-10 |
@@ -439,7 +468,29 @@ force-push, and is **not** authorised by this document.
 | GAP-9 | Gold set holds 20 pairs per direction against a ≥500 requirement, and is not domain-held-out. | R-8.9, AC-9 |
 | GAP-10 | Corpus is Stage 1 only; no back-translation pipeline exists. | R-2.1b, R-2.10 |
 | GAP-11 | Tokenizer `<unk>` behaviour on Dhivehi Latin is unprofiled. | R-9.6, AC-12 |
-| GAP-12 | Sentence segmentation is not script-aware; Dhivehi punctuation is untreated. | R-5.7 |
+| GAP-12 | ~~Sentence segmentation is not script-aware.~~ **Closed** — `۔`, `؟` and line breaks are boundaries, terminator runs collapse, and letterless fragments are never emitted. `segmentSentences.test.ts`. | Closed |
+| GAP-13 | The ten Arabic-derived Thaana letters cannot round-trip exactly, and coda `h` (`ށް` vs `އް`) is resolved by frequency, not evidence. Both are declared, measured classes rather than defects. | Accepted; R-1.8 |
+| GAP-14 | `SUBJECT_LATIN`, `LOCATION_LATIN` and `PARTICLE_LATIN` in `closedClass.ts` lost their only consumers when `frames/` was deleted. Harmless, but dead. | Cleanup |
+
+---
+
+## 11. Amendment log (v0.2.1 → v0.2.2)
+
+Raised while implementing §8. Each was a place where following the spec
+literally would have produced something that could not work, or could not be
+verified.
+
+| # | Change | Why it was necessary |
+|---|---|---|
+| 1 | **R-1.8** — gate on Latin-stability, report exact and folded beside it | The ≥98% *exact* gate contradicted R-1.2. One canonical romanization forces Thaana→Latin to be many-to-one for ten Arabic-derived letters, so exact match cannot reach 100% however correct the rules are. Measured: 88.07% exact vs **99.28% Latin-stable**. The model only sees Latin, so the second figure is the one §6.8 is actually about. |
+| 2 | **R-3.4 / AC-10** — scope the 80 MB to the model directory | Read as "everything fetched at runtime" it includes the ONNX Runtime WASM, measured at **21.6 MB**, making AC-10 unachievable at any model size. |
+| 3 | **R-3.12** — Cache Storage API, not IndexedDB | Factually wrong as written. Transformers.js caches in Cache Storage; an examiner following the spec would look in the wrong devtools panel and conclude caching was broken. |
+| 4 | **R-2.5** — pin the exact prefix literals, single definition | The spec omitted the T5 `": "` separator. Two characters of drift between corpus and runtime degrade the model with no error at any layer, so the literal is pinned and shared rather than restated. |
+| 5 | **R-5.3** — add `dictionary` and `error` | `error` was absent, so a failed ONNX load rendered identically to "never requested", contradicting R-3.8. `dictionary` was absent though R-5.2 and R-6.2 both require the glosses. |
+| 6 | **§4.1** — `@huggingface/transformers` ^3.8.1; vendor the ORT WASM | The successor package is maintained and its `dtype` option retires v0.1's duplicate-decoder hack. Vendoring is not optional: the library defaults `wasmPaths` to a jsDelivr CDN, which put a third-party fetch on the translation path in breach of §1.2, NFR-2 and NFR-3. |
+| 7 | **§4.1** — pin Python deps; note Node is needed offline too | R-9.1 requires the pipeline be rerunnable from committed scripts. There was no `requirements.txt` anywhere in the repo. |
+| 8 | **§8 M-8** — split into M-8a (code, early) and M-8b (307 MB, last) | Deleting the models before the new one exists would leave no model path at all. Splitting keeps the app runnable throughout, as §8 intends. |
+| 9 | **R-9.3** — noted as newly implemented | There was no ONNX export script in the repo at all, and the Colab notebook had no export cell, so the requirement had never been met. `tools/export_onnx.py` now asserts the merged decoder exposes `use_cache_branch`, that each graph actually shrank under quantization, and that the total is within budget — refusing to write otherwise. |
 
 ---
 
@@ -448,14 +499,15 @@ force-push, and is **not** authorised by this document.
 | Area | Requirements | Code | Tests |
 |---|---|---|---|
 | Transliteration | R-1.x | `core/transliterator/`, `ui/hooks/useThaanaIme.ts` | `transliterator.test.ts`, `useThaanaIme.test.ts` |
-| Corpus | R-2.x | `tools/` (**planned**) | stats artefacts |
-| Translation model | R-3.x | `core/translate/` (**planned**), pattern from `core/realization/runner.ts` | test-mode short-circuit |
+| Corpus | R-2.x | `tools/build_translation_pairs.py`, `tools/transliterate.mjs`, `tools/_transliterate_bridge.py` | `data/parallel/corpus_stats.json` |
+| Translation model | R-3.x | `core/translate/{runner,types,prefixes}.ts` | `translate.test.ts`, `scripts/check-models.mjs` |
 | Lexicon & morphology | R-4.x | `core/dictionary/`, `core/morphology/` | `lookup.test.ts`, `stemWord.test.ts`, `suffixParser.test.ts` |
-| Pipeline | R-5.x | `core/pipeline/` | `pipeline.test.ts`, `enToDv.output.test.ts` (rewrite) |
+| Pipeline | R-5.x | `core/pipeline/` | `pipeline.test.ts`, `enToDv.output.test.ts` |
+| Segmentation | R-5.7 | `core/segmenter/textProcessor.ts` | `segmentSentences.test.ts` |
 | UI | R-6.x | `App.tsx`, `ui/` | manual / AC-2–AC-7 |
 | LLM | R-7.x | `llm/` | manual |
-| Evaluation | R-8.x | `lib/feedback.ts`, `evaluation/`, `tools/evaluate.py` | manual |
-| Training | R-9.x | `tools/train_*.py` (**adapt**) | offline |
+| Evaluation | R-8.x | `lib/feedback.ts`, `evaluation/`, `tools/evaluate.py`, `tools/measure_roundtrip.py` | `roundtrip_stats.json`, `scores.json` |
+| Training | R-9.x | `tools/train_translate.py`, `tools/export_onnx.py`, `tools/profile_tokenizer.py`, `colab_train_translate.ipynb` | `training_stats.json`, `export_stats.json`, `tokenizer_profile.json` |
 
 ---
 

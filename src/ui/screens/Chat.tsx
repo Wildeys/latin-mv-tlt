@@ -41,9 +41,10 @@ export default function Chat() {
     setMessages((m) => [...m, userMsg]);
     try {
       const inbound = await translateDvToEn(text);
-      const englishIn = inbound.available
-        ? (inbound.output ?? '')
-        : inbound.traces.map((t) => t.frameString).join('\n');
+      // No fallback: if the translation is unavailable there is no English, and
+      // Chat refuses below. R-6.3 says only English may reach the LLM, and with
+      // the frame string gone there is no longer any path by which it could not.
+      const englishIn = inbound.available ? (inbound.output ?? '') : '';
       const inboundLatin = inbound.traces.map((t) => t.latin).filter(Boolean).join(' ');
       setMessages((m) =>
         m.map((msg) =>
@@ -55,7 +56,7 @@ export default function Chat() {
 
       if (!inbound.available) {
         throw new Error(
-          'Realization model is not loaded, so there is no fluent English to send to an LLM. Use Translator / Breakdown to inspect the frame.',
+          'The translation model is not loaded, so there is no English to send to an LLM. Use Translator / Breakdown to inspect the transliteration and glosses.',
         );
       }
 
@@ -88,8 +89,8 @@ export default function Chat() {
         {messages.length === 0 && (
           <p className="text-sm text-slate-500">
             Type Male Latin (aharen). It converts to Thaana. The translator produces English, an optional LLM replies in
-            English, then the reverse pipeline returns Thaana. Without a realization model, Chat will refuse rather than
-            invent a sentence.
+            English, then the reverse pipeline returns Thaana. Without the translation model, Chat will refuse rather
+            than invent a sentence.
           </p>
         )}
         {messages.map((msg) => (

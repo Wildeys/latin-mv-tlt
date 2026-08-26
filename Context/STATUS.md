@@ -4,14 +4,24 @@ Measured state of **latin-mv-tlt**, not a diary. Data numbers: [DATA.md](DATA.md
 
 ## Now
 
-- `npx tsc -b` — clean.
-- `npm test` — **81 passing** across 11 files.
-- `npm run build` — succeeds.
-- Translator, Breakdown, Chat, Feedback, Benchmarks, and About are in the app.
-- Thaana at the user edge (Faruma 16px, Male Latin IME on Dhivehi input). Latin in the NLP core.
-- Shipped lexicon: **15,302** Latin entries, no `dhivehi` column.
-- Realization corpus: **16,141** English pairs, **14,270** Dhivehi Latin pairs.
-- **No T5 checkpoint.** Fluent output stays Unavailable. BLEU, chrF, and human ratings are unmeasured; the Benchmarks page says so.
+**v0.2 migration: application code complete, model not yet trained.**
+
+- `npx tsc -b` — clean. `npm test` — **70 passing across 9 files**. `npm run build` — succeeds.
+- Architecture is now one direct Dhivehi Latin ↔ English seq2seq model selected by task prefix.
+  `src/core/frames/` and `src/core/realization/` are deleted; `src/core/translate/` replaces them.
+- Runtime is `@huggingface/transformers` ^3.8.1. The ONNX Runtime WASM is vendored into
+  `public/ort/` at build time, so no translation depends on a CDN.
+- **Round-trip transliteration measured** (M-2, was GAP-1): **99.28% Latin-stable** over 15,201
+  dictionary entries, 88.07% exact Thaana. `evaluation/roundtrip_stats.json`. Three previously
+  missing inverse rules were added — geminates, prenasalized stops, and the coda `h`/`iy` sukun
+  specials — which took Latin-stability from ~87% to 99.28%.
+- **No checkpoint.** The Translator reports Unavailable and invents nothing. BLEU, chrF++ and human
+  ratings stay unmeasured, and the Benchmarks page says so.
+- Still to run (yours, needs GPU): M-1 corpus build, M-2b tokenizer profile, M-3 training,
+  M-4 ONNX export. Scripts are committed; see README "Offline pipeline".
+- `public/models/{en,dv}-realize` (307 MB) is still on disk. It goes at M-8b, after the v0.2 model
+  is verified in a browser. `.git` will stay ~65 MB regardless — the blobs remain in history, and
+  rewriting it is not authorised by the requirements document.
 
 ## Already fixed (headlines)
 

@@ -1,8 +1,8 @@
 import type { Screen } from '../screens';
 
 const SUB: Record<Screen, string> = {
-  translator: 'Main artefact — Dhivehi ↔ English through Latin frames',
-  breakdown: 'Viva view — every pipeline stage, including residue',
+  translator: 'Main artefact — Dhivehi ↔ English through a Latin intermediate representation',
+  breakdown: 'Viva view — source, Latin, glosses, model input and raw model output',
   chat: 'Demo — translator wraps an optional LLM',
   feedback: 'Native-speaker ratings stored on this device',
   benchmarks: 'Pipeline metrics only. Empty cells are not yet measured.',
