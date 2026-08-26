@@ -1,169 +1,275 @@
 # Training
 
-Two small T5-style **sentence-realization** models. Neither is a translator. Neither repairs word-salad glosses.
+One small T5 **translation** model, both directions from one set of weights, selected by a task
+prefix. It is not two models, and it does not see Thaana.
 
-How the JSONL was built: [DATA.md](DATA.md). How the pipeline uses it: [PROJECT.md](PROJECT.md). Do not increase T5 training until lookup and conversational coverage are in [QUALITY.md](QUALITY.md).
+How the JSONL was built: [DATA.md](DATA.md). How the pipeline uses it: [PROJECT.md](PROJECT.md).
+Measured state: [STATUS.md](STATUS.md). Known gaps: [QUALITY.md](QUALITY.md).
 
-## What the models learn
+> **v0.2.** This replaces the v0.1 semantic-frame architecture — two sentence-realization models,
+> coverage capped at about sixty content words. `data/realize/`, `build_frame_pairs.py`,
+> `train_t5_realize.py` and `colab_train_realize.ipynb` are gone (M-8a). If a document tells you to
+> upload `en_train.jsonl`, it is describing v0.1.
 
-Latin Dhivehi and English only **inside** the models. Thaana exists at the user edges. Teaching T5 Thaana would add nothing; `latinToThaana` runs after inference. Dhivehi targets stay Latin: `aharen maleah dhaanan`, never Thaana.
+## What the model learns
 
-| Model | Input | Target |
+Latin Dhivehi and English only. Thaana exists at the user edges: the rule-based transliterator runs
+before inference on the way in, and `latinToThaana` runs after it on the way out. Dhivehi targets
+stay Latin — `aharen maleah dhaanan`, never Thaana. A Thaana character in a model input is an
+architecture violation, and the notebook asserts against it.
+
+| Direction | Prefix | Target |
 |---|---|---|
-| English realization | English-valued frame string | fluent English |
-| Dhivehi Latin realization | Latin-valued frame string | fluent Malé Latin |
+| `dv-en` | `translate Dhivehi Latin to English: ` | English |
+| `en-dv` | `translate English to Dhivehi Latin: ` | Malé Latin |
 
-```text
-INPUT
-SUBJECT=I | ACTION=go | LOCATION=Male | TENSE=future | POLARITY=affirmative | REGISTER=spoken
-
-TARGET
-I will go to Male.
-```
-
-```text
-INPUT
-SUBJECT=aharen | ACTION=dhaa | LOCATION=male | TENSE=future | POLARITY=affirmative | REGISTER=spoken
-
-TARGET
-aharen maleah dhaanan
-```
-
-Note `maleah`, not a bare `Male`. `REGISTER` distinguishes written Dhivehi (`eve`) from spoken. The files are **not** `Latin sentence → English sentence`, because the architecture uses frames.
-
-Old APE degrader pairs in `dhivehi-latin-slm/data/ape/` are a supporting ablation only. Do not train the production models on `grammar: I Male go future`.
-
-Current sizes (`data/realize/stats.json`):
-
-```text
-en_train.jsonl    14526
-en_valid.jsonl     1615
-dv_train.jsonl    12843
-dv_valid.jsonl     1427
-```
-
-The corpus covers about sixty content words (7 subjects, 16 verbs, 12 objects, 5 locations, 7 time words). A checkpoint realizes those slots well and generalises no further than they reach.
-
-## Colab
-
-A laptop CPU is slow. A free Colab **T4 GPU** is the intended path. You are fine-tuning `t5-small` so it turns a **semantic frame** into a sentence — two models, two output folders:
-
-| Run | Upload | Output folder | Used for |
-|---|---|---|---|
-| English | `en_train.jsonl`, `en_valid.jsonl` | `en_realize` | Dhivehi → English |
-| Dhivehi Latin | `dv_train.jsonl`, `dv_valid.jsonl` | `dv_realize` | English → Dhivehi Latin |
-
-A Colab session is temporary. If you close the tab without downloading (or saving to Drive), the work is gone.
-
-### Before you start
-
-- A Google account
-- The four JSONL files under `latin-mv-tlt\data\realize\`
-- About an hour with the browser tab left open
-
-Do not regenerate the files after you have already uploaded them, or the Colab copy no longer matches disk.
-
-### 1 — Upload the notebook
-
-Upload [`colab_train_realize.ipynb`](../colab_train_realize.ipynb) to Colab (**File → Upload notebook**). It trains both models in one session. The same training loop lives in [`tools/train_t5_realize.py`](../tools/train_t5_realize.py) for a local GPU. Do not paste a second copy of the Trainer into this file.
-
-### 2 — Turn the GPU on
-
-**Runtime → Change runtime type → T4 GPU → Save.** First cell must print `GPU available: True`. Free Colab has a daily quota; if it refuses a T4, wait or use another account.
-
-### 3 — Upload the JSONL
-
-The notebook mounts Drive, then asks for the four files. After upload:
-
-```text
-  14526 en_train.jsonl
-   1615 en_valid.jsonl
-  12843 dv_train.jsonl
-   1427 dv_valid.jsonl
-```
-
-Each line looks like:
+Each line of `data/parallel/*.jsonl`:
 
 ```json
-{"input": "SUBJECT=I | ACTION=go | LOCATION=Male | TENSE=future | POLARITY=affirmative | REGISTER=spoken", "target": "I will go to Male.", "direction": "en"}
+{"input": "translate Dhivehi Latin to English: aharen maleah dhaanan", "target": "I will go to Male.", "direction": "dv-en", "provenance": {"source": "alakxender/dhivehi-english-translations", "domain": "crime", "synthetic": false}}
 ```
 
-If a line starts with `grammar:`, you uploaded the old APE pairs. Stop.
+Every kept pair is written twice, once per direction. If a line starts with `SUBJECT=` or
+`grammar:`, you are holding a v0.1 file.
 
-### 4 — Train
+## Corpus
 
-Run the notebook cells. Batch 16, fp16, 3 epochs, `t5-small`, learning rate `5e-5`. If Colab says `CUDA out of memory`, set `BATCH = 8`.
-
-Keep the tab **open and visible**. Idle sessions die after about 90 minutes.
-
-Both training loss and validation loss should fall. Screenshot the table for Chapter 5.
-
-- Validation loss rising while training loss falls → overfitting. Try 2 epochs next time.
-- Loss stuck near 0 from the first step → the model is copying. Check that `input` and `target` are different.
-
-A 30-second smoke run (8 train / 2 valid rows, 1 epoch) is only a wiring check. Do not demo or evaluate a smoke checkpoint as if it were the real model.
-
-### 5 — Sanity check
-
-English probe:
+Built by `tools/build_translation_pairs.py` (M-1). Full numbers in
+[`data/parallel/corpus_stats.json`](../data/parallel/corpus_stats.json), which **is** committed —
+the JSONL is not (R-2.1b, and `train.jsonl` alone is 189 MB).
 
 ```text
-SUBJECT=I | ACTION=go | LOCATION=Male | TENSE=future | POLARITY=affirmative | REGISTER=spoken
+train.jsonl   480,018 rows
+valid.jsonl    49,948 rows
+test.jsonl     40,592 rows
 ```
 
-Good sign: `I will go to Male.` Bad sign: the frame printed back unchanged, or empty text.
+285,748 pairs kept from 575,892 rows read, over the Stage 2 target of 200k. The splits hold out
+**whole domains** (R-2.6, R-8.8), so validation and test scores are out-of-domain:
 
-Dhivehi probe:
+| Split | Domains |
+|---|---|
+| train | `crime`, `local news`, `politics`, `other`, the `alakxender/dhivehi-english-parallel` bulk |
+| valid | `business`, `international`, `sports` |
+| test | `education`, `entertainment`, `environment`, `health`, `law`, `religion`, `society`, `technology`, `tourism` |
+
+The `conversational` group is the exception: it is held out **by row**, so it appears in all three
+splits (76,830 / 2,984 / 2,990 rows). Scores on those rows are in-domain and are not comparable to
+the news splits. Report them separately or the number is inflated.
+
+## Gates — both already pass
+
+Run before training, not after. Neither needs a GPU; both need Node, because they call the
+project's own TypeScript transliterator through `tools/transliterate.mjs` (R-2.2).
+
+| Gate | Command | Threshold | Measured |
+|---|---|---|---|
+| M-2 round-trip | `python tools/measure_roundtrip.py` | ≥ 98% Latin-stable | **99.8%** ([`roundtrip_stats_corpus.json`](../evaluation/roundtrip_stats_corpus.json)) |
+| M-2b tokenizer | `python tools/profile_tokenizer.py` | ≤ 5% `<unk>` | **0.0%**, 5.697 pieces/word ([`tokenizer_profile.json`](../evaluation/tokenizer_profile.json)) |
+
+Round-trip accuracy caps achievable quality — the model cannot beat the Latin it is trained on. Do
+not raise training scale to paper over a failing gate.
+
+## Hyperparameters
+
+`tools/train_translate.py` defaults, from R-9.2. Do not pass them again on the command line and do
+not drift from them silently.
+
+| | Value | Why |
+|---|---|---|
+| base model | `t5-small` | 60M; `google/flan-t5-small` via `--model` |
+| epochs | 4 | R-9.2 allows 3–5 |
+| batch | 32 | t5-small at len 128 fp16 on a T4. 8–16 for `flan-t5-base` |
+| learning rate | `1e-4` | not v0.1's `5e-5`. `3e-4` only as a recorded ablation |
+| weight decay | `0.01` | v0.1 never set it and silently used the HF default |
+| max length | 128 | R-3.5 |
+| seed | 11 | same seed as the corpus split |
+| fp16 | when CUDA is present | `torch.cuda.is_available()`; CPU runs fp32 |
+| beams | 1, greedy | matches inference (R-3.5) |
+
+Two behaviours worth knowing:
+
+- **Best checkpoint, not last.** `load_best_model_at_end=True` on `metric_for_best_model="chrf"`.
+  Without it, `save_model()` keeps the final epoch, so an overfitting run ships its worst weights.
+- **Metrics per direction.** BLEU and chrF++ are computed for `dv-en` and `en-dv` separately as
+  well as overall (R-8.4). One mixed average can look acceptable while a direction has collapsed.
+  chrF++ is `sacrebleu.CHRF(word_order=2)` — bare `CHRF()` is chrF, a different metric.
+
+## Where to run it
+
+**Not on the laptop.** The dev machine is a 2016 MacBook Pro: Intel i7-6567U, 2 cores, Iris 550
+integrated graphics — no CUDA, and no MPS either. `pip install -r tools/requirements-train.txt`
+fails outright, because `torch>=2.4` has no x86_64 macOS wheel (PyTorch stopped shipping Intel Mac
+builds after 2.2.2). Even pinned to `torch==2.2.2` it is fp32 on two cores: on the order of 40–80
+hours *per epoch*, so one to two weeks for the four. A free Colab **T4** does the same run in about
+three hours.
+
+A local smoke run is still worth it before spending a Colab session. Point it at a slice —
+`PairDataset` parses all 480k rows before `--smoke` truncates them:
+
+```sh
+head -n 2000 data/parallel/train.jsonl > /tmp/train_tiny.jsonl
+head -n 200  data/parallel/valid.jsonl > /tmp/valid_tiny.jsonl
+python tools/train_translate.py --train /tmp/train_tiny.jsonl --valid /tmp/valid_tiny.jsonl \
+    --out /tmp/smoke --smoke
+```
+
+R-8.3: a smoke checkpoint is a wiring check. Never demo or evaluate one as a result, and never send
+Feedback items produced by one.
+
+## Colab (M-3, M-4)
+
+[`colab_train_translate.ipynb`](../colab_train_translate.ipynb) trains **and** exports in one
+session. It clones the repo rather than pasting the trainer inline — a notebook copy is a second
+implementation to keep in sync, which is exactly what went wrong in v0.1.
+
+A Colab session is temporary. Nothing survives closing the tab unless it reached Drive or your
+disk.
+
+### 1 — GPU
+
+**Runtime → Change runtime type → T4 GPU → Save.** The first cell asserts and prints the device
+name. Free Colab has a daily quota; if it refuses a T4, wait or use another account.
+
+### 2 — Get the corpus in
+
+The JSONL is gitignored, so cloning does not bring it. **Upload `train.jsonl` and `valid.jsonl` to
+Drive from your browser first** — `files.upload()` stalls or dies at 189 MB — then replace the
+upload cell with:
+
+```python
+from google.colab import drive; drive.mount('/content/drive')
+!cp /content/drive/MyDrive/train.jsonl /content/drive/MyDrive/valid_small.jsonl data/parallel/
+```
+
+Do not rebuild the corpus after uploading, or the Colab copy no longer matches disk.
+
+### 3 — Subsample the validation set
+
+`predict_with_generate=True` generates over the whole validation set every epoch. At 49,948 rows
+that is 30–50 minutes per epoch on top of training, and the run outlives the session. Cut a seeded
+subset locally, keeping both directions, and keep the full file for final scoring:
+
+```sh
+python3 - <<'EOF'
+import json, random
+rows = [json.loads(l) for l in open('data/parallel/valid.jsonl', encoding='utf-8') if l.strip()]
+random.Random(11).shuffle(rows)
+keep = {'dv-en': [], 'en-dv': []}
+for r in rows:
+    if len(keep[r['direction']]) < 1000: keep[r['direction']].append(r)
+with open('data/parallel/valid_small.jsonl', 'w', encoding='utf-8') as f:
+    for r in keep['dv-en'] + keep['en-dv']: f.write(json.dumps(r, ensure_ascii=False) + '\n')
+EOF
+```
+
+2,000 rows is well clear of the ≥500-per-direction floor `tools/evaluate.py` enforces (R-8.9), so
+best-checkpoint selection stays meaningful.
+
+### 4 — Verify before training
+
+The corpus cell asserts *properties*, not hard-coded line counts — the prefix is present, both
+directions appear, no Thaana reached a model input, and no validation input also appears in train.
+It is the cheapest place to catch a bad upload. Do not skip it.
+
+### 5 — Train
+
+```sh
+python tools/train_translate.py \
+    --train data/parallel/train.jsonl \
+    --valid data/parallel/valid_small.jsonl \
+    --out models/dv-en-translate \
+    --model t5-small --epochs 4 --batch 32 --lr 1e-4
+```
+
+`BATCH = 16` or `8` on `CUDA out of memory`. Keep the tab open and visible; idle sessions die after
+about 90 minutes. Roughly 15,000 steps per epoch.
+
+Both losses should fall and chrF++ should rise. Screenshot the per-epoch table — it is the evidence
+that the checkpoint was selected on a metric rather than on the last epoch, and it goes in the
+write-up along with `t5-small`, the pair counts, epochs, learning rate, batch size, fp16 and **T4**.
+
+- Validation metric peaks early and then decays → overfitting. `--epochs 3`.
+- Loss near zero from the first step → the model is copying. Check `input` and `target` differ.
+- One direction's chrF++ far below the other → do not report the mixed average alone.
+
+### 6 — Probe
 
 ```text
-SUBJECT=aharen | ACTION=dhaa | LOCATION=male | TENSE=future | POLARITY=affirmative | REGISTER=spoken
+translate Dhivehi Latin to English: aharen maleah dhaanan
+translate English to Dhivehi Latin: I will go to Male.
 ```
 
-Good sign: `aharen maleah dhaanan` (or close). Not Thaana. Not a bare `Male`.
+Good: fluent English, and Latin Dhivehi carrying the dative — `maleah`, not a bare `male`. Bad: the
+prefixed input echoed back, empty output, or Thaana.
 
-### 6 — Download
+### 7 — Export to ONNX INT8 (M-4)
 
-Zip `en_realize` and `dv_realize` (about 200–250 MB each). Allow pop-ups for `colab.research.google.com`. If the connection is unreliable, copy the zip to Drive first (the notebook already mounts Drive).
-
-Extract on the laptop to:
-
-```text
-latin-mv-tlt\models\en_realize\
-latin-mv-tlt\models\dv_realize\
+```sh
+python tools/export_onnx.py --model models/dv-en-translate --out public/models/dv-en-translate
 ```
 
-You should see `model.safetensors`, `config.json`, and tokenizer files. `/models/` at the repo root is gitignored. Do not commit 200 MB PyTorch weights. Browser q8 ONNX files live in `public/models/` and **are** committed.
+The cell v0.1 never had, which is how 307 MB of hand-made models ended up holding ~162 MB of graphs
+the runtime never loads. It asserts at every step and **refuses to write** rather than ship
+something that fails in the browser:
 
-Record what you actually ran for Chapter 5: `t5-small`, pair counts, epochs, learning rate, batch size, fp16, **T4**.
+- the merged decoder really exposes `use_cache_branch`, which is what makes the old `runBeam`
+  monkey-patch unnecessary;
+- each quantized graph actually shrank — `quantize_dynamic` skips `If` subgraphs without
+  `extra_options={"EnableSubgraph": True}` and leaves the file fp32 inside at ~160 MB;
+- the total is inside the **80 MB** budget (R-3.4), scoped to the model directory. The ONNX Runtime
+  WASM (~21 MB) is counted separately.
 
-### 7 — Use it from the website
+Budget gate fails → the contingency ladder is in the error message and in REQUIREMENTS.md R-3.2.
+Vocabulary trimming is the big win and must happen *before* retraining. Do not skip past it.
 
-[`src/core/realization/runner.ts`](../src/core/realization/runner.ts) loads **local** Transformers.js models from `public/models/en-realize` and `public/models/dv-realize` (q8 ONNX). The PyTorch folder `models/en_realize` is for Python checks only; it does not feed the website.
+Runtime files are exactly what transformers.js fetches: `config.json`, tokenizer files,
+`encoder_model_quantized.onnx`, `decoder_model_merged_quantized.onnx`. Nothing else ships.
 
-- Realization loads from `/latin-mv-tlt/models/en-realize` and `/latin-mv-tlt/models/dv-realize`
-- First page load fetches the ONNX files from the same origin. After the browser cache holds them, realization can run offline.
-- Breakdown still shows the frame while the models load.
-- Transformers.js requires a file named `decoder_model_merged_quantized.onnx`. That is a copy of the 42 MB `decoder_model`, not the ~159 MB Optimum merge (too large for GitHub and for wasm session create).
+### 8 — Download and verify
 
-No Hugging Face repo IDs and no `VITE_*` model env vars.
+Zip to Drive, then to disk. Extract into `public/models/dv-en-translate/`, then:
+
+```sh
+node tools/smoke_translate.mjs 'aharen maleah dhaanan'   # the export under Node
+npm run check:models                                     # the same 80 MB gate CI runs
+npm run dev                                              # the only check that exercises WASM
+```
+
+`/models/` at the repo root is gitignored — it holds PyTorch weights for Python checks only and
+does not feed the website. `public/models/dv-en-translate` **is** committed. Do not commit 200 MB
+safetensors.
+
+Only after the browser check is the v0.2 model verified, and only then does M-8b delete the v0.1
+`public/models/{en,dv}-realize` (307 MB). Deleting them earlier leaves the app with no model path
+at all.
+
+## Then
+
+M-9 extends the gold set to ≥500 verified pairs per direction from a held-out domain. M-10 scores
+it and publishes:
+
+```sh
+python tools/evaluate.py --test data/parallel/test.jsonl --predictions preds.jsonl
+```
+
+Do not put BLEU or chrF++ on the Benchmarks page until they were measured on this pipeline. Until
+then the Translator reports *Unavailable*, and the page says the numbers are unmeasured.
+
+M-11 is Stage 2: back-translation, corpus growth, retrain, compare against this baseline.
 
 ## Troubleshooting
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `GPU available: False` | Skipped the runtime type step | Runtime → T4 GPU |
-| Cannot connect to GPU | Daily quota | Wait, or another account |
-| `FileNotFoundError: en_train.jsonl` | Session restarted | Re-upload |
-| `unexpected keyword 'processing_class'` | Old transformers | Re-install, then **Runtime → Restart session** |
+| `No GPU` assertion | Skipped the runtime type step | Runtime → T4 GPU |
+| Cannot connect to a GPU | Daily quota | Wait, or another account |
+| `FileNotFoundError: train.jsonl` | Session restarted, or the clone had no JSONL | Re-copy from Drive |
+| `unexpected keyword 'processing_class'` | transformers < 4.46 | Re-install, then **Runtime → Restart session** |
 | `CUDA out of memory` | Batch too big | `BATCH = 8` |
-| Disconnected mid-run | Idle timeout | Keep the tab visible; start again from upload |
-| Input starts with `grammar:` | Wrong dataset | Use `data/realize/` |
-| Output is Thaana | Wrong target language | Dhivehi model targets **Latin** only |
-| Fluent output far outside the slot vocabulary | Overclaiming | The corpus covers ~60 content words; say so |
-| `REGISTER=` missing from an input | Stale JSONL | Re-run `build_frame_pairs.py` and re-upload |
-
-Do not invent BLEU/chrF on the Benchmarks page until you measure them on this pipeline. Do not send native-speaker Feedback items that were produced by a smoke checkpoint.
-
-## Ablation (later)
-
-Compare frame realization against the old gloss-polish APE. Tokenization-study numbers stay supporting research, not the main claim. Quality cycle (lookup first, then rule realizer vs T5, conversational structures): [QUALITY.md](QUALITY.md).
+| Disconnected mid-run | Idle timeout | Keep the tab visible; start again from the copy step |
+| `Thaana reached the model input` | Corpus built without the transliterator step | Re-run `build_translation_pairs.py` |
+| Input starts with `SUBJECT=` | v0.1 frame pairs | Use `data/parallel/` |
+| Output is Thaana | Wrong target language | The Dhivehi side targets **Latin** only |
+| `torch` will not install on the Mac | No x86_64 macOS wheel above 2.2.2 | Train on Colab |
+| Export writes nothing | 80 MB budget gate | Read the error; trim vocabulary before retraining |
