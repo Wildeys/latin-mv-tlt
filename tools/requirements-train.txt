@@ -1,0 +1,25 @@
+# Training and ONNX export (M-3, M-4). Runs on Colab or a local GPU box.
+#
+#   pip install -r tools/requirements.txt -r tools/requirements-train.txt
+#
+# Separate from tools/requirements.txt because the corpus is built on a laptop
+# (it needs Node for the transliterator, R-2.2) while training needs a GPU. On
+# x86_64 macOS there is no torch>=2.4 wheel at all — PyTorch stopped shipping
+# Intel Mac builds after 2.2.2 — so a combined file would break the local
+# install for packages the local scripts never import.
+#
+# colab_train_translate.ipynb installs these itself; you do not need them
+# locally unless you are training on your own GPU.
+
+# transformers>=4.46 is required for `processing_class` on Seq2SeqTrainer,
+# and is already pinned in tools/requirements.txt.
+torch>=2.4
+accelerate>=1.1
+
+# ONNX export and INT8 quantization (R-9.3, R-3.13).
+# onnxruntime supplies quantize_dynamic; export_onnx.py passes
+# extra_options={"EnableSubgraph": True} so the merged decoder's If-subgraph
+# nodes are actually quantized rather than silently left in fp32.
+optimum[onnxruntime]>=1.23
+onnx>=1.17
+onnxruntime>=1.19

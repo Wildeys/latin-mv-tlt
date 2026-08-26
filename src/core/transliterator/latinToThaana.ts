@@ -54,6 +54,7 @@ const SUKUN = 'ް';
 const ALIFU = 'އ';
 const THAA = 'ތ';
 const SHAVIYANI = 'ށ';
+const SHEENU = 'ޝ';
 const NOONU = 'ނ';
 const LETTER_OR_DIGIT = /[A-Za-z0-9]/;
 const VOWEL_LETTER = /[aeiou]/;
@@ -196,6 +197,23 @@ function convertLatinWordDetailed(word: string): LatinToThaanaResult {
     ) {
       result.push(SHAVIYANI + SUKUN);
       i += 1;
+      continue;
+    }
+
+    // A coda `sh` is ޝް (sheenu), never ށް (shaviyani), even though both letters
+    // romanise to `sh` in onset position and shaviyani is the native one.
+    //
+    // The asymmetry comes from SUKUN_SPECIAL: ށ under sukun reads out as `h`, not
+    // `sh`. So ށް cannot be the inverse of a coda `sh` — round-tripping through it
+    // returns `h` and silently changes the word (މަޝްހޫރު `mashhooru` came back as
+    // `mahhooru`). ޝް is the only spelling that reads back as written, and it is
+    // also the etymologically right one: coda `sh` occurs in Arabic loanwords,
+    // which is what sheenu exists to write.
+    //
+    // This single rule was 91% of the corpus round-trip failures (R-1.8).
+    if (cons && cons[0] === 'sh' && !matchVowel(folded, i + 2)) {
+      result.push(SHEENU + SUKUN);
+      i += 2;
       continue;
     }
 

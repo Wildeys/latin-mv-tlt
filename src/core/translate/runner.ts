@@ -33,6 +33,21 @@ const MODEL_ID = 'dv-en-translate';
 /** R-3.5: max sequence length 128, greedy decoding. */
 const MAX_NEW_TOKENS = 128;
 
+/**
+ * R-3.5's limit applied to the *input*, which `max_new_tokens` does not cover.
+ *
+ * The corpus builder drops training pairs that exceed this, so the model has
+ * never seen a longer sequence. At inference the tokenizer would instead
+ * truncate silently: a long sentence pasted as part of a paragraph would come
+ * back as a fluent translation of only its first half, with nothing anywhere
+ * reporting that the tail was discarded. A confidently wrong translation is
+ * worse than a refusal, so this refuses.
+ *
+ * Sentences, not paragraphs, are what arrive here — callers segment first
+ * (R-5.1) — so this fires only on genuinely long single sentences.
+ */
+const MAX_INPUT_TOKENS = 128;
+
 type Generator = (text: string) => Promise<string>;
 
 let envConfigured = false;
@@ -110,6 +125,19 @@ async function loadPipeline(): Promise<Generator> {
   emitProgress(null);
 
   return async (text: string) => {
+    // Counted with the model's own tokenizer rather than by characters, because
+    // Dhivehi Latin fragments to ~5.8 subwords per word against English's ~1.3
+    // — a character heuristic would be wrong by a factor of four between the
+    // two directions.
+    const encoded = pipe.tokenizer(text) as { input_ids: { dims: number[] } };
+    const inputTokens = encoded.input_ids.dims.at(-1) ?? 0;
+    if (inputTokens > MAX_INPUT_TOKENS) {
+      throw new Error(
+        `sentence is ${inputTokens} tokens, over the ${MAX_INPUT_TOKENS}-token limit ` +
+          `(R-3.5); it would be silently truncated, so no translation is returned`,
+      );
+    }
+
     const out = await pipe(text, {
       max_new_tokens: MAX_NEW_TOKENS,
       // R-3.5 greedy, and NFR-7: with no sampling the model is reproducible,
