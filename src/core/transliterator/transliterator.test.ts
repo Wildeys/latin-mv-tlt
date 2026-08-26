@@ -97,6 +97,8 @@ describe('transliterator round-trip (R-1.8)', () => {
     ['dative -ah word-final', 'މާލެއަށް', 'maaleah'],
     ['dative -ah before a consonant', 'ކަށްޑެވި', 'kahdevi'],
     ['sukun special iy', 'ފޮތް', 'foiy'],
+    ['coda sh before a consonant', 'މަޝްހޫރު', 'mashhooru'],
+    ['coda sh word-final', 'ކައިޝް', 'kaish'],
   ];
 
   for (const [name, thaana, latin] of cases) {
@@ -125,6 +127,21 @@ describe('transliterator round-trip (R-1.8)', () => {
     // `ddh` is ޑް + ދ, not a doubled ޑ. Without a longest-match guard the
     // geminate rule swallowed the d of every dh that followed one.
     expect(latinToThaana('addhu')).not.toContain('އް');
+  });
+
+  it('writes coda sh with sheenu and onset sh with shaviyani', () => {
+    // ށ and ޝ both romanise to `sh`, but ށ under sukun reads out as `h`
+    // (SUKUN_SPECIAL), so ށް can never be the inverse of a coda `sh` —
+    // މަޝްހޫރު used to come back as `mahhooru`, a different word. Coda `sh` is
+    // therefore ޝް, which is also the etymologically right letter: it occurs in
+    // the Arabic loanwords sheenu exists to write.
+    expect(latinToThaana('mashvaraa')).toContain('ޝް');
+    expect(latinToThaana('mashvaraa')).not.toContain('ށް');
+
+    // Onset `sh` keeps the native shaviyani, which round-trips correctly because
+    // the sukun special does not apply when a vowel follows.
+    expect(latinToThaana('shafeeu')).toBe('ށަފީއު');
+    expect(transliterateThaana('ށަފީއު')).toBe('shafeeu');
   });
 
   it('reports unconverted Thaana characters (R-1.3)', () => {
