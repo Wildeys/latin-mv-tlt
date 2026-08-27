@@ -255,13 +255,34 @@ def main() -> int:
         pad_token=tokenizer.pad_token,
         eos_token=tokenizer.eos_token,
         unk_token=tokenizer.unk_token,
-        # Carried over, not defaulted. PreTrainedTokenizerFast assumes
-        # token_type_ids; T5 has no such input and generate() rejects it — and
-        # this lands in tokenizer_config.json, so the wrong value would reach
-        # transformers.js and be fed to the ONNX encoder at runtime.
+        # Every one of these is carried over rather than defaulted, because
+        # PreTrainedTokenizerFast's defaults are not T5's and all of them are
+        # written to tokenizer_config.json — which transformers.js reads at
+        # runtime. Two that bit us:
+        #   model_input_names            defaults to include token_type_ids,
+        #                                which T5 has no input for
+        #   clean_up_tokenization_spaces defaults False; T5 uses True, and
+        #                                without it every output keeps the space
+        #                                before its punctuation ("County ,")
         model_input_names=list(tokenizer.model_input_names),
         padding_side=tokenizer.padding_side,
+        truncation_side=tokenizer.truncation_side,
+        clean_up_tokenization_spaces=tokenizer.clean_up_tokenization_spaces,
+        split_special_tokens=getattr(tokenizer, "split_special_tokens", False),
     )
+    for attr in (
+        "model_input_names",
+        "padding_side",
+        "truncation_side",
+        "clean_up_tokenization_spaces",
+        "model_max_length",
+    ):
+        before, after = getattr(tokenizer, attr, None), getattr(trimmed, attr, None)
+        if before != after:
+            raise SystemExit(
+                f"{attr} changed {before!r} -> {after!r}. This is written to "
+                "tokenizer_config.json and read by transformers.js at runtime."
+            )
     if set(trimmed.model_input_names) != set(tokenizer.model_input_names):
         raise SystemExit(
             f"model_input_names changed {tokenizer.model_input_names} -> "
@@ -322,6 +343,19 @@ def main() -> int:
                     f"  text:    {text[:90]}\n"
                     f"  before:  {tokenizer.convert_ids_to_tokens(before['input_ids'])[:14]}\n"
                     f"  after:   {trimmed.convert_ids_to_tokens(after['input_ids'])[:14]}"
+                )
+            # The string a user actually sees. Identical pieces can still decode
+            # differently — clean_up_tokenization_spaces is what puts the space
+            # back before a comma — and decoding is the last thing that happens
+            # before text reaches the screen.
+            if tokenizer.decode(before["input_ids"]) != trimmed.decode(after["input_ids"]):
+                raise SystemExit(
+                    "REFUSING TO WRITE: decoding changed after trimming.\n"
+                    f"  text:    {text[:90]}\n"
+                    f"  before:  {tokenizer.decode(before['input_ids'])[:90]}\n"
+                    f"  after:   {trimmed.decode(after['input_ids'])[:90]}\n"
+                    "  The ids are equivalent; the detokenizer is not. Check the attributes "
+                    "carried onto PreTrainedTokenizerFast."
                 )
             checked += 1
     print(f"  ok  {checked:,} texts tokenize identically")
