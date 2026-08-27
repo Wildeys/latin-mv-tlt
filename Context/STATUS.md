@@ -6,19 +6,33 @@ Measured state of **latin-mv-tlt**, not a diary. Data numbers: [DATA.md](DATA.md
 
 **v0.2 migration: application code complete, model not yet trained.**
 
-- `npx tsc -b` — clean. `npm test` — **70 passing across 9 files**. `npm run build` — succeeds.
+- `npx tsc -b` — clean. `npm test` — **73 passing across 9 files**. `npm run build` — succeeds.
 - Architecture is now one direct Dhivehi Latin ↔ English seq2seq model selected by task prefix.
   `src/core/frames/` and `src/core/realization/` are deleted; `src/core/translate/` replaces them.
 - Runtime is `@huggingface/transformers` ^3.8.1. The ONNX Runtime WASM is vendored into
   `public/ort/` at build time, so no translation depends on a CDN.
-- **Round-trip transliteration measured** (M-2, was GAP-1): **99.28% Latin-stable** over 15,201
-  dictionary entries, 88.07% exact Thaana. `evaluation/roundtrip_stats.json`. Three previously
-  missing inverse rules were added — geminates, prenasalized stops, and the coda `h`/`iy` sukun
-  specials — which took Latin-stability from ~87% to 99.28%.
+- **Round-trip transliteration measured** (M-2, was GAP-1): **99.35% Latin-stable** over 15,201
+  dictionary entries (88.13% exact Thaana, 88.96% folded), and **99.80% Latin-stable** over a
+  5,000-sentence sample of the news corpus (27.50% exact, 34.32% folded — exact match punishes the
+  round trip for normalising nonstandard source Thaana, which is why R-1.8 gates on Latin
+  stability). `evaluation/roundtrip_stats.json`, `evaluation/roundtrip_stats_corpus.json`. Three
+  previously missing inverse rules were added — geminates, prenasalized stops, and the coda `h`/`iy`
+  sukun specials — which took Latin-stability from ~87% to 99.35%.
+- **Parallel corpus built** (M-1): **285,748** real pairs kept from 575,892 rows read, emitted twice
+  (one row per direction) as **480,018 train / 49,948 valid / 40,592 test** over 18 domains. Whole
+  domains are held out; `conversational` is held out by row instead and appears in all three splits,
+  so its scores are in-domain and are not comparable to the news splits.
+  `data/parallel/corpus_stats.json`. The ≥200k Stage 2 volume target (R-2.1b) is **met with real
+  data** — `syntheticPairs: 0` — so what is outstanding at M-11 is the back-translation pipeline,
+  not corpus size. Restate GAP-10 accordingly.
+- **Tokenizer profiled** (M-2b): **0.0% `<unk>`** over 2,000 word types (gate ≤5%), mean **5.697
+  pieces per word** on `t5-small`, histogram peaking at 5 with a tail to 15.
+  `evaluation/tokenizer_profile.json`. In-vocabulary but heavily fragmented — a sequence-length
+  cost, not a coverage win. Do not quote the 0% without the 5.697.
 - **No checkpoint.** The Translator reports Unavailable and invents nothing. BLEU, chrF++ and human
   ratings stay unmeasured, and the Benchmarks page says so.
-- Still to run (yours, needs GPU): M-1 corpus build, M-2b tokenizer profile, M-3 training,
-  M-4 ONNX export. Scripts are committed; see README "Offline pipeline".
+- Still to run (yours, needs GPU): M-3 training, M-4 ONNX export. Scripts are committed; see README
+  "Offline pipeline".
 - `public/models/{en,dv}-realize` (307 MB) is still on disk. It goes at M-8b, after the v0.2 model
   is verified in a browser. `.git` will stay ~65 MB regardless — the blobs remain in history, and
   rewriting it is not authorised by the requirements document.

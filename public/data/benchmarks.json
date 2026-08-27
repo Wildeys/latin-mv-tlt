@@ -4,15 +4,27 @@
   "metrics": [
     {
       "group": "TRANSLITERATION",
-      "name": "Round-trip Latin stability",
-      "value": "99.28% (15092 / 15201)",
+      "name": "Round-trip Latin stability — dictionary",
+      "value": "99.35% (15102 / 15201 entries) — gate is ≥98%",
       "source": "tools/measure_roundtrip.py → evaluation/roundtrip_stats.json"
     },
     {
       "group": "TRANSLITERATION",
-      "name": "Round-trip exact Thaana match",
-      "value": "88.07% raw, 88.96% folding the 10 Arabic-derived letters",
+      "name": "Round-trip Latin stability — news corpus",
+      "value": "99.80% (4990 / 5000 sentences) — gate is ≥98%",
+      "source": "tools/measure_roundtrip.py → evaluation/roundtrip_stats_corpus.json"
+    },
+    {
+      "group": "TRANSLITERATION",
+      "name": "Round-trip exact Thaana match — dictionary",
+      "value": "88.13% raw, 88.96% folding the 10 Arabic-derived letters",
       "source": "tools/measure_roundtrip.py → evaluation/roundtrip_stats.json"
+    },
+    {
+      "group": "TRANSLITERATION",
+      "name": "Round-trip exact Thaana match — news corpus",
+      "value": "27.50% raw, 34.32% folded — exact match punishes the round trip for normalising nonstandard source Thaana; Latin stability is the gated figure (R-1.8)",
+      "source": "tools/measure_roundtrip.py → evaluation/roundtrip_stats_corpus.json"
     },
     {
       "group": "TRANSLITERATION",
@@ -23,26 +35,32 @@
     {
       "group": "TOKENIZER",
       "name": "Dhivehi Latin <unk> rate",
-      "value": "not measured",
-      "source": "tools/profile_tokenizer.py (M-2b)"
+      "value": "0.0% (0 of 2000 word types) — gate is ≤5%",
+      "source": "tools/profile_tokenizer.py → evaluation/tokenizer_profile.json"
     },
     {
       "group": "TOKENIZER",
       "name": "Mean subwords per Latin word",
-      "value": "not measured",
-      "source": "tools/profile_tokenizer.py (M-2b)"
+      "value": "5.697 pieces/word on t5-small (histogram peaks at 5, tail to 15)",
+      "source": "tools/profile_tokenizer.py → evaluation/tokenizer_profile.json"
     },
     {
       "group": "CORPUS",
       "name": "Stage 1 real parallel pairs",
-      "value": "not built yet",
-      "source": "tools/build_translation_pairs.py (M-1)"
+      "value": "285748 pairs kept from 575892 rows read; written twice (one row per direction) as 480018 train / 49948 valid / 40592 test",
+      "source": "tools/build_translation_pairs.py → data/parallel/corpus_stats.json"
     },
     {
       "group": "CORPUS",
       "name": "Stage 2 target (≥200k, R-2.1b)",
-      "value": "not started",
-      "source": "tools/build_translation_pairs.py (M-11)"
+      "value": "met with real data — 285748 real pairs, 0 synthetic; the back-translation pipeline (M-11, R-2.10) is still not built",
+      "source": "tools/build_translation_pairs.py → data/parallel/corpus_stats.json"
+    },
+    {
+      "group": "CORPUS",
+      "name": "Split policy",
+      "value": "18 domains, whole domains held out (R-2.6 / R-8.8); `conversational` is held out by row instead and appears in all three splits, so its scores are in-domain and must be reported separately",
+      "source": "data/parallel/corpus_stats.json"
     },
     {
       "group": "TRANSLATION",

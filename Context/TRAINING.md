@@ -94,6 +94,9 @@ Two behaviours worth knowing:
 - **Metrics per direction.** BLEU and chrF++ are computed for `dv-en` and `en-dv` separately as
   well as overall (R-8.4). One mixed average can look acceptable while a direction has collapsed.
   chrF++ is `sacrebleu.CHRF(word_order=2)` — bare `CHRF()` is chrF, a different metric.
+- **Checkpoint cadence is a flag.** `--save-steps N` saves and evaluates every N steps instead of
+  once per epoch. `load_best_model_at_end` requires the two strategies to match, so they move
+  together; see [Resuming](#resuming-an-interrupted-run).
 
 ## Where to run it
 
@@ -193,6 +196,58 @@ write-up along with `t5-small`, the pair counts, epochs, learning rate, batch si
 - Loss near zero from the first step → the model is copying. Check `input` and `target` differ.
 - One direction's chrF++ far below the other → do not report the mixed average alone.
 
+### 5b — Resuming an interrupted run
+
+Free Colab drops sessions. At batch 32 over 480,018 rows an epoch is **15,001 steps**, so
+per-epoch saving means a timeout at step 50,000 discards everything back to `checkpoint-45003`.
+Two settings make that survivable, and they only help if they were set *before* the run.
+
+**Write checkpoints to Drive, not to the clone.** `--out` is the whole mechanism — checkpoints go
+to `<out>/runs`, and nothing under `/content/latin-mv-tlt/` outlives the tab:
+
+```sh
+--out /content/drive/MyDrive/dv-en-translate
+```
+
+A checkpoint is ~730 MB (fp32 weights plus Adam state). `save_total_limit=2` keeps two, plus the
+best, so budget about 2.2 GB of Drive.
+
+**Save mid-epoch.** `--save-steps 5000` bounds a lost session to 5,000 steps rather than 15,001.
+It also evaluates that often, which is why the validation set has to be `valid_small.jsonl` — at
+49,948 rows `predict_with_generate` would cost more than the training it interrupts.
+
+**Then resume:**
+
+```sh
+python tools/train_translate.py \
+    --train data/parallel/train.jsonl \
+    --valid data/parallel/valid_small.jsonl \
+    --out /content/drive/MyDrive/dv-en-translate \
+    --model t5-small --epochs 4 --batch 32 --lr 1e-4 \
+    --save-steps 5000 \
+    --resume auto
+```
+
+`auto` takes the newest checkpoint under `<out>/runs`; a path pins one. Optimizer state, LR
+schedule, RNG state and `log_history` all come back with it, so the resumed run is a continuation
+and not a second run — the per-epoch table at the end still covers every epoch.
+
+#### Keep every checkpoint, not just the newest
+
+`--resume` **refuses to start** unless the interrupted run's best checkpoint is sitting in
+`<out>/runs` next to the one being resumed from. That is not tidiness:
+
+`trainer_state.json` stores `best_model_checkpoint` as an absolute path belonging to the session
+that wrote it — `/content/latin-mv-tlt/models/...` for a run that used the clone. transformers
+repairs that path on each save by looking for `checkpoint-<best_global_step>` under `output_dir`,
+and when the directory is not there it **logs a warning and continues**. `save_model()` then writes
+the *last* step. The run reports success, the per-epoch table looks right, and the shipped weights
+are the final epoch rather than the best one — reinstating the exact v0.1 bug that
+`load_best_model_at_end` exists to prevent.
+
+So if `checkpoint-30002` scored best and only `checkpoint-45003` was copied back from Drive, put
+both in `<out>/runs` before resuming. The failure message names the missing directory.
+
 ### 6 — Probe
 
 ```text
@@ -267,7 +322,10 @@ M-11 is Stage 2: back-translation, corpus growth, retrain, compare against this 
 | `FileNotFoundError: train.jsonl` | Session restarted, or the clone had no JSONL | Re-copy from Drive |
 | `unexpected keyword 'processing_class'` | transformers < 4.46 | Re-install, then **Runtime → Restart session** |
 | `CUDA out of memory` | Batch too big | `BATCH = 8` |
-| Disconnected mid-run | Idle timeout | Keep the tab visible; start again from the copy step |
+| Disconnected mid-run | Idle timeout | Keep the tab visible; `--resume auto` (see 5b) |
+| `--resume auto found no checkpoint` | Drive not mounted, or `--out` is not the Drive path | Mount, then point `--out` at the directory holding `runs/` |
+| `best checkpoint is missing` | Only the newest checkpoint was copied back | Copy the named `checkpoint-*` into `<out>/runs` too |
+| `checkpoint is not inside the output directory` | Checkpoints restored somewhere other than `<out>/runs` | Move them in, or set `--out` to their parent's parent |
 | `Thaana reached the model input` | Corpus built without the transliterator step | Re-run `build_translation_pairs.py` |
 | Input starts with `SUBJECT=` | v0.1 frame pairs | Use `data/parallel/` |
 | Output is Thaana | Wrong target language | The Dhivehi side targets **Latin** only |

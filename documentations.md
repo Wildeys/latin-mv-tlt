@@ -22,20 +22,19 @@ bullets into prose; do not re-derive the numbers.
 
 **Stale artefacts — fix before you cite them against each other**
 
-1. `public/data/benchmarks.json` says the corpus is "not built yet" and the
-   tokenizer `<unk>` rate is "not measured". Both were measured since; the file
-   predates `data/parallel/corpus_stats.json` and `evaluation/tokenizer_profile.json`.
-2. `benchmarks.json` and `Context/STATUS.md` quote round-trip as **99.28%**
-   Latin-stable / 88.07% exact. `evaluation/roundtrip_stats.json` itself says
-   **99.349%** (15,102 / 15,201) and **88.132%**. Quote the JSON.
-3. `Context/PROJECT.md` still describes the v0.1 semantic-frame pipeline as the
+*(`public/data/benchmarks.json` and `Context/STATUS.md` were corrected on
+2026-08-27 — round-trip now reads 99.35% / 99.80% straight from the JSON, and
+the corpus and tokenizer rows carry their measured values. Both are safe to
+cite. The three below are still outstanding.)*
+
+1. `Context/PROJECT.md` still describes the v0.1 semantic-frame pipeline as the
    live architecture. It is prior work now; `docs/REQUIREMENTS.md` §2 is current.
-4. `docs/REQUIREMENTS.md` GAP-10 says "Stage 1 only, ≥200k not reached".
+2. `docs/REQUIREMENTS.md` GAP-10 says "Stage 1 only, ≥200k not reached".
    `corpus_stats.json` reports `realPairs: 285748` and `meetsStage2Target: true`
    from real parallel data alone — the Stage 2 volume target was met without
    back-translation. Restate GAP-10 as *back-translation pipeline not built*,
    not *corpus too small*.
-5. `public/data/dictionary_stats.json` `source` field leaks a Windows path
+3. `public/data/dictionary_stats.json` `source` field leaks a Windows path
    (`C:\Users\Moham\...`). Do not screenshot it. `[GAP-7]`
 
 ---
@@ -349,7 +348,7 @@ Unavailable. No rule-based fallback sentence is ever emitted.
 - Static hosting, no server runtime `[NFR-1]`; offline after first load `[NFR-2]`;
   privacy `[NFR-3]`.
 - Type safety — strict `tsc -b` in the build `[NFR-4]`; tested core — 9 test files,
-  70 tests `[NFR-5]`; tests touch neither models nor network `[NFR-6]`.
+  73 tests `[NFR-5]`; tests touch neither models nor network `[NFR-6]`.
 - Determinism: transliteration, lookup and morphology are pure; only the model is
   stochastic, and greedy decoding makes even that reproducible `[NFR-7]`.
 - **Honest reporting** `[NFR-8]` — any metric not measured on this pipeline is
@@ -728,7 +727,7 @@ Give this its own space. It is the strongest methods material in the project.
   the asymmetry in size is itself informative and worth one sentence.
 - The improvement worth narrating in detail: **three missing inverse rules** —
   geminates, prenasalized stops, and the coda `h` / `iy` sukun specials — took
-  Latin-stability from **~87% to 99.28%** on the dictionary set. This is the
+  Latin-stability from **~87% to 99.35%** on the dictionary set. This is the
   clearest before/after result in the project. `[Context/STATUS.md]`
 - Two fixed defects worth naming: `latinToThaana` silently deleting unknown
   characters (now preserved and reported), and unreachable branches in the
@@ -904,7 +903,7 @@ Two datasets, built by different scripts. Keep them apart in the write-up.
 
 - Four levels: unit (Vitest), gate measurements (Python + Node tooling),
   acceptance criteria AC-1…AC-13, and human evaluation.
-- Unit suite: **9 test files, 70 tests**, covering transliterator, dictionary,
+- Unit suite: **9 test files, 73 tests**, covering transliterator, dictionary,
   morphology (stemming and suffix parsing), segmenter, pipeline, translation
   runner and IME. `[NFR-5, Context/STATUS.md]`
 - **Tests touch neither models nor the network** — enforced by a `MODE === 'test'`
@@ -943,7 +942,8 @@ Two datasets, built by different scripts. Keep them apart in the write-up.
   Levenshtein per character 0.021.
 - Gate: ≥98% Latin-stable, measured **before** corpus construction and training.
   Both populations pass. `[AC-11]`
-- Cite the exact JSON values, not the stale 99.28% in `benchmarks.json`.
+- `benchmarks.json` now carries both populations and matches these figures, so
+  a Benchmarks screenshot and this table agree.
 
 ## 6.4 Translation Evaluation
 
@@ -1017,12 +1017,12 @@ Two datasets, built by different scripts. Keep them apart in the write-up.
 
   | | Criterion | Status |
   |---|---|---|
-  | AC-1 | `npm ci && npm run build` succeeds; `npm test` passes offline | Pass — 70 tests, 9 files |
+  | AC-1 | `npm ci && npm run build` succeeds; `npm test` passes offline | Pass — 73 tests, 9 files |
   | AC-2 | Translator produces output with the model present | ⟨after M-4⟩ |
   | AC-3 | Model removed → `not_loaded` / `unavailable`, nothing fabricated | Pass |
   | AC-4 | Breakdown shows source, Latin, glosses, model input, model output | Pass |
   | AC-5 | Feedback persists and exports valid CSV | Pass (see 6.5 defects) |
-  | AC-6 | Benchmarks shows no unmeasured metric as measured | Pass — but the file is stale, see the header notes |
+  | AC-6 | Benchmarks shows no unmeasured metric as measured | Pass |
   | AC-7 | Chat sends English only; fails clearly with no key | Pass |
   | AC-8 | Push to `main` deploys to Pages | Pass |
   | AC-9 | BLEU + chrF++ on ≥500 pairs/direction, plus spellability check | ⟨after M-3/M-4, M-9⟩ |
@@ -1116,7 +1116,7 @@ The strongest material in the chapter. Suggested arguments:
   | O4 tokenizer profile | **Met** | 0.0% `<unk>`, 5.697 pieces/word |
   | O5 train model | ⟨M-3⟩ | scripts and notebook committed and rehearsed |
   | O6 export ≤80 MB | ⟨M-4⟩ | `export_onnx.py` with three refuse-to-write assertions |
-  | O7 browser app + trace | Met | six screens, 70 tests, deployed to Pages |
+  | O7 browser app + trace | Met | six screens, 73 tests, deployed to Pages |
   | O8 evaluation | Partly | harness and gold-set method ready; scores ⟨pending⟩ |
 
 - Do not soften the two unmet rows. A clearly bounded gap with committed,
