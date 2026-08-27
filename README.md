@@ -77,6 +77,7 @@ The corpus builder and round-trip tool call the project's **own** TypeScript tra
 `tools/transliterate.mjs`, so training-time and inference-time Latin are produced by the same code.
 That is also why they run locally rather than on Colab — they need Node.
 
+- Design: [`docs/DESIGN.md`](docs/DESIGN.md)
 - Dictionary: [`Context/DATA.md`](Context/DATA.md)
 - Training: [`Context/TRAINING.md`](Context/TRAINING.md)
 - Measured state: [`Context/STATUS.md`](Context/STATUS.md)
