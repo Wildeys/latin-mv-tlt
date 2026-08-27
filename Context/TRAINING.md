@@ -258,6 +258,52 @@ translate English to Dhivehi Latin: I will go to Male.
 Good: fluent English, and Latin Dhivehi carrying the dative — `maleah`, not a bare `male`. Bad: the
 prefixed input echoed back, empty output, or Thaana.
 
+### 6b — Trim the vocabulary (R-3.2 step 1)
+
+The honest export is **80.27 MB** against an 80.00 MB budget. That is not a surprise —
+[DESIGN.md](../docs/DESIGN.md) §5.3 predicted "35 + 42 + 2.4 ≈ 80 MB — *at* the budget, not under
+it". The fp32 sizes say where the room is:
+
+| | params | fp32 | measured |
+|---|---|---|---|
+| embedding (`shared.weight`) | 16.45M | 65.8 MB | |
+| encoder = embedding + 6 layers | 35.3M | 141.3 MB | 141.41 |
+| merged decoder = embedding + 6 layers | 41.7M | 166.5 MB | 166.86 |
+
+`lm_head` is already deduplicated against `shared.weight`, so that lever is spent. The embedding
+still appears **once per graph** — 2 × 16.45 MB at INT8, about **42%** of the shipped ONNX.
+
+Measured over all 1,141,116 corpus texts, t5's vocabulary is **73.2% used**: 23,404 distinct ids,
+plus 101 more for the specials and the ASCII margin. Dropping the remaining 8,623 rows frees
+**8.83 MB** across the two graphs, taking the export to about **71 MB**.
+
+```sh
+python tools/trim_vocab.py \
+    --model models/dv-en-translate \
+    --corpus data/parallel/train.jsonl data/parallel/valid.jsonl data/parallel/test.jsonl \
+    --out models/dv-en-translate-trimmed
+```
+
+**Retraining is not required**, despite R-3.2's wording. Slicing embedding rows keeps every
+surviving token's learned vector bit for bit; the model loses only the ability to emit what was
+dropped. So the entire question is whether the kept set is complete, and the script verifies that
+instead of assuming it:
+
+- re-tokenizes sampled corpus rows and **refuses to write** if one piece sequence changed — a
+  dropped piece makes Unigram re-segment around it, which shows up immediately;
+- generates from the original and the trimmed model and **refuses to write** if any output differs;
+- asserts `pad`/`eos`/`unk` did not move, because `config.json`, `generation_config.json` and
+  `decoder_start_token_id` all pin those by number.
+
+Two things to get right:
+
+- **Pass every split.** A token appearing only in `test.jsonl` would otherwise be dropped, breaking
+  M-10 evaluation later.
+- **The ASCII margin is deliberate.** The corpus decides what the model can *produce*, but a user
+  can type anything into the encoder. Keeping all single-character ASCII pieces costs 101 rows and
+  makes any ASCII input representable — a complete guarantee here, since R-2.2 keeps Thaana out of
+  the model entirely. `--no-ascii-margin` drops it, and gives that guarantee up.
+
 ### 7 — Export to ONNX INT8 (M-4)
 
 ```sh
@@ -330,4 +376,4 @@ M-11 is Stage 2: back-translation, corpus growth, retrain, compare against this 
 | Input starts with `SUBJECT=` | v0.1 frame pairs | Use `data/parallel/` |
 | Output is Thaana | Wrong target language | The Dhivehi side targets **Latin** only |
 | `torch` will not install on the Mac | No x86_64 macOS wheel above 2.2.2 | Train on Colab |
-| Export writes nothing | 80 MB budget gate | Read the error; trim vocabulary before retraining |
+| Export writes nothing | 80 MB budget gate | `tools/trim_vocab.py` (6b) — no retraining needed |
