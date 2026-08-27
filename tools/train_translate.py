@@ -147,6 +147,68 @@ def build_metrics(tokenizer, directions: list[str]):
     return compute
 
 
+def check_resume_layout(ckpt: Path, run_dir: Path) -> None:
+    """Fail before the GPU time, not after it.
+
+    Two ways a resumed run quietly produces the wrong artefact. Both are caused
+    by checkpoints that were parked in Drive and copied back somewhere else, and
+    neither announces itself until the run is already finished:
+
+      the checkpoint is not under output_dir
+          The trainer resumes from wherever it is pointed but writes *new*
+          checkpoints under output_dir. Rotation, best-checkpoint recovery and a
+          later `--resume auto` all read output_dir, so the run ends up split
+          across two directories that each look incomplete.
+
+      the best checkpoint was left behind
+          trainer_state.json records the best checkpoint as an absolute path
+          belonging to the session that wrote it. transformers repairs that path
+          on every save, but only by looking for `checkpoint-<best_global_step>`
+          under output_dir; if that directory is missing it logs a warning and
+          carries on, and `save_model()` then writes the LAST step instead of the
+          best one — reinstating exactly the bug `load_best_model_at_end` is here
+          to prevent, on a run that otherwise looks successful.
+    """
+    state = json.loads((ckpt / "trainer_state.json").read_text(encoding="utf-8"))
+    print(
+        f"resuming {ckpt.name}: step {state.get('global_step')}/{state.get('max_steps')}, "
+        f"epoch {state.get('epoch')}"
+    )
+
+    if ckpt.resolve().parent != run_dir.resolve():
+        raise SystemExit(
+            "checkpoint is not inside the output directory\n"
+            f"  checkpoint: {ckpt.resolve()}\n"
+            f"  output_dir: {run_dir.resolve()}\n"
+            "  New checkpoints go to output_dir, so resuming from elsewhere splits the run "
+            "across two directories.\n"
+            f"  Move it into {run_dir}, or pass --out {run_dir.parent} so that <out>/runs is "
+            "where the checkpoints already are."
+        )
+
+    best = state.get("best_model_checkpoint")
+    if not best:
+        return
+    # best_global_step is what transformers rebuilds the path from; older
+    # checkpoints predate the field, so fall back to the recorded basename.
+    name = (
+        f"checkpoint-{state['best_global_step']}"
+        if state.get("best_global_step")
+        else Path(best).name
+    )
+    if (run_dir / name).is_dir():
+        print(f"best so far: {name}, chrf++ {state.get('best_metric')}")
+        return
+    raise SystemExit(
+        f"the interrupted run's best checkpoint is missing: {run_dir / name}\n"
+        f"  trainer_state.json scored it {state.get('best_metric')} chrf++, and "
+        f"recorded it at {best}.\n"
+        "  transformers only warns about this, and save_model() then ships the last step "
+        "rather than the best one.\n"
+        f"  Copy {name} back from Drive alongside {ckpt.name} before resuming."
+    )
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--train", type=Path, required=True)
@@ -162,6 +224,25 @@ def main() -> int:
     ap.add_argument("--max-len", type=int, default=128, help="R-3.5")
     ap.add_argument("--seed", type=int, default=11)
     ap.add_argument("--smoke", action="store_true", help="tiny wiring check, not a real run")
+    # Colab sessions get terminated. Without this, a dropped run restarts from
+    # epoch 0 and the ~730 MB per-epoch checkpoints under --out/runs are dead
+    # weight. "auto" takes the latest checkpoint in that directory.
+    ap.add_argument(
+        "--resume",
+        default=None,
+        metavar="CHECKPOINT|auto",
+        help="resume from a checkpoint directory, or 'auto' for the latest under --out/runs",
+    )
+    # Saving once per epoch is ~15,000 steps at batch 32 on this corpus, so a
+    # session that dies at step 50,000 throws away everything since step 45,003.
+    # This bounds that loss to N steps.
+    ap.add_argument(
+        "--save-steps",
+        type=int,
+        default=None,
+        metavar="N",
+        help="checkpoint and evaluate every N steps instead of once per epoch",
+    )
     args = ap.parse_args()
 
     if _MISSING_DEPS:
@@ -187,18 +268,32 @@ def main() -> int:
         args.epochs = 1
 
     args.out.mkdir(parents=True, exist_ok=True)
+    run_dir = args.out / "runs"
+
+    # load_best_model_at_end requires eval_strategy == save_strategy, and
+    # save_steps to be a multiple of eval_steps, so the two move together.
+    cadence = (
+        {
+            "eval_strategy": "steps",
+            "save_strategy": "steps",
+            "eval_steps": args.save_steps,
+            "save_steps": args.save_steps,
+        }
+        if args.save_steps
+        else {"eval_strategy": "epoch", "save_strategy": "epoch"}
+    )
 
     training = Seq2SeqTrainingArguments(
-        output_dir=str(args.out / "runs"),
+        output_dir=str(run_dir),
         num_train_epochs=args.epochs,
         per_device_train_batch_size=args.batch,
         per_device_eval_batch_size=args.batch,
         learning_rate=args.lr,
         weight_decay=args.weight_decay,
-        eval_strategy="epoch",
-        save_strategy="epoch",
-        # R-8.5: validation metrics per epoch, best checkpoint selected on the
-        # metric. Training without a validation metric is not acceptable.
+        **cadence,
+        # R-8.5: validation metrics at every `cadence` boundary, best checkpoint
+        # selected on the metric. Training without a validation metric is not
+        # acceptable.
         predict_with_generate=True,
         generation_max_length=args.max_len,
         generation_num_beams=1,  # greedy, matching inference (R-3.5)
@@ -222,7 +317,35 @@ def main() -> int:
         compute_metrics=build_metrics(tokenizer, valid_ds.directions()),
     )
 
-    trainer.train()
+    # A typo here silently trains from scratch for four hours, which is the worst
+    # possible way to find out about it — so the path is resolved and checked
+    # here rather than handed to the trainer as-is.
+    resume = args.resume
+    if resume is not None:
+        if resume == "auto":
+            from transformers.trainer_utils import get_last_checkpoint
+
+            found = get_last_checkpoint(str(run_dir)) if run_dir.is_dir() else None
+            if found is None:
+                raise SystemExit(
+                    f"--resume auto found no checkpoint under {run_dir}\n"
+                    "  A Colab disk does not survive the session that made it. Copy the "
+                    "checkpoint-* directories back from Drive into that path, or point "
+                    "--out at the Drive directory that already holds them."
+                )
+            ckpt = Path(found)
+        else:
+            ckpt = Path(resume)
+            if not (ckpt / "trainer_state.json").exists():
+                raise SystemExit(
+                    f"not a checkpoint directory: {ckpt}\n"
+                    "  expected trainer_state.json inside it. Pass --resume auto to use the "
+                    f"latest under {run_dir}."
+                )
+        check_resume_layout(ckpt, run_dir)
+        resume = str(ckpt)
+
+    trainer.train(resume_from_checkpoint=resume)
 
     # With load_best_model_at_end=True this is the best checkpoint, not the last.
     trainer.save_model(str(args.out))
@@ -241,6 +364,8 @@ def main() -> int:
                 "maxLen": args.max_len,
                 "seed": args.seed,
                 "smoke": args.smoke,
+                "resumedFrom": args.resume,
+                "saveSteps": args.save_steps,
                 "trainRows": len(train_ds),
                 "validRows": len(valid_ds),
                 "perEpoch": history,
