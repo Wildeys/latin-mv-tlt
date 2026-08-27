@@ -1,0 +1,30 @@
+{
+  "generatedBy": "tools/export_onnx.py",
+  "sourceCheckpoint": "/content/drive/MyDrive/training_datasets/dv-en-translate-checkpoints-trimmed",
+  "opset": 14,
+  "quantization": {
+    "weightType": "QInt8",
+    "perChannel": false,
+    "reduceRange": true,
+    "enableSubgraph": true
+  },
+  "mergedDecoderHasCacheBranch": true,
+  "files": {
+    "config.json": 1498,
+    "generation_config.json": 122,
+    "tokenizer.json": 1855942,
+    "tokenizer_config.json": 446,
+    "onnx/encoder_model_quantized.onnx": 31100336,
+    "onnx/decoder_model_merged_quantized.onnx": 37889196
+  },
+  "totalBytes": 70847540,
+  "budgetBytes": 80000000,
+  "withinBudget": true,
+  "notShipped": [
+    "decoder_model.onnx",
+    "decoder_model_merged.onnx",
+    "decoder_with_past_model.onnx",
+    "encoder_model.onnx"
+  ],
+  "note": "Only the graphs transformers.js loads are shipped (R-3.13). v0.1 also carried decoder_with_past (never loaded) and an unmerged decoder that was byte-identical to the file served as the merged one \u2014 together ~162 MB of the 307 MB."
+}

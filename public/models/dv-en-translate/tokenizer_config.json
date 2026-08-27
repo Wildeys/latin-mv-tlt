@@ -1,0 +1,19 @@
+{
+  "backend": "tokenizers",
+  "clean_up_tokenization_spaces": true,
+  "eos_token": "</s>",
+  "max_length": 128,
+  "model_input_names": [
+    "input_ids",
+    "attention_mask"
+  ],
+  "model_max_length": 512,
+  "pad_token": "<pad>",
+  "padding_side": "right",
+  "split_special_tokens": false,
+  "stride": 0,
+  "tokenizer_class": "TokenizersBackend",
+  "truncation_side": "right",
+  "truncation_strategy": "longest_first",
+  "unk_token": "<unk>"
+}
