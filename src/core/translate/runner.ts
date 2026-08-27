@@ -150,6 +150,46 @@ async function loadPipeline(): Promise<Generator> {
   };
 }
 
+// ---------------------------------------------------------------- poisoned cache
+
+/**
+ * The Cache Storage bucket `@huggingface/transformers` writes model files into.
+ * Not exported by the library, so it is duplicated here; it is a stable part of
+ * the library's observable behaviour rather than an internal we are reaching
+ * past.
+ */
+const HF_CACHE = 'transformers-cache';
+
+/**
+ * Whether a load failure is the signature of a cached file that is not what it
+ * claims to be: HTML served where JSON was expected, then `JSON.parse`d.
+ *
+ *     Unexpected token '<', "<!doctype "... is not valid JSON
+ *
+ * `getModelFile` treats HTTP 404 as the only signal that a file is absent, and
+ * caches any 200. A dev server that answers missing paths with the SPA shell —
+ * Vite's default, which `vite.config.ts` now overrides for `public/models/` —
+ * therefore stores `index.html` under a weights URL. That entry then wins on
+ * every later load, so the failure outlives the missing file: reloading does not
+ * clear Cache Storage, and neither does a hard refresh.
+ */
+function isPoisonedCacheError(err: unknown): boolean {
+  return err instanceof SyntaxError && /JSON/.test(err.message);
+}
+
+/**
+ * Drop the library's cache so the next load refetches. Returns whether anything
+ * was actually deleted, so the caller only retries when a retry can differ.
+ */
+async function purgeModelCache(): Promise<boolean> {
+  if (typeof caches === 'undefined') return false;
+  try {
+    return await caches.delete(HF_CACHE);
+  } catch {
+    return false;
+  }
+}
+
 // ---------------------------------------------------------------- status machine
 
 /**
@@ -168,7 +208,15 @@ export async function ensureTranslationModel(): Promise<TranslationStatus> {
   status = 'loading';
   loading = (async () => {
     try {
-      generate = await loadPipeline();
+      try {
+        generate = await loadPipeline();
+      } catch (err) {
+        // One retry, and only for the one failure a retry can fix. A genuine
+        // network or export problem must not be turned into a repeated 70 MB
+        // download, so this deliberately does not retry on every error.
+        if (!isPoisonedCacheError(err) || !(await purgeModelCache())) throw err;
+        generate = await loadPipeline();
+      }
       status = 'ready';
       lastError = undefined;
     } catch (err) {
