@@ -13,7 +13,7 @@
 
 @font-face {
   font-family: Faruma;
-  src: local("Faruma"), url("/latin-mv-tlt/fonts/Faruma.ttf") format("truetype");
+  src: local("Faruma"), url("/fonts/Faruma.ttf") format("truetype");
   font-display: swap;
 }
 

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { englishGloss, latinValue } from '../../core/dictionary/lookup';
 import type { PipelineTrace, StageState } from '../../core/pipeline/types';
 import { hasThaana } from '../../core/segmenter/textProcessor';
 
@@ -60,14 +61,17 @@ export default function TraceView({ trace }: { trace: PipelineTrace }) {
       )}
 
       <Block title="Dictionary" state={trace.stages.dictionary}>
+        {/* `englishGloss` and `latinValue` are the lexicon's own accessors. This
+            block used to reimplement both inline, so the panel could disagree
+            with every other consumer about what a word's gloss is — and the
+            accessors sat unreferenced behind an `export *` barrel looking used. */}
         {trace.dictionary.length === 0
           ? '—'
           : trace.dictionary
-              .map((w) => {
-                const gloss = w.translations[0]?.english[0] ?? '';
-                const latin = w.stem || w.transliteration || w.input;
-                return `${latin} → ${gloss}${w.caseGloss ? ` (${w.caseGloss})` : ''}`;
-              })
+              .map(
+                (w) =>
+                  `${latinValue(w)} → ${englishGloss(w)}${w.caseGloss ? ` (${w.caseGloss})` : ''}`,
+              )
               .join('\n')}
       </Block>
 

@@ -39,6 +39,13 @@ describe('stemWord', () => {
     expect(stemWord('   ', known)).toBeNull();
   });
 
+  it('composes spelling variants instead of applying them one at a time', () => {
+    // `ghaqee` needs BOTH gh→g and q→g. Each rule used to be applied to the
+    // original word only, so the composed form the lexicon holds was never tried.
+    const lexicon = (latin: string) => latin === 'gagee';
+    expect(stemWord('ghaqee', lexicon)?.root).toBe('gagee');
+  });
+
   it('collects the English hints for the suffixes it stripped', () => {
     const result = stemWord('indhuge', known);
     expect(result?.englishHints.join(' ')).toContain('of');

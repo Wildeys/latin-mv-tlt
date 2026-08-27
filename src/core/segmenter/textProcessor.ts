@@ -1,18 +1,52 @@
 import { transliterateThaana } from '../transliterator/thaanaToLatin';
 
-const THAANA = /[\u0780-\u07BF]/;
-const PUNCTUATION = /[.,;:!?()[\]{}"'\u060C\u061B\u061F\u0640\u06D4]/;
-const WORD = /([\u0780-\u07BF]+|[a-zA-Z]+(?:['-][a-zA-Z]+)*|\d+|[.,;:!?()[\]{}"'\u060C\u061B\u061F\u0640\u06D4])/g;
+const THAANA = /[ހ-޿]/;
+const PUNCTUATION = /[.,;:!?()[\]{}"'،؛؟ـ۔]/;
+/**
+ * Token classes, longest-first within each alternative.
+ *
+ * `\d+(?:[.,]\d+)+` precedes bare `\d+` so `3.14` and `1,000` survive as one
+ * token, which R-5.8 requires. Before this, `tokenizeWords('3.14')` returned `['3', '.', '14']`, which
+ * put a bare `.` into the word list and made the number unrecoverable downstream.
+ *
+ * The Latin class carries the accented vowels because Malé Latin place names
+ * (`Malé`, `Hulhumalé`) arrive unfolded from an English source; folding happens
+ * at the transliterator edge, not here.
+ */
+const WORD =
+  /([ހ-޿]+|[a-zA-ZÁÉÍÓÚáéíóú]+(?:['-][a-zA-ZÁÉÍÓÚáéíóú]+)*|\d+(?:[.,]\d+)+|\d+|[.,;:!?()[\]{}"'،؛؟ـ۔])/g;
+
+/** A token that is a word rather than punctuation or a bare number (R-5.8). */
+const WORD_TOKEN = /^(?:[ހ-޿]+|[a-zA-ZÁÉÍÓÚáéíóú]+(?:['-][a-zA-ZÁÉÍÓÚáéíóú]+)*)$/;
+
+/**
+ * English abbreviations whose full stop is not a sentence boundary.
+ *
+ * Deliberately short and English-only: Dhivehi terminates with `۔` (U+06D4) and
+ * does not use `.`-abbreviations, so a Dhivehi list would be inventing a problem.
+ * Matching is case-insensitive on the letters before the stop.
+ */
+const ABBREVIATIONS = new Set([
+  'dr', 'mr', 'mrs', 'ms', 'prof', 'sr', 'jr', 'st', 'rev', 'hon', 'gen', 'col',
+  'capt', 'sgt', 'vs', 'etc', 'no', 'nos', 'fig', 'vol', 'pp', 'approx', 'dept',
+  'univ', 'inc', 'ltd', 'co', 'est', 'min', 'max', 'al',
+  'jan', 'feb', 'mar', 'apr', 'jun', 'jul', 'aug', 'sept', 'sep', 'oct', 'nov', 'dec',
+  'mon', 'tue', 'tues', 'wed', 'thu', 'thur', 'thurs', 'fri', 'sat', 'sun',
+]);
+
+/** `e.g.`, `i.e.`, `U.S.`, `a.m.` — a run of single letters each followed by a stop. */
+const DOTTED_INITIALISM = /(?:^|[\s("'])(?:[A-Za-z]\.){1,}$/;
+const CAPITAL_INITIAL = /(?:^|[\s("'])[A-Z]\.$/;
 /**
  * Sentence terminators, script-aware (R-5.7).
  *
- * `\u06D4` (\u06D4, Arabic full stop) is used in Dhivehi text and was previously not
+ * `۔` (۔, Arabic full stop) is used in Dhivehi text and was previously not
  * a boundary at all, so a whole Thaana paragraph arrived at the model as one
- * "sentence". `\u061F` is the Arabic question mark.
+ * "sentence". `؟` is the Arabic question mark.
  */
-const SENTENCE_END = /[.!?\u061F\u06D4]/;
+const SENTENCE_END = /[.!?؟۔]/;
 /** Closing marks that belong to the sentence they follow, not the next one. */
-const TRAILING_CLOSER = /["'\u2019\u201D)\]\u00BB]/;
+const TRAILING_CLOSER = /["'’”)\]»]/;
 /** A segment worth translating contains at least one letter or digit. */
 const HAS_CONTENT = /[\p{L}\p{N}]/u;
 const LATIN_LETTER = /[a-zA-Z]/;
@@ -29,8 +63,8 @@ export function tokenizeWords(text: string): string[] {
  *
  * Under v0.1 this fed a rule-based frame extractor and a bad split was merely
  * untidy. Under v0.2 each segment costs one model inference, so the previous
- * implementation's habit of emitting bare `"."` fragments \u2014 `"a... b"` came back
- * as `["a.", ".", ".", "b"]` \u2014 is now a correctness *and* a cost problem: three
+ * implementation's habit of emitting bare `"."` fragments — `"a... b"` came back
+ * as `["a.", ".", ".", "b"]` — is now a correctness *and* a cost problem: three
  * of those four segments contain nothing to translate, and each would be
  * prefixed and pushed through the decoder.
  *
@@ -42,10 +76,33 @@ export function tokenizeWords(text: string): string[] {
  * Line breaks are hard boundaries: a newline ends a sentence whether or not it
  * is punctuated, which is how headline-and-body text actually arrives.
  *
- * Abbreviations (`Dr. Smith`) and decimals (`3.14`) are deliberately still split
- * \u2014 see Context/STATUS.md. Fixing those needs an abbreviation lexicon and is out
- * of scope for this change.
+ * Two further exceptions were added once the abbreviation lexicon existed
+ * (R-5.7). Both suppress the boundary rather than move it:
+ *
+ *   - a `.` between two digits is a decimal point, so `3.14 is pi.` is one
+ *     sentence and not `['3.', '14 is pi.']`;
+ *   - a `.` closing a known abbreviation, a capitalised initial (`J. Smith`) or a
+ *     dotted initialism (`e.g.`, `U.S.`) does not end the sentence.
+ *
+ * Both are checked only when the next character is *not* itself a terminator, so
+ * a run like `a... b` still splits on the run rule above and is unaffected. The
+ * initial rule requires a capital, which is what keeps lowercase `a.` splitting.
  */
+/** `3.14` — a stop flanked by digits is a decimal point, not a boundary. */
+function isDecimalPoint(text: string, i: number): boolean {
+  return DIGIT.test(text[i - 1] ?? '') && DIGIT.test(text[i + 1] ?? '');
+}
+
+/**
+ * True when the `.` just appended to `current` closes an abbreviation rather than
+ * a sentence. `current` ends with that stop.
+ */
+function closesAbbreviation(current: string): boolean {
+  if (DOTTED_INITIALISM.test(current) || CAPITAL_INITIAL.test(current)) return true;
+  const word = /([A-Za-z]+)\.$/.exec(current);
+  return word ? ABBREVIATIONS.has(word[1].toLowerCase()) : false;
+}
+
 export function segmentSentences(text: string): string[] {
   if (!text) return [];
 
@@ -73,6 +130,15 @@ export function segmentSentences(text: string): string[] {
     current += char;
 
     if (SENTENCE_END.test(char)) {
+      // A `.` that is not part of a terminator run may still belong to the
+      // sentence rather than end it. `char` is already appended to `current`.
+      if (char === '.' && !SENTENCE_END.test(text[i + 1] ?? '')) {
+        if (isDecimalPoint(text, i) || closesAbbreviation(current)) {
+          i += 1;
+          continue;
+        }
+      }
+
       let j = i + 1;
       while (j < n && SENTENCE_END.test(text[j])) current += text[j++];
       while (j < n && TRAILING_CLOSER.test(text[j])) current += text[j++];
@@ -88,10 +154,20 @@ export function segmentSentences(text: string): string[] {
   return result;
 }
 
+/**
+ * The single word tokenizer for the whole system (R-5.8).
+ *
+ * Both pipeline directions route through this. `enToDv` previously split English
+ * on its own `/[^A-Za-z…'-]+/` regex, so the Breakdown's dictionary panel could
+ * show a different word list than the one that was actually analysed — the same
+ * sentence tokenized two ways in two places.
+ *
+ * The previous filter was `/^[a-zA-Z]+$/`, which silently dropped every
+ * contraction and hyphenated form: `don't` and `well-known` tokenize as one token
+ * each and were then discarded, so they never reached the lexicon at all.
+ */
 export function extractWordsOnly(text: string): string[] {
-  return tokenizeWords(text).filter(
-    (token) => THAANA.test(token[0] ?? '') || /^[a-zA-Z]+$/.test(token),
-  );
+  return tokenizeWords(text).filter((token) => WORD_TOKEN.test(token));
 }
 
 /**

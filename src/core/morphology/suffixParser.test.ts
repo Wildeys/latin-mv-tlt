@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { generate, parseSuffix } from './suffixParser';
+import { NOUN_SUFFIXES, STEM_SUFFIXES, generate, parseSuffix } from './suffixParser';
 
 describe('suffix parser', () => {
   it('lets kamah beat ah', () => {
@@ -26,6 +26,14 @@ describe('suffix parser', () => {
     const parsed = parseSuffix('gey');
     expect(parsed.suffix).toBeNull();
     expect(parsed.root).toBe('gey');
+  });
+
+  it('agrees with STEM_SUFFIXES about what kamah means', () => {
+    // The two tables disagreed about the same morpheme: NOUN_SUFFIXES glossed it
+    // 'some', STEM_SUFFIXES 'to'. `kam` + dative `ah` is 'to'.
+    expect(NOUN_SUFFIXES.kamah.english).toBe('to');
+    expect(STEM_SUFFIXES.find(([s]) => s === 'kamah')?.[1]).toBe('to');
+    expect(parseSuffix('beynunkamah').english).toBe('to');
   });
 
   it('generate adds case endings', () => {

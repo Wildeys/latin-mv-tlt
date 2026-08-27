@@ -48,8 +48,20 @@ export function exportFeedbackCsv(): string {
   return [header, ...body].join('\n');
 }
 
+/**
+ * Quote one CSV cell, and neutralise spreadsheet formula injection.
+ *
+ * A correction beginning `=`, `+`, `-`, `@` or a control character is executed as
+ * a formula when the export is opened in Excel, Sheets or Numbers — the standard
+ * CSV injection vector, and this file is *designed* to be opened in a
+ * spreadsheet. Prefixing an apostrophe forces the cell to text; the leading
+ * quote is visible in the cell but the value is preserved verbatim.
+ */
+const FORMULA_LEAD = /^[=+\-@\t\r]/;
+
 function csv(value: string): string {
-  return `"${value.replaceAll('"', '""')}"`;
+  const safe = FORMULA_LEAD.test(value) ? `'${value}` : value;
+  return `"${safe.replaceAll('"', '""')}"`;
 }
 
 export function downloadFeedbackCsv() {
@@ -58,6 +70,13 @@ export function downloadFeedbackCsv() {
   const a = document.createElement('a');
   a.href = url;
   a.download = 'latin-mv-tlt-feedback.csv';
+  // Firefox requires the anchor to be in the document before a synthetic click
+  // does anything at all, and both Firefox and Safari read the blob
+  // asynchronously — revoking on the next line cancelled the download that had
+  // just been started. Revoke on a later task instead.
+  a.style.display = 'none';
+  document.body.appendChild(a);
   a.click();
-  URL.revokeObjectURL(url);
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 10_000);
 }

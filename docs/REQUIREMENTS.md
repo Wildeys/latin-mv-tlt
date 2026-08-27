@@ -1,6 +1,6 @@
 # latin-mv-tlt — Project Requirements Specification
 
-**Version 0.2.2** · Status: draft · Supersedes v0.1 · Applies to repository version `0.2.0`
+**Version 0.2.3** · Status: draft · Supersedes v0.1 · Applies to repository version `0.2.0`
 
 > **Revision 0.2.1 (2026-08-26).** Incorporates the external review in
 > [`docs/v2_review.md`](v2_review.md). Changes: the training learning rate is
@@ -15,6 +15,13 @@
 > migration. Each is a case where the spec as written was unachievable, factually
 > wrong about the runtime, or ambiguous enough that two readings produce
 > different code. They are listed with their evidence at **§11**.
+
+> **Revision 0.2.3 (2026-08-27).** Adds **R-5.8**, a single-definition rule for
+> word tokenization, after a defect sweep found three divergent tokenizers in the
+> codebase. Unlike the 0.2.2 amendments, this is a genuinely *new* requirement
+> rather than a correction to an existing one: nothing in the spec had ever said
+> where a word begins, so no implementation was in breach and no test could fail.
+> Recorded at **§11.1**.
 
 > **Change of architecture.** v0.1 specified translation through a semantic
 > frame with two sentence-realization models. v0.2 replaces that with a single
@@ -218,12 +225,26 @@ Traceability: `lookup.ts`, `closedClass.ts`, `suffixParser.ts`, `stemWord.ts`,
 | R-5.5 | Input shall be normalised once and the transliterated form computed once and reused. | Must |
 | R-5.6 | Dictionary glossing shall run **beside** translation, not as an input to it. A gloss failure shall not fail the translation. | Must |
 | R-5.7 | **Planned** — Sentence segmentation (R-5.1) shall be **script-aware and deterministic**, treating Latin full stops, Dhivehi punctuation (e.g. `۔`), and line breaks as sentence boundaries. Dhivehi punctuation conventions differ from English; segmentation shall not assume ASCII terminators alone. | Must |
+| R-5.8 | Word tokenization shall have a **single definition**, shared by every consumer. `tokenizeWords` shall define the token classes and `extractWordsOnly` shall filter them to words; no pipeline direction, screen or tool shall define its own word boundary. A number written with a decimal point or thousands separator (`3.14`, `1,000`) shall be **one** token, and contractions and hyphenated forms (`don't`, `well-known`) shall be retained as words rather than discarded. | Must |
 
 Traceability: `dvToEn.ts`, `enToDv.ts`, `types.ts`; tests `pipeline.test.ts`,
 `enToDv.output.test.ts`. R-5.4 is enforced by `traces.length > 0 &&
 traces.every(...)` — a regression guard, since `[].every()` is vacuously true
 and previously reported empty input as a successful translation. **This guard
 must survive the refactor.**
+
+R-5.8 exists because the system had **three** word definitions: `tokenizeWords`,
+`extractWordsOnly`, and a private regex inside `enToDv.ts`. The visible
+consequence was that the Breakdown's dictionary panel (R-6.2) could list
+different words than the pipeline had analysed, for the same sentence, with no
+error at any layer. The two secondary clauses are the defects that divergence
+concealed: `tokenizeWords('3.14')` returned `['3', '.', '14']`, putting a bare
+`.` into the word list and making the number unrecoverable; and
+`extractWordsOnly`'s `/^[a-zA-Z]+$/` filter silently discarded every contraction
+and hyphenated form before it could reach the lexicon. Segmentation (R-5.7) and
+tokenization are separate rules over the same text, so they are separate
+requirements. Traceability: `core/segmenter/textProcessor.ts`,
+`core/pipeline/enToDv.ts`; tests `segmentSentences.test.ts`.
 
 `PipelineTrace` changes under v0.2: `englishFrame`, `latinFrame`, `frameString`,
 `latinFrameString`, and `realization` are removed; `modelInput`, `modelOutput`,
@@ -474,7 +495,15 @@ force-push, and is **not** authorised by this document.
 
 ---
 
-## 11. Amendment log (v0.2.1 → v0.2.2)
+## 11. Amendment log
+
+### 11.1 v0.2.2 → v0.2.3
+
+| # | Change | Why it was necessary |
+|---|---|---|
+| 1 | **R-5.8** — one definition of a word, shared by every consumer | The spec constrained sentence segmentation (R-5.7) and required the Breakdown to render dictionary glosses (R-5.2, R-6.2), but never said what a *word* was. Three definitions had accumulated — `tokenizeWords`, `extractWordsOnly`, and a private regex in `enToDv.ts` — so the Breakdown's word list could disagree with the pipeline's for the same sentence. That is a user-visible inconsistency that no requirement forbade and no test could catch. The two secondary clauses pin the defects the divergence hid: decimals shredded into three tokens, and contractions discarded by a letters-only filter. |
+
+### 11.2 v0.2.1 → v0.2.2
 
 Raised while implementing §8. Each was a place where following the spec
 literally would have produced something that could not work, or could not be
@@ -503,7 +532,7 @@ verified.
 | Translation model | R-3.x | `core/translate/{runner,types,prefixes}.ts` | `translate.test.ts`, `scripts/check-models.mjs` |
 | Lexicon & morphology | R-4.x | `core/dictionary/`, `core/morphology/` | `lookup.test.ts`, `stemWord.test.ts`, `suffixParser.test.ts` |
 | Pipeline | R-5.x | `core/pipeline/` | `pipeline.test.ts`, `enToDv.output.test.ts` |
-| Segmentation | R-5.7 | `core/segmenter/textProcessor.ts` | `segmentSentences.test.ts` |
+| Segmentation & tokenization | R-5.7, R-5.8 | `core/segmenter/textProcessor.ts`, `core/pipeline/enToDv.ts` | `segmentSentences.test.ts` |
 | UI | R-6.x | `App.tsx`, `ui/` | manual / AC-2–AC-7 |
 | LLM | R-7.x | `llm/` | manual |
 | Evaluation | R-8.x | `lib/feedback.ts`, `evaluation/`, `tools/evaluate.py`, `tools/measure_roundtrip.py` | `roundtrip_stats.json`, `scores.json` |

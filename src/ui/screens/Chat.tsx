@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { translateDvToEn, translateEnToDv } from '../../core/pipeline';
 import { hasThaana } from '../../core/segmenter/textProcessor';
 import { completeEnglish } from '../../llm/adapter';
@@ -14,6 +14,20 @@ export default function Chat() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const ime = useThaanaIme(true);
+  /**
+   * The LLM call had no abort path, so a hung endpoint left `busy` true forever:
+   * the send button stayed disabled and the only recovery was a page reload.
+   */
+  const inFlight = useRef<AbortController | null>(null);
+
+  useEffect(() => () => inFlight.current?.abort(), []);
+
+  function cancel() {
+    inFlight.current?.abort();
+    inFlight.current = null;
+    setBusy(false);
+    setError('Cancelled.');
+  }
 
   function persist(next: LlmSettings) {
     setSettings(next);
@@ -60,7 +74,9 @@ export default function Chat() {
         );
       }
 
-      const englishOut = await completeEnglish(settings, englishIn);
+      const controller = new AbortController();
+      inFlight.current = controller;
+      const englishOut = await completeEnglish(settings, englishIn, controller.signal);
       const outbound = await translateEnToDv(englishOut);
       const assistant: ChatMessage = {
         id: crypto.randomUUID(),
@@ -71,8 +87,12 @@ export default function Chat() {
       };
       setMessages((m) => [...m, assistant]);
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+      // `cancel` has already set the message and cleared `busy`.
+      if (!(err instanceof DOMException && err.name === 'AbortError')) {
+        setError(err instanceof Error ? err.message : String(err));
+      }
     } finally {
+      inFlight.current = null;
       setBusy(false);
     }
   }
@@ -124,13 +144,24 @@ export default function Chat() {
           placeholder="Type Male Latin (aharen)..."
           className="flex-1 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 font-thaana"
         />
-        <button
-          onClick={send}
-          disabled={busy}
-          className="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-medium disabled:opacity-50"
-        >
-          {busy ? '…' : 'Send'}
-        </button>
+        {busy ? (
+          // Reachable while the request is in flight, so a hung endpoint no
+          // longer needs a page reload to recover from.
+          <button
+            onClick={cancel}
+            className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 text-sm font-medium"
+          >
+            Cancel
+          </button>
+        ) : (
+          <button
+            onClick={send}
+            disabled={!draft.trim()}
+            className="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-medium disabled:opacity-50"
+          >
+            Send
+          </button>
+        )}
       </div>
     </div>
   );

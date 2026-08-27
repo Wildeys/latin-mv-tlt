@@ -144,6 +144,24 @@ describe('transliterator round-trip (R-1.8)', () => {
     expect(transliterateThaana('ށަފީއު')).toBe('shafeeu');
   });
 
+  it('reads the diacritic that follows a prenasalized stop (R-1.8)', () => {
+    // The forward rule emitted the digraph and then jumped past the stop without
+    // reading its sukun, so the sukun met the next iteration with no consonant in
+    // front of it and was copied into the Latin as a raw U+07B0.
+    expect(transliterateThaana('ނބް')).toBe("n'b");
+    expect(transliterateThaanaDetailed('ނބް').preserved).toEqual([]);
+    expect(transliterateThaana('އަނބު')).toBe("an'bu");
+  });
+
+  it('keeps prenasalized stops Latin-stable in both directions (R-1.8)', () => {
+    for (const thaana of ['ނބް', 'ނދް', 'ނގް', 'ނޑް', 'އަނބު', 'އަނދު']) {
+      const latin = transliterateThaana(thaana);
+      expect(latin).not.toMatch(/[\u0780-\u07BF]/);
+      // Latin stability is the property R-1.8 actually gates on.
+      expect(transliterateThaana(latinToThaana(latin))).toBe(latin);
+    }
+  });
+
   it('reports unconverted Thaana characters (R-1.3)', () => {
     // The reverse direction has always reported preserved segments; the forward
     // direction used to drop unmapped characters silently, which made R-1.8's

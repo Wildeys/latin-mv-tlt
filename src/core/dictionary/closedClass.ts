@@ -1,4 +1,19 @@
-/** High-frequency English function words the bilingual dictionary often misses. */
+/**
+ * High-frequency English function words the bilingual dictionary often misses.
+ *
+ * A curated entry OVERRIDES the 16k bilingual lexicon, so a wrong entry here is
+ * worse than no entry: the lookup never gets to consult the real dictionary.
+ * Four were removed for that reason, each of them an open-class content word
+ * pointing at a Dhivehi form that means something else:
+ *
+ *   work  → kurun  — `kurun` is "to do/make", not "to work"
+ *   stay  → huri   — `huri` is "was / is present", not "to stay"
+ *   never → nu     — `nu` is the negative prefix; "never" is not a bare negator
+ *   exist → ulee   — a finite form, where every neighbouring verb is a lemma
+ *
+ * They now fall through to the bilingual dictionary. Replacements need a native
+ * speaker rather than a guess, so none were invented — see Context/QUALITY.md.
+ */
 export const ENGLISH_TO_LATIN: Record<string, string> = {
   i: 'aharen',
   me: 'aharen',
@@ -6,6 +21,8 @@ export const ENGLISH_TO_LATIN: Record<string, string> = {
   we: 'aharemen',
   us: 'aharemen',
   you: 'kaley',
+  // `eyna` is gender-neutral in Dhivehi; both English pronouns collapse onto it,
+  // and the reverse gloss says so rather than picking one.
   he: 'eyna',
   she: 'eyna',
   they: 'emeehun',
@@ -17,7 +34,6 @@ export const ENGLISH_TO_LATIN: Record<string, string> = {
   which: 'kon',
   what: 'kon',
   not: 'nu',
-  never: 'nu',
   also: 'ves',
   although: 'namaves',
   when: 'iru',
@@ -29,8 +45,6 @@ export const ENGLISH_TO_LATIN: Record<string, string> = {
   gone: 'dhiya',
   come: 'ann',
   live: 'ulhun',
-  exist: 'ulee',
-  stay: 'huri',
   drink: 'bonun',
   give: 'dhinun',
   sleep: 'nidun',
@@ -38,7 +52,6 @@ export const ENGLISH_TO_LATIN: Record<string, string> = {
   take: 'gann',
   buy: 'gathun',
   find: 'hoadhun',
-  work: 'kurun',
   read: 'kiyun',
   write: 'liyun',
   male: 'male',
@@ -70,7 +83,7 @@ export const LATIN_TO_ENGLISH: Record<string, string> = {
   aharemen: 'we',
   ahah: 'to me',
   kaley: 'you',
-  eyna: 'he',
+  eyna: 'he/she',
   emeehun: 'they',
   thimaa: 'self',
   thimange: 'own',
@@ -136,24 +149,33 @@ export const LATIN_TO_ENGLISH: Record<string, string> = {
   engun: 'know',
 };
 
-export const LOCATION_LATIN = new Set([
-  'male',
-  'maale',
-  'raajje',
-  'addu',
-  'hulhumale',
-  'malegai',
-  'raajjegai',
+/**
+ * English keys that deliberately do NOT round-trip through LATIN_TO_ENGLISH.
+ *
+ * Dhivehi genuinely collapses these — one pronoun for `I`/`me`, one verb lemma
+ * for `go`/`going`/`went`, one noun for `house`/`home` — so the reverse map can
+ * only carry one gloss. Listing them makes the asymmetry a recorded decision
+ * instead of an accident: `closedClass.test.ts` fails on any round-trip failure
+ * that is not named here, which is what stopped `work → kurun → do` from sitting
+ * in the table unnoticed.
+ */
+export const COLLAPSED_ENGLISH = new Set([
+  'me',        // → aharen → I
+  'us',        // → aharemen → we
+  'them',      // → emeehun → they
+  'what',      // → kon → which
+  'going',     // → dhaa → go
+  'went',      // → dhiya → go
+  'gone',      // → dhiya → go
+  'home',      // → ge → house
+  'see',       // → belun → look
+  'malé',      // → male → Male   (accent folded)
+  'hulhumalé', // → hulhumale → Hulhumale
 ]);
-export const SUBJECT_LATIN = new Set([
-  'aharen',
-  'aharemen',
-  'kaley',
-  'thibaa',
-  'eyna',
-  'emeehun',
-  'thimaa',
-  'meehu',
-  'meehun',
-]);
-export const PARTICLE_LATIN = new Set(['nu', 'neth', 'noonee', 'eve', 'ves', 'namaves', 'iru', 'maa']);
+
+/*
+ * `LOCATION_LATIN`, `SUBJECT_LATIN` and `PARTICLE_LATIN` used to live here.
+ * They classified words into semantic-frame slots — location, subject, particle
+ * — and nothing has read them since `src/core/frames/` was deleted in the v0.2
+ * migration. `export *` in the barrel kept them looking used.
+ */

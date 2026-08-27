@@ -1,16 +1,23 @@
 import { translateWord, type WordTranslation } from '../dictionary';
 import { buildModelInput } from '../translate/prefixes';
 import { translateText } from '../translate/runner';
-import { segmentSentences } from '../segmenter/textProcessor';
+import { extractWordsOnly, segmentSentences } from '../segmenter/textProcessor';
 import { latinToThaanaDetailed } from '../transliterator/latinToThaana';
 import { normalise } from '../normalize';
 import type { PipelineResult, PipelineTrace, StageState } from './types';
 
+/**
+ * R-5.8: one tokenizer for the whole system.
+ *
+ * This used to split on its own `/[^A-Za-zÁÉÍÓÚáéíóú'-]+/`, which is a *third*
+ * word definition alongside `tokenizeWords` and `extractWordsOnly`. The visible
+ * consequence was that the Breakdown's dictionary panel could list different
+ * words than the ones the rest of the pipeline had analysed — for the same
+ * sentence. It also emitted bare `-` and `'` as words, because a run of them
+ * separates two empty strings that `filter(Boolean)` does not catch.
+ */
 function dictionaryForEnglish(text: string): WordTranslation[] {
-  return text
-    .split(/[^A-Za-zÁÉÍÓÚáéíóú'-]+/)
-    .filter(Boolean)
-    .map((word) => translateWord(word, 'english'));
+  return extractWordsOnly(text).map((word) => translateWord(word, 'english'));
 }
 
 export async function translateEnToDvSentence(sentence: string): Promise<PipelineTrace> {

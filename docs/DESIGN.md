@@ -32,11 +32,9 @@ its full account lives in `REQUIREMENTS.md` Appendix A.
 | [`Context/STATUS.md`](../Context/STATUS.md) | What is measured, right now |
 | [`Context/QUALITY.md`](../Context/QUALITY.md) | What is known to be wrong |
 
-> **Warning about `Context/PROJECT.md`.** That file still describes the v0.1
-> semantic-frame pipeline (frames, `en-realize`/`dv-realize`, "Semantic
-> representation → Small trained realization model"). It was not migrated with the
-> code. Where it disagrees with this document, this document is correct — the
-> modules it describes (`src/core/frames/`, `src/core/realization/`) do not exist.
+`Context/PROJECT.md` described the v0.1 semantic-frame pipeline until it was
+migrated alongside this document; it was the last file still doing so. All four
+`Context/` documents and this one now describe the same system.
 
 ---
 
@@ -240,11 +238,22 @@ keys and the dictionary silently misses.
 tokens. **Interface.** `segmentSentences`, `tokenizeWords`, `extractWordsOnly`,
 `identifyScript`, `hasThaana`, `prepareSentence`.
 
-**`segmentSentences` — three rules, in order** (R-5.7):
+**`segmentSentences` — five rules, in order** (R-5.7):
 
 1. A run of terminators (`...`, `?!`) is **one** boundary, not one per mark.
 2. Closing quotes and brackets stay with the sentence they close.
 3. A segment containing no letter or digit (`\p{L}`/`\p{N}`) is never emitted.
+4. A `.` flanked by digits is a decimal point, not a boundary: `3.14 is pi.` is
+   one sentence, where it used to be `['3.', '14 is pi.']`.
+5. A `.` closing a known abbreviation (`Dr.`, `etc.`), a capitalised initial
+   (`J. Smith`) or a dotted initialism (`e.g.`, `U.S.`) does not end the sentence.
+
+Rules 4 and 5 are checked **only when the next character is not itself a
+terminator**, which is what keeps rule 1 intact: `a... b` still splits, because
+the `.` after `a` is followed by another `.`. The initial rule requires a capital,
+so a lowercase `a.` is not mistaken for an initial. The abbreviation list is
+English-only by design — Dhivehi terminates with `۔` and does not abbreviate with
+a full stop, so a Dhivehi list would be inventing a problem.
 
 Terminators are script-aware: `.` `!` `?` plus `U+061F` (Arabic question mark) and
 `U+06D4` (Arabic full stop, used in Dhivehi). Before `U+06D4` was a boundary, an
@@ -254,6 +263,20 @@ entire Thaana paragraph arrived at the model as one "sentence" and was truncated
 **Why rule 3 is a correctness requirement and not tidiness.** Under v0.1 a bad split
 was untidy. Under v0.2 **one segment costs one model inference**, so emitting `"."`
 as a segment means prefixing and decoding a fragment with nothing in it.
+
+**One tokenizer, not three** (R-5.8, DD-18). `tokenizeWords` defines the token classes and
+`extractWordsOnly` filters them to words; both pipeline directions route through
+it. `enToDv` previously split English on its own regex, so the Breakdown's
+dictionary panel could list different words than the pipeline had analysed, for
+the same sentence. The token classes also keep `3.14` and `1,000` whole, and the
+word filter keeps contractions and hyphenated forms that the old `/^[a-zA-Z]+$/`
+filter discarded silently.
+
+R-5.8 was added to the requirements spec in revision 0.2.3 as a consequence of
+this work. It is the one place where the defect sweep found a gap in the *spec*
+rather than in the code: nothing had ever said where a word begins, so no
+implementation was in breach and no test could fail. Segmentation (R-5.7) and
+tokenization are separate rules over the same text, and are now separate clauses.
 
 **`identifyScript`** is a single pass over the string returning percentage shares of
 Thaana / Latin / digit / punctuation / whitespace. It replaced an implementation
@@ -306,6 +329,14 @@ matching gets both wrong:
 - **`iy` → `ތް` is an accepted lossy choice.** `އިޔް` also reads out as `iy`; `ތް` is
   chosen as canonical because it is far the commoner word-final shape. R-1.2 permits
   exactly one convention, so the alternative is *deliberately* lost.
+
+**A prenasalized stop is one Latin unit spelled from two Thaana consonants**, and
+the diacritic that follows belongs to the *second* of them. The forward rule used
+to emit the digraph and jump straight past the stop, so a following sukun met the
+next iteration with no consonant in front of it and was copied into the Latin as a
+raw `U+07B0`: `ނބް` came out as `n'b` plus a Thaana character. Falling into the
+shared vowel/sukun handling instead makes the pair behave exactly like any other
+consonant, and every prenasalized form is now Latin-stable.
 
 **Preserved segments** (R-1.3). Both directions return `preserved: string[]` — what
 could not be mapped, de-duplicated. Forward, only Thaana-block characters count
@@ -373,6 +404,19 @@ Two ranking decisions carry scars:
   prevent. Likewise an exact dictionary hit is the *only* thing allowed to replace a
   curated closed-class gloss.
 
+**A curated closed-class entry overrides the 16k lexicon**, so a wrong entry there
+is worse than a missing one — the staged lookup never reaches the real dictionary
+to be corrected. Four entries were removed on that basis, each an open-class
+content word pointing at a Dhivehi form that means something else: `work → kurun`
+("to do/make"), `stay → huri` ("was/is present"), `never → nu` (the negative
+prefix) and `exist → ulee` (a finite form among lemmas). No replacements were
+invented — that needs a native speaker, not a guess. The genuinely many-to-one
+collapses that remain (`me`/`I` → `aharen`, `going`/`went` → one lemma,
+`home`/`house` → `ge`) are declared in `COLLAPSED_ENGLISH` and enforced by
+`closedClass.test.ts`, which fails on any round-trip asymmetry that is not on the
+list. `eyna` is gender-neutral in Dhivehi and is now glossed `he/she` rather than
+picking one.
+
 **Why binary search.** Prefix lookup previously walked all ~16k keys per word. Keys
 sharing a prefix form one contiguous run in sorted order, so `lowerBound` plus a walk
 that stops at the first non-match is O(log n + k).
@@ -391,10 +435,23 @@ future, present-focus copula, progressive and the clause-chaining converbs. Each
 entry carries an English hint, which is what surfaces on the Breakdown as the
 `caseGloss`.
 
+**The two suffix tables agree.** `kamah` read `{case: 'indefinite_dative', english:
+'some'}` in `NOUN_SUFFIXES` and `['kamah', 'to']` in `STEM_SUFFIXES`, so the same
+morpheme carried two glosses and the Breakdown printed whichever table the caller
+happened to reach. `kam` (verbal noun) + dative `ah` is *to*; `some` was the error.
+
 **Stemming is gated by a `known()` callback.** `stemWord(word, isKnownLatin, maxDepth
 = MAX_STRIP_DEPTH)` strips recursively to a depth of 3 but only accepts a root the
 lexicon actually contains, so it cannot invent a stem. The gate is passed in rather than imported, which keeps the module
 free of a dependency on the dictionary and keeps it unit-testable in isolation.
+
+**Spelling variants compose.** The four letter-variant rules (`q`→`g`, `kh`→`h`,
+`gh`→`g`, `dhh`→`dh`) used to be applied to the original word only, so a word
+carrying two of them never reached its normalised form: `ghaqee` produced `gaqee`
+and `ghagee` but never `gagee`, which is the spelling the lexicon holds. The
+generator is now a fixed point over the rules — at most 2^4 spellings, bounded by
+`MAX_VARIANTS = 64` — with the word-final mutations and sandhi undoings applied to
+each spelling rather than only to the input.
 
 **Register detection** returns `written | spoken | neutral`. The design note in
 `honorifics.ts` is candid about its own limits: Fritz Vol. II does *not* attest a
@@ -540,6 +597,19 @@ unimplemented provider that throws a clear message rather than pretending). It s
 `temperature: 0.4` and a fixed system prompt, and it receives and returns **English
 only** — the LLM never sees Thaana, and never sees a translation in progress (D3).
 
+Three robustness properties, each of which was a defect first:
+
+- **`endpointFor` tolerates a missing, null or blank URL.** `settings.apiUrl.replace(...)`
+  threw a raw `TypeError` whenever storage held `apiUrl: null`, which surfaced in
+  the Chat error line with nothing pointing at the setting that caused it.
+- **`loadSettings` drops null values before the spread.** That is the root cause:
+  spreading a stored blob over the defaults lets an explicit `null` *overwrite* a
+  default rather than fall back to it.
+- **The call takes an `AbortSignal`**, and Chat holds the controller in a ref with
+  a Cancel button in place of Send while a request is in flight. Without it a hung
+  endpoint left `busy` true forever and the only recovery was a page reload. An
+  `AbortError` is a user action, so it is not reported as a failure.
+
 `Translator → English → LLM → English → Translator`. The translator must work with
 no API key at all.
 
@@ -568,8 +638,8 @@ Screens and components are covered in §6.
 | Module | Design note |
 |---|---|
 | `lastTrace.ts` | The Breakdown reads the last result from `sessionStorage`, not from React state, so it survives a screen switch. The key is **versioned** (`…:last-result:v2`): a v0.1-shaped trace parses fine and renders as `undefined`, because the frame fields the old Breakdown read are gone. Bumping the key retires stale entries left in tabs open across a deploy. |
-| `feedback.ts` | `localStorage`-backed rows, CSV export with `"`-doubling. Two known defects are recorded in §13. |
-| `theme.ts` | Class-based dark mode toggled on `documentElement`. Known gap: neither reads `prefers-color-scheme` nor persists (§13). |
+| `feedback.ts` | `localStorage`-backed rows; CSV export with `"`-doubling **and** formula-injection neutralisation — a correction beginning `=`, `+`, `-`, `@` or a control character is prefixed with an apostrophe, because this file is *designed* to be opened in a spreadsheet. The download anchor is attached to the document before the synthetic click (Firefox ignores a detached one) and the blob URL is revoked on a later task, not the next line — revoking immediately cancelled the download that had just started in Firefox and Safari. |
+| `theme.ts` | Precedence is **explicit choice → `prefers-color-scheme` → light**. The choice persists in `localStorage` and is read synchronously on the first render, so the app does not paint light and then flip. While no explicit choice exists the hook follows OS changes live; once the user has picked, the OS no longer overrides them. `localStorage` access is wrapped — Safari private mode throws rather than returning null, and a theme is not worth failing a render over. |
 
 ### 3.11 `tools/` and `scripts/` — build-time only
 
@@ -770,7 +840,15 @@ what the neural model was actually given.
 Chrome stays Inter / LTR. Only Thaana-bearing nodes get `.font-thaana` (Faruma,
 RTL), decided per node by `hasThaana(...)`, never per page. The font is bundled
 (`public/fonts/`) so Thaana renders on a machine with no Dhivehi font installed
-(NFR-10).
+(NFR-10); `src` is `local("Faruma")` first, so an installed copy is preferred over
+the download, with `font-display: swap` so text is never invisible while it loads.
+
+The `@font-face` URL is the **root-absolute public path** `/fonts/Faruma.ttf`, not a
+base-prefixed literal. Vite injects `base` into public-file references in CSS in both
+dev and build, so the emitted rule is `/latin-mv-tlt/fonts/Faruma.ttf` without the
+deployment path being written into a stylesheet. Hardcoding it — as an earlier
+version did — makes the font silently fall back to a system font under any other
+base, which is a failure with no error attached to it.
 
 ### 6.4 The Thaana IME (`useThaanaIme`)
 
@@ -797,7 +875,8 @@ suite runs under `environment: 'node'`.
 ### 6.5 Layout and theme
 
 Sidebar on desktop, `MobileNav` below the breakpoint, shared `TopBar`. Tailwind with
-a `brand` palette and class-based dark mode.
+a `brand` palette and class-based dark mode; the theme's precedence and persistence
+are described in §3.10.
 
 ---
 
@@ -896,13 +975,30 @@ test:  checkout → node 22 → npm ci → tsc -b → npm test → npm run check
 deploy: needs: test, skipped on pull_request → npm run build → upload dist/ → Pages
 ```
 
-**Test design.** 73 tests across 9 files, all under `environment: 'node'`. The suite
-touches no model and no network (NFR-6), which the runner's test-mode short-circuit
-guarantees structurally rather than by convention. Coverage is concentrated where the
-invariants are: transliteration round trips, suffix parsing and stemming, dictionary
-lookup staging, sentence segmentation, the pipeline's empty-input guard, the en→dv
-`latin`-is-output asymmetry, and the IME's pure functions. **There are no component
-tests** — see §13.
+**Test design.** 103 tests across 12 files. The suite touches no model and no network
+(NFR-6), which the runner's test-mode short-circuit guarantees structurally rather
+than by convention.
+
+`environment: 'node'` remains the **default** on purpose: the core must be able to
+run with no DOM, and a jsdom default would hide an accidental `window` or
+`document` reference inside `src/core/**`. The two component suites opt in per file
+with a `// @vitest-environment jsdom` docblock, so the opt-in is visible at the top
+of the file that needs it rather than buried in config.
+
+| Suite | What it pins |
+|---|---|
+| `transliterator` | round trips both ways, preserved segments, prenasalized Latin-stability |
+| `suffixParser`, `stemWord` | longest-suffix matching, the two tables agreeing on `kamah`, composed spelling variants, honest failure on an unknown root |
+| `lookup`, `closedClass` | staged lookup and ranking; every closed-class asymmetry either impossible or declared |
+| `segmentSentences` | all five boundary rules, including decimals and abbreviations; the R-5.8 tokenizer contract, and that both pipeline directions use it |
+| `pipeline`, `enToDv.output` | the empty-input guard, and `latin` being the model's *output* on en→dv |
+| `useThaanaIme` | the pure composition functions |
+| `TraceView` | verbatim model input, Unavailable with nothing invented, error surfaced, preserved segments listed, Thaana font applied only to Thaana |
+| `Translator` | the same refusal at screen level, through the *real* pipeline in its not-loaded state; direction switching; the trace reaching `sessionStorage`; QWERTY Latin becoming Thaana in place |
+
+The `Translator` suite is deliberately not mocked. `MODE === 'test'` puts the runner
+in exactly the state a user hits before the weights exist, so the test exercises the
+production refusal path rather than a stand-in for it.
 
 ---
 
@@ -927,6 +1023,9 @@ tests** — see §13.
 | DD-15 | Model-or-nothing output | Fall back to concatenated glosses | A plausible-looking wrong sentence is worse than an honest "Unavailable" (G1) |
 | DD-16 | No router, single-state screen switch | React Router | Six screens on a static base-path deploy; a router adds a build-time and cognitive cost for nothing gained |
 | DD-17 | **Abandon the semantic-frame architecture** | Keep v0.1 | ~60 content words of coverage for 307 MB tracked / ~148 MB fetched, versus open-domain coverage for one ≤80 MB model. See Appendix A |
+| DD-18 | One tokenizer (`tokenizeWords` / `extractWordsOnly`) for the whole system | Per-consumer tokenizers | Divergent word definitions made the Breakdown's dictionary panel disagree with the pipeline about the same sentence — a visible inconsistency with no error attached. Promoted to **R-5.8** in requirements revision 0.2.3 |
+| DD-19 | Declare closed-class collapses in a list and test them | Force the tables symmetric, or leave them unchecked | Dhivehi genuinely collapses `me`/`I`; forcing symmetry would be wrong. Declaring the collapses makes the *undeclared* ones fail CI |
+| DD-20 | Node test environment by default, jsdom per file | jsdom for everything | A jsdom default would hide an accidental DOM reference in `src/core/**`, which must stay headless (NFR-6) |
 
 ---
 
@@ -958,7 +1057,8 @@ tests** — see §13.
 | R-5.4 | §3.7 empty-input guard |
 | R-5.5 | §2.4 normalise once, transliterate once |
 | R-5.6 | §2.4 glossing beside translation; DD-9 |
-| R-5.7 | §3.2 three segmentation rules, script-aware terminators |
+| R-5.7 | §3.2 five segmentation rules, script-aware terminators |
+| R-5.8 | §3.2 one tokenizer, both directions; decimals and contractions preserved |
 | R-6.1 – R-6.6 | §6.1 screens |
 | R-6.7, R-6.8 | §6.5 layout and theme |
 | R-6.9 | §3.9 startup ordering; §7.3 |
@@ -976,67 +1076,95 @@ tests** — see §13.
 
 ## 13. Known design gaps and debt
 
-Every item here is reproducible and was deliberately left. Fuller accounts:
-[`Context/STATUS.md`](../Context/STATUS.md), [`Context/QUALITY.md`](../Context/QUALITY.md).
+Fuller accounts: [`Context/STATUS.md`](../Context/STATUS.md),
+[`Context/QUALITY.md`](../Context/QUALITY.md).
 
-**Blocking the product**
+### 13.1 Outstanding
+
+**Blocking the product — neither is a code defect**
 
 - **No trained checkpoint.** The design is complete and the application code is
-  migrated, but M-3 (training) and M-4 (export) have not been run. The Translator
-  therefore reports *Unavailable* — which is the design working as specified (G1),
-  not a bug. BLEU, chrF++ and human ratings are unmeasured, and Benchmarks says so.
-- **`public/models/{en,dv}-realize` (307 MB) is still on disk.** It is v0.1 dead
-  weight, scheduled for removal at M-8b once the v0.2 model is verified in a
-  browser. `.git` stays ~65 MB regardless — the blobs are in history and rewriting
-  it is not authorised.
+  migrated, but M-3 (training) and M-4 (export) have not been run; both need a
+  GPU. The Translator therefore reports *Unavailable*, which is the design working
+  as specified (G1). BLEU, chrF++ and human ratings are unmeasured, and Benchmarks
+  says so.
+- **`public/models/{en,dv}-realize` (307 MB) is still on disk.** v0.1 dead weight,
+  scheduled for removal at **M-8b — explicitly gated on the v0.2 model being
+  verified in a browser first**, which cannot happen until there is a checkpoint.
+  Deleting it now would discard the only working models in the repo before their
+  replacement exists, so it is deliberately still here. `.git` stays ~65 MB either
+  way: the blobs are in history and rewriting it is not authorised.
 
-**Design-level defects**
+**Design limits, accepted rather than fixed**
 
-- **Segmentation still splits abbreviations and decimals.** `"Dr. Smith went."` →
-  `["Dr.", "Smith went."]`; `tokenizeWords("3.14")` → `["3", ".", "14"]`. Fixing the
-  first needs an abbreviation lexicon and is out of scope for the current change.
-- **Three divergent tokenizers** across `textProcessor.ts` and the pipeline
-  entry points, so the Breakdown's dictionary panel can show a different word list
-  than the one that was analysed. This violates the spirit of D2 and should collapse
-  to one.
-- **The suffix tables contradict each other.** `kamah` is
-  `{case: 'indefinite', english: 'some'}` in `NOUN_SUFFIXES` and `'to'` in
-  `STEM_SUFFIXES`, and the test currently locks the contradiction in.
-  `parseSuffix('age')` yields root `"a"`, which `stemWord` would reject.
-- **`latinToThaana` is still not a full inverse** for prenasalised stops. Silent
-  deletion is fixed; those round trips remain a gap.
-- **Lossy closed-class round trips.** `work → kurun` but `kurun → do`;
-  `see`/`look → belun` but `belun → look`.
-- **Spelling variants are never composed** — a word containing both `gh` and `q`
-  never reaches the fully normalised form.
-- **The three-level honorific paradigm is an unwired stub** (§3.5), and is not
-  claimed anywhere in the UI.
+- **The three-level honorific paradigm is an unwired stub.** Fritz Vol. II does not
+  attest a systematic three-level honorific system — only eight mostly dialectal
+  tokens — so there is nothing to implement against. What is attested (the written
+  narrative particle `eve`) *is* implemented. The stub is not claimed anywhere in
+  the UI. This is a limit of the sources, not of the code.
+- **Lexicon leftovers needing human work**: Radheef "a kind of plant/fish" glosses,
+  placeholder frequencies, 315 mirror ties, 26 quarantined rows, 179 `unknown` POS.
+  Verb and location slots were not widened; that needs Fritz-attested inflection
+  tables.
+- **Four closed-class entries were removed, not replaced** (`work`, `stay`,
+  `never`, `exist`). They now fall through to the bilingual dictionary, which is
+  more likely right than a wrong hardcoded override — but a native speaker should
+  decide whether correct entries belong there.
+- **Segmentation exceptions are heuristics.** A lowercase single letter followed by
+  a stop and a space (`a. b`) is now read as an initialism rather than two
+  sentences. That is the deliberate trade for handling `e.g.` and `U.S.`; a
+  one-letter lowercase sentence is vanishingly rarer than an initialism.
+- **`@huggingface/transformers` pulls a vulnerable `sharp`** (GHSA-f88m-g3jw-g9cj,
+  no fix available). `sharp` is a Node-only optional dependency of the library and
+  is not in the browser bundle, so it does not reach the deployed artefact — but it
+  is in the lockfile and `npm audit` reports it.
 
-**Application-level defects**
+### 13.2 Closed since the first draft of this document
 
-- **Feedback CSV:** the blob URL is revoked immediately after `a.click()`, which
-  breaks the download in Firefox and Safari; `correction` is not sanitised against
-  spreadsheet formula injection (a leading `=`/`+`/`-`/`@` should be prefixed).
-- **Chat adapter:** crashes on a stored `apiUrl: null`, and has no `AbortController`,
-  so a hung call leaves Chat busy forever.
-- **Dark mode** never reads `prefers-color-scheme` and never persists (R-6.8 is only
-  half met).
-- **The Faruma `@font-face` hardcodes `/latin-mv-tlt/fonts/Faruma.ttf`** in
-  `src/index.css` rather than deriving it from `BASE_URL` as every other asset path
-  does, so the bundled font silently falls back to a system font under any other
-  base path.
-- **No component tests.** Vitest runs under `environment: 'node'` with no DOM, so
-  every UI design commitment in §6 is currently verified by inspection only.
-- **Dead code:** `deserializeFrame` cannot parse `serializeFrame`'s output (joins on
-  `' | '`, splits on bare `'|'`); unreachable branches in `VERB_SUFFIXES.un`,
-  `extractDv`'s `'ga'`, `thaanaToLatin`'s `'އ'`; ten dead exports hidden behind
-  `export *` barrels.
+Each was listed as outstanding above; each now has a regression test.
 
-**Documentation debt**
+| Gap | Resolution |
+|---|---|
+| `tokenizeWords('3.14')` → `['3','.','14']` | Token classes keep decimals and thousands separators whole (§3.2) |
+| `segmentSentences('3.14 is pi.')` split the number | Rule 4: a stop flanked by digits is not a boundary |
+| `segmentSentences('Dr. Smith went.')` split the title | Rule 5: abbreviation lexicon, capitalised initials, dotted initialisms |
+| Divergent tokenizers across the pipeline | One tokenizer, both directions (R-5.8, DD-18) |
+| `extractWordsOnly` silently dropped contractions | Filter widened to the full word token class |
+| `kamah` glossed `some` in one table and `to` in the other | `to` in both; test asserts they agree |
+| Spelling variants never composed | Fixed point over the letter-variant rules, bounded at 64 |
+| `latinToThaana` not a full inverse for prenasalised stops | The forward rule now reads the stop's own diacritic; all forms Latin-stable |
+| `work → kurun → do` and friends unchecked | Four wrong entries removed; remaining collapses declared and enforced (DD-19) |
+| Feedback CSV: blob revoked too early | Anchor attached before click; revoke deferred |
+| Feedback CSV: formula injection | Leading `=`/`+`/`-`/`@`/control prefixed with an apostrophe |
+| Chat adapter crashed on `apiUrl: null` | `endpointFor` falls back; `loadSettings` drops nulls before the spread |
+| Chat had no `AbortController` | Signal threaded through; Cancel button replaces Send while in flight |
+| Dark mode ignored `prefers-color-scheme` and never persisted | Explicit choice → system → light, persisted, synchronous on first render |
+| No component tests | jsdom opt-in per file; `TraceView` and `Translator` suites (§10) |
+| Faruma `@font-face` hardcoded the deployment path | Root-absolute public path; Vite injects `base` (§6.3) |
+| `Context/PROJECT.md` described the v0.1 architecture | Rewritten for v0.2 |
 
-- `Context/PROJECT.md` still describes the v0.1 frame architecture (see §0).
+### 13.3 Recorded in `STATUS.md` but no longer present
 
----
+Verified against the code while writing this section. These were carried forward
+from v0.1 notes and describe modules the migration deleted:
+
+- **`deserializeFrame` cannot parse `serializeFrame`'s output.** Both functions are
+  gone with `src/core/frames/`.
+- **Unreachable `extractDv` `'ga'` branch.** `extractDv` and `extractEn` are gone.
+- **`parseSuffix('age')` yields root `"a"`.** It returns `age` with no suffix;
+  `minStemFor` already guards it, and `stemWord.test.ts` pins the behaviour.
+- **Ten dead exports.** The sweep found the residue was `LOCATION_LATIN`,
+  `SUBJECT_LATIN`, `PARTICLE_LATIN` (v0.1 frame-slot classifiers) and
+  `parseWordList` (an unused wrapper) — all now deleted. `englishGloss` and
+  `latinValue` were dead only because `TraceView` reimplemented them inline; it now
+  calls them. The rest of the unreferenced exports are public API surface or types
+  (`SuffixParse`, `REGISTERS`, `mergeEve`'s Fritz sandhi rules), retained
+  deliberately.
+- **Unreachable `thaanaToLatin` `'އ'` branch.** Confirmed dead — `އ` is in
+  `THAANA_CONSONANTS` mapped to the empty string, so the consonant branch always
+  claimed it first and produced the identical result. Now removed.
+- **Dead `forms.delete(base)`.** Confirmed dead — the `if (suffix)` guard already
+  keeps `base` out of the set. Now removed.
 
 ## Appendix A — the superseded v0.1 design, and why
 

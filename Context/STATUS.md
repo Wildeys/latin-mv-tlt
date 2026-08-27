@@ -6,7 +6,7 @@ Measured state of **latin-mv-tlt**, not a diary. Data numbers: [DATA.md](DATA.md
 
 **v0.2 migration: application code complete, model not yet trained.**
 
-- `npx tsc -b` — clean. `npm test` — **73 passing across 9 files**. `npm run build` — succeeds.
+- `npx tsc -b` — clean. `npm test` — **103 passing across 12 files**. `npm run build` — succeeds.
 - Architecture is now one direct Dhivehi Latin ↔ English seq2seq model selected by task prefix.
   `src/core/frames/` and `src/core/realization/` are deleted; `src/core/translate/` replaces them.
 - Runtime is `@huggingface/transformers` ^3.8.1. The ONNX Runtime WASM is vendored into
@@ -43,21 +43,53 @@ Empty input no longer reports a successful translation (`[].every(...)` is vacuo
 
 ## Open
 
-Each item is reproducible and was deliberately left.
+Each item is reproducible and was deliberately left. Full design context:
+[`docs/DESIGN.md` §13](../docs/DESIGN.md).
 
-- **`segmentSentences` produces junk fragments.** `"a... b"` → `["a.", ".", ".", "b"]`; `"Dr. Smith went."` → `["Dr.", "Smith went."]`. Each bogus `"."` costs a full pipeline pass. `textProcessor.ts`.
-- **`tokenizeWords` shreds decimals.** `"3.14"` → `["3", ".", "14"]`.
-- **`deserializeFrame` cannot parse `serializeFrame`'s output.** Joins on `' | '` and splits on bare `'|'`. Dead code that would break if used.
-- **Three divergent tokenizers** (`textProcessor.ts`, `extractEn.ts`, `enToDv.ts`). The Breakdown dictionary panel can show a different word list than the frame was built from.
-- **Suffix tables contradict each other.** `kamah` is `{case: 'indefinite', english: 'some'}` in `NOUN_SUFFIXES` and `'to'` in `STEM_SUFFIXES`. The test locks the contradiction in.
-- **`parseSuffix` and `stemWord` disagree on a legal stem.** `parseSuffix('age')` yields root `"a"`.
-- **Spelling variants are never composed.** A word containing both `gh` and `q` never reaches the fully normalised form.
-- **Lossy closed-class round trips.** `work → kurun` but `kurun → do`; `see`/`look → belun` but `belun → look`; `stay → huri` but `huri → was`.
-- **Unreachable code** in `VERB_SUFFIXES.un`, `extractDv` `'ga'`, `thaanaToLatin` `'އ'`, `forms.delete(base)`.
-- **Ten dead exports** hidden by `export *` barrels.
-- **Feedback CSV:** blob URL revoked immediately after `a.click()` (breaks Firefox/Safari); `correction` is not sanitised against spreadsheet formula injection.
-- **Chat LLM adapter** crashes on stored `apiUrl: null` and has no `AbortController`, so a hung call leaves Chat busy forever.
-- **Dark-mode toggle** never reads `prefers-color-scheme` and never persists.
-- **`latinToThaana` is still not a full inverse** of `transliterateThaana` for prenasalised stops. Silent deletion is fixed; prenasalisation round-trips remain a gap.
-- **No component tests.** Vitest runs in `environment: 'node'` with no DOM.
-- **Lexicon leftovers** (human work): Radheef “a kind of plant/fish” glosses, placeholder frequencies, 315 mirror ties, 26 quarantined rows, 179 `unknown` POS. Verb and location slots were not widened — that needs Fritz-attested inflection tables.
+- **No checkpoint**, so BLEU / chrF++ / human ratings stay unmeasured. Needs a GPU
+  (M-3, M-4).
+- **`public/models/{en,dv}-realize` (307 MB)** still on disk. M-8b is gated on the
+  v0.2 model being verified in a browser, which needs the checkpoint first.
+- **The three-level honorific paradigm is an unwired stub.** Fritz Vol. II attests
+  only 8 mostly dialectal HON tokens; the written-narrative `eve` register, which
+  *is* attested, is implemented. A limit of the sources, not of the code.
+- **Four closed-class entries removed, not replaced** (`work`, `stay`, `never`,
+  `exist`). They fall through to the bilingual dictionary. Correct replacements
+  need a native speaker.
+- **Lexicon leftovers** (human work): Radheef “a kind of plant/fish” glosses,
+  placeholder frequencies, 315 mirror ties, 26 quarantined rows, 179 `unknown` POS.
+  Verb and location slots were not widened — that needs Fritz-attested inflection
+  tables.
+- **`sharp` advisory** (GHSA-f88m-g3jw-g9cj, no fix) reaches the lockfile through
+  `@huggingface/transformers`. Node-only optional dependency; not in the browser
+  bundle.
+
+## Closed
+
+Each of these was in the Open list and now has a regression test. `npm test` is
+**103 passing across 12 files**; `npx tsc -b` and `npm run build` are clean.
+
+- `segmentSentences` junk fragments, decimals (`3.14 is pi.`) and abbreviations
+  (`Dr. Smith went.`) — five boundary rules now, all tested.
+- `tokenizeWords` shredding decimals; `extractWordsOnly` dropping contractions.
+- Divergent tokenizers — one tokenizer serves both pipeline directions.
+- `kamah` glossed `some` in `NOUN_SUFFIXES` and `to` in `STEM_SUFFIXES`.
+- Spelling variants never composing (`ghaqee` never reached `gagee`).
+- `latinToThaana` not a full inverse for prenasalised stops — the *forward* rule
+  was dropping the stop's own diacritic into the Latin as a raw `U+07B0`.
+- Lossy closed-class round trips — four wrong entries removed, the legitimate
+  many-to-one collapses declared and enforced by `closedClass.test.ts`.
+- Feedback CSV: blob URL revoked before the download started; formula injection.
+- Chat LLM adapter: crash on stored `apiUrl: null`; no `AbortController`.
+- Dark-mode toggle ignoring `prefers-color-scheme` and never persisting.
+- No component tests — jsdom opt-in per file; `TraceView` and `Translator` suites.
+- Faruma `@font-face` hardcoding `/latin-mv-tlt/` instead of deriving from `base`.
+- Dead code: `forms.delete(base)`, the unreachable `thaanaToLatin` `'އ'` branch,
+  `parseWordList`, and the v0.1 frame-slot sets `LOCATION_LATIN` / `SUBJECT_LATIN` /
+  `PARTICLE_LATIN`.
+- `Context/PROJECT.md` still describing the v0.1 frame architecture.
+
+Three items previously listed as open no longer exist in the code at all —
+`deserializeFrame`, the `extractDv` `'ga'` branch, and `parseSuffix('age')`
+yielding root `"a"`. The first two went with `src/core/frames/`; the third is
+already guarded by `minStemFor`.

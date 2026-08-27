@@ -36,7 +36,11 @@ export const NOUN_SUFFIXES: Record<string, { case: string; english: string }> = 
   eh: { case: 'indefinite', english: 'a' }, // Corrected from ablative
   aku: { case: 'indefinite', english: 'a' }, // Indefinite person/place marker
   aai: { case: 'sociative', english: 'and/with' }, // Sociative marker
-  kamah: { case: 'indefinite_dative', english: 'some' }, // Legacy compatibility
+  // `kam` (verbal noun) + dative `ah`, so the gloss is 'to' — the same value
+  // STEM_SUFFIXES has always carried for this key. It read 'some' here, so the
+  // two tables disagreed about the same morpheme and the Breakdown printed
+  // whichever one the caller happened to reach.
+  kamah: { case: 'indefinite_dative', english: 'to' },
 };
 
 /**
@@ -315,14 +319,6 @@ export function parseSuffix(
   return { input: word, root: cleaned, suffix: null, register, isNegative };
 }
 
-export function parseWordList(
-  words: string[],
-  pos?: 'noun' | 'verb',
-  known?: (latin: string) => boolean
-): SuffixParse[] {
-  return words.map((w) => parseSuffix(w, pos, known));
-}
-
 function desandhi(word: string): string[] {
   const out: string[] = [];
   if (word.endsWith('ey')) out.push(word.slice(0, -2) + 'e');
@@ -341,23 +337,50 @@ function desandhi(word: string): string[] {
   return out;
 }
 
+/** Hard bound on the composed set, so a pathological word cannot blow up. */
+const MAX_VARIANTS = 64;
+
+/**
+ * Every orthographic spelling of `word` the lexicon might be keyed under.
+ *
+ * The letter-variant rules **compose**. Each rule used to be applied to the
+ * original word only, so a word carrying two of them never reached its fully
+ * normalised form: `ghaqee` produced `gaqee` (gh→g) and `ghagee` (q→g) but never
+ * `gagee`, which is the form the lexicon actually holds. Composition is a fixed
+ * point over the four rules — at most 2^4 spellings, bounded anyway by
+ * MAX_VARIANTS — and only then are the word-final mutations and the sandhi
+ * undoings applied to each.
+ */
 function spellingVariants(word: string): string[] {
   const seen = new Set<string>([word]);
   const out = [word];
   const emit = (candidate: string) => {
-    if (candidate && !seen.has(candidate)) {
+    if (candidate && !seen.has(candidate) && out.length < MAX_VARIANTS) {
       seen.add(candidate);
       out.push(candidate);
+      return true;
     }
+    return false;
   };
-  for (const [src, dst] of LETTER_VARIANTS) {
-    if (word.includes(src)) emit(word.replaceAll(src, dst));
+
+  // Fixed point over LETTER_VARIANTS: re-scan the growing list so each rule can
+  // apply on top of the others' output.
+  for (let i = 0; i < out.length && out.length < MAX_VARIANTS; i += 1) {
+    const current = out[i];
+    for (const [src, dst] of LETTER_VARIANTS) {
+      if (current.includes(src)) emit(current.replaceAll(src, dst));
+    }
   }
-  for (const [src, dst] of MUTATIONS) {
-    if (word.endsWith(src)) emit(word.slice(0, -src.length) + dst);
+
+  // Word-final rules apply to every spelling reached above, not just the input.
+  for (const spelling of [...out]) {
+    for (const [src, dst] of MUTATIONS) {
+      if (spelling.endsWith(src)) emit(spelling.slice(0, -src.length) + dst);
+    }
+    for (const candidate of desandhi(spelling)) emit(candidate);
+    if (!'aeiou'.includes(spelling.at(-1) ?? '')) emit(spelling + 'un');
   }
-  for (const candidate of desandhi(word)) emit(candidate);
-  if (word && !'aeiou'.includes(word.at(-1) ?? '')) emit(word + 'un');
+
   return out;
 }
 
@@ -402,8 +425,9 @@ export function generate(stem: string, suffixes: string[] = LATIN_INFLECTION_SUF
   const base = (stem || '').trim();
   if (!base) return forms;
   for (const suffix of suffixes) {
+    // The empty-string guard is what keeps `base` itself out of the set, so the
+    // `forms.delete(base)` that used to follow this loop could never fire.
     if (suffix) forms.add(base + suffix);
   }
-  forms.delete(base);
   return forms;
 }

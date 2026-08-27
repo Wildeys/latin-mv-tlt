@@ -20,6 +20,13 @@ export type ThaanaToLatinResult = {
  * metric needs to attribute failures to a class, and "there was a character we
  * had no rule for" is one of them — invisible without this.
  */
+/**
+ * A branch for `އ` + vowel used to sit after the consonant branch below. It was
+ * unreachable: `އ` IS in THAANA_CONSONANTS (mapped to the empty string), so the
+ * consonant branch always claimed it first and emitted the identical result
+ * through `cons ? cons + vowel : vowel`. It is gone rather than kept as a
+ * comment-free duplicate of live logic.
+ */
 export function transliterateThaanaDetailed(text: string): ThaanaToLatinResult {
   const result: string[] = [];
   const preserved: string[] = [];
@@ -41,20 +48,29 @@ export function transliterateThaanaDetailed(text: string): ThaanaToLatinResult {
       continue;
     }
 
+    // A prenasalized stop is ONE Latin unit spelled from TWO Thaana consonants,
+    // but the diacritic that follows still belongs to the second of them. This
+    // used to `continue` straight after emitting the digraph, so the stop's own
+    // vowel or sukun was left for the next iteration to meet with no consonant in
+    // front of it: `ނބް` came out as `n'b` + a raw U+07B0 in the Latin. Falling
+    // into the shared diacritic handling below is what makes the pair behave
+    // exactly like any other consonant (R-1.8).
+    let cons: string | null = null;
+
     if (i + 1 < n && char === 'ނ') {
-      const nextChar = text[i + 1];
-      const cons = THAANA_CONSONANTS[nextChar] ?? '';
-      if (cons in PRENASALIZED_STOPS) {
-        result.push(PRENASALIZED_STOPS[cons]);
+      const stop = THAANA_CONSONANTS[text[i + 1]] ?? '';
+      if (stop in PRENASALIZED_STOPS) {
+        cons = PRENASALIZED_STOPS[stop];
         i += 2;
-        continue;
       }
     }
 
-    if (char in THAANA_CONSONANTS) {
-      const cons = THAANA_CONSONANTS[char];
+    if (cons === null && char in THAANA_CONSONANTS) {
+      cons = THAANA_CONSONANTS[char];
       i += 1;
+    }
 
+    if (cons !== null) {
       if (i < n && text[i] in THAANA_VOWELS && text[i] !== 'ް') {
         const vowel = THAANA_VOWELS[text[i]];
         result.push(cons ? cons + vowel : vowel);
@@ -66,6 +82,8 @@ export function transliterateThaanaDetailed(text: string): ThaanaToLatinResult {
         i += 1;
         const nextChar = i < n ? text[i] : '';
 
+        // Geminates are an alifu-carried rule, so they cannot follow a
+        // prenasalized pair — `char` is ނ there, never އ.
         if (char === 'އ' && nextChar in THAANA_CONSONANTS) {
           const nextCons = THAANA_CONSONANTS[nextChar];
           if (GEMINATE_CONSONANTS.has(nextCons)) {
@@ -80,12 +98,6 @@ export function transliterateThaanaDetailed(text: string): ThaanaToLatinResult {
       }
 
       if (cons) result.push(cons);
-      continue;
-    }
-
-    if (char === 'އ' && i + 1 < n && text[i + 1] in THAANA_VOWELS && text[i + 1] !== 'ް') {
-      result.push(THAANA_VOWELS[text[i + 1]]);
-      i += 2;
       continue;
     }
 
