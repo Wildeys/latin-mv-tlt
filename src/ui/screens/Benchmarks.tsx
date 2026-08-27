@@ -1,14 +1,43 @@
 import { useEffect, useState } from 'react';
-import { getDictionaryStats } from '../../core/dictionary/lookup';
+import { getDictionaryStats, getEntryCount } from '../../core/dictionary/lookup';
 
 type BenchmarksFile = {
   notes: string;
   metrics: Array<{ group: string; name: string; value: string; source: string }>;
 };
 
+type Row = { group: string; name: string; value: string; source: string };
+
+/**
+ * Keys in `dictionary_stats.json` that name a count the build script produced.
+ *
+ * The previous list asked for `rawDbRows`, `uniqueLatin`, `entriesWithEnglish`,
+ * `finalExportedEntries`, `invertedFlipped`, `quarantined` and `keysRecovered` —
+ * none of which the shipped file carries. Every row was therefore filtered out
+ * and the DICTIONARY group rendered empty, while DESIGN.md §6.1 claimed the
+ * screen showed live dictionary counters. This list is the file's actual shape.
+ */
+const STATS_KEYS: Array<[string, string]> = [
+  ['shippedBefore', 'Entries shipped (before frequency merge)'],
+  ['shippedAfter', 'Entries shipped (after frequency merge)'],
+  ['frequencyUpdatedFromCorpus', 'Frequencies counted from corpus'],
+];
+
+/**
+ * `source` is an absolute path on the original author's machine
+ * (`C:\Users\...\dhivehi_dictionary.db`). It is provenance for whoever ran the
+ * build, not a metric, and this page is deployed publicly — so it is excluded by
+ * name rather than by happening to fall outside the list above.
+ */
+const NEVER_RENDER = new Set(['source']);
+
 export default function Benchmarks() {
   const [file, setFile] = useState<BenchmarksFile | null>(null);
   const stats = getDictionaryStats();
+  // The live count, from the array the app actually indexed. The Dictionary
+  // screen reports the same number from the same place (`res.corpusSize`), so
+  // the two screens cannot disagree about how large the lexicon is.
+  const liveCount = getEntryCount();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -19,29 +48,36 @@ export default function Benchmarks() {
     return () => controller.abort();
   }, []);
 
-  // Only render counters the stats file actually carries. The Thaana count is
-  // gone: the shipped lexicon is Latin only (Context/PROJECT.md).
-  const liveKeys: Array<[string, string]> = [
-    ['rawDbRows', 'Raw DB rows'],
-    ['uniqueLatin', 'Unique Latin'],
-    ['entriesWithEnglish', 'Entries with English'],
-    ['finalExportedEntries', 'Final exported entries'],
-    ['invertedFlipped', 'Inverted rows repaired'],
-    ['quarantined', 'Rows quarantined'],
-    ['keysRecovered', 'Lookup keys recovered'],
+  const live: Row[] = [
+    {
+      group: 'DICTIONARY',
+      name: 'Entries indexed (live)',
+      value: liveCount.toLocaleString(),
+      source: 'data/dictionary.json, counted at load',
+    },
   ];
-  const live = stats
-    ? liveKeys
-        .filter(([key]) => stats[key] !== undefined)
-        .map(([key, name]) => ({
-          group: 'DICTIONARY',
-          name,
-          value: String(stats[key]),
-          source: 'build script',
-        }))
-    : [];
 
-  const rows = [...live, ...(file?.metrics ?? [])];
+  if (stats) {
+    for (const [key, name] of STATS_KEYS) {
+      const value = stats[key];
+      if (value === undefined || NEVER_RENDER.has(key)) continue;
+      live.push({
+        group: 'DICTIONARY',
+        name,
+        value: String(value),
+        source: 'data/dictionary_stats.json — build script',
+      });
+    }
+  }
+
+  // The stats file is a build artefact and can fall behind the data file it
+  // describes; it currently reports 15,302 where 15,528 entries ship. Saying so
+  // is the same posture the rest of this page takes toward its numbers — the
+  // alternative is showing two different totals and letting the reader guess.
+  const shippedAfter = typeof stats?.shippedAfter === 'number' ? stats.shippedAfter : null;
+  const staleBy = shippedAfter !== null && shippedAfter !== liveCount ? liveCount - shippedAfter : null;
+
+  const rows: Row[] = [...live, ...(file?.metrics ?? [])];
 
   return (
     <div className="space-y-4">
@@ -50,6 +86,14 @@ export default function Benchmarks() {
         scores.
       </p>
       {file?.notes && <p className="text-xs text-slate-500">{file.notes}</p>}
+      {staleBy !== null && (
+        <p className="text-xs text-amber-700 dark:text-amber-300">
+          The build-script figures are stale: <span className="font-mono">dictionary_stats.json</span> reports{' '}
+          {shippedAfter?.toLocaleString()} entries where {liveCount.toLocaleString()} ship — a difference of{' '}
+          {Math.abs(staleBy).toLocaleString()}. The live count is authoritative; the stats file has not been
+          regenerated since the lexicon last changed.
+        </p>
+      )}
       <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
         <table className="min-w-full text-sm">
           <thead className="bg-slate-50 dark:bg-slate-900 text-left">

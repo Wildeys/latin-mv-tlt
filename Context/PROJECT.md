@@ -143,10 +143,11 @@ API keys: `sessionStorage` by default; optional "Remember on this device" uses
 `localStorage`. Never in git, source, or CSV exports. Feedback ratings stay in
 localStorage and export as CSV.
 
-## Six screens
+## Seven screens
 
 - **Translator** — main artefact
 - **Sentence Breakdown** — viva / research view
+- **Dictionary** — searchable lexicon browser; the shipped entries as they are
 - **AI Chat** — application / demo
 - **Feedback** — meaning and naturalness ratings, CSV export
 - **Benchmarks** — pipeline metrics only, unmeasured shown as unmeasured
@@ -154,7 +155,7 @@ localStorage and export as CSV.
 
 ## Scope
 
-MUST: Vite app + six screens; Latin core with Thaana at the edges; rule-based
+MUST: Vite app + seven screens; Latin core with Thaana at the edges; rule-based
 transliteration both ways with a measured round-trip rate; dictionary +
 morphology glossing; pipeline traces without the model; Translator + Breakdown;
 parallel-corpus generation; train / export the translation model; plug it into

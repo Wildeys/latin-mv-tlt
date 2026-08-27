@@ -25,8 +25,12 @@
   text-align: right;
 }
 
+/* `height` as well as `width`: the mobile nav's seven-screen button strip
+   scrolls horizontally, and a rule with only `width` leaves that scrollbar at
+   the platform default. */
 .scroll-thin::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 .scroll-thin::-webkit-scrollbar-thumb {
   background: rgba(148, 163, 184, 0.3);

@@ -51,7 +51,7 @@ npm run check:models  # enforce the 80 MB runtime model budget
 
 ## Screens
 
-Translator (main artefact) · Sentence Breakdown (viva) · AI Chat (demo) · Feedback · Benchmarks · About
+Translator (main artefact) · Sentence Breakdown (viva) · Dictionary (lexicon browser) · AI Chat (demo) · Feedback · Benchmarks · About
 
 ## Deploy
 

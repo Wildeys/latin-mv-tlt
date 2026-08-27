@@ -1,4 +1,4 @@
-import { BarChart3, Info, Languages, MessageSquare, Moon, SplitSquareVertical, Star, Sun } from 'lucide-react';
+import { BarChart3, BookOpen, Info, Languages, MessageSquare, Moon, SplitSquareVertical, Star, Sun } from 'lucide-react';
 import type { Screen } from '../screens';
 
 type Props = {
@@ -11,6 +11,7 @@ type Props = {
 const items: { id: Screen; label: string; icon: typeof Languages }[] = [
   { id: 'translator', label: 'Translator', icon: Languages },
   { id: 'breakdown', label: 'Breakdown', icon: SplitSquareVertical },
+  { id: 'dictionary', label: 'Dictionary', icon: BookOpen },
   { id: 'chat', label: 'AI Chat', icon: MessageSquare },
   { id: 'feedback', label: 'Feedback', icon: Star },
   { id: 'benchmarks', label: 'Benchmarks', icon: BarChart3 },

@@ -73,6 +73,14 @@ English → Dhivehi
           Arabic-derived Thaana letters, so a round trip normalises them; the measured rate is on the Benchmarks page.
           Honorifics are recognised, not fully generated. This is a research prototype, not a production MT system.
         </p>
+        <p>
+          The lexicon has known defects, and the Dictionary screen shows it as it is rather than a cleaned view of it.
+          Some rows are inverted — the English sits in the headword column and the Dhivehi in the glosses — and the
+          screen declines to guess which, because the obvious heuristic misclassifies correct entries. Most frequency
+          values are placeholder constants rather than corpus counts, so a frequency is shown only where a source
+          actually counted it. Thaana on that screen is generated from the Latin headword by the transliterator and
+          never stored, which is why an inverted row transliterates an English phrase and means nothing.
+        </p>
       </section>
     </article>
   );

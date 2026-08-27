@@ -131,7 +131,11 @@ export default function Chat() {
           </div>
         ))}
       </div>
-      {error && <p className="text-sm text-red-600 mt-2">{error}</p>}
+      {error && (
+        <p className="text-sm text-red-600 mt-2" role="alert">
+          {error}
+        </p>
+      )}
       <div className="mt-3 flex gap-2">
         <input
           value={draft}
@@ -141,6 +145,7 @@ export default function Chat() {
             if (e.key === 'Enter' && !e.nativeEvent.isComposing) send();
           }}
           onBeforeInput={(e) => ime.onBeforeInput(e, draft, setDraft)}
+          aria-label="Message"
           placeholder="Type Male Latin (aharen)..."
           className="flex-1 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 font-thaana"
         />

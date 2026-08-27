@@ -45,7 +45,19 @@ function Block({ title, state, children }: { title: string; state: StageState; c
  * string was a *rule-based* artefact displayed where a reader would reasonably
  * expect to see what the neural model was given.
  */
-export default function TraceView({ trace }: { trace: PipelineTrace }) {
+export default function TraceView({
+  trace,
+  onLookup,
+}: {
+  trace: PipelineTrace;
+  /**
+   * Optional on purpose. `TraceView` is the research deliverable and has to
+   * render correctly with no navigator attached — in a test, or anywhere the
+   * Dictionary screen is not reachable. With no handler the glosses stay the
+   * plain text they have always been.
+   */
+  onLookup?: (latin: string) => void;
+}) {
   const isDvEn = trace.direction === 'dv-en';
 
   return (
@@ -67,12 +79,29 @@ export default function TraceView({ trace }: { trace: PipelineTrace }) {
             accessors sat unreferenced behind an `export *` barrel looking used. */}
         {trace.dictionary.length === 0
           ? '—'
-          : trace.dictionary
-              .map(
-                (w) =>
-                  `${latinValue(w)} → ${englishGloss(w)}${w.caseGloss ? ` (${w.caseGloss})` : ''}`,
-              )
-              .join('\n')}
+          : trace.dictionary.map((w, i) => {
+              const latin = latinValue(w);
+              const rest = `${englishGloss(w)}${w.caseGloss ? ` (${w.caseGloss})` : ''}`;
+              return (
+                <span key={`${latin}-${i}`} className="block">
+                  {/* The same lexicon this panel glosses from is browsable on the
+                      Dictionary screen, so the headword is the link to it. */}
+                  {onLookup ? (
+                    <button
+                      type="button"
+                      onClick={() => onLookup(latin)}
+                      className="underline decoration-dotted underline-offset-2 hover:text-brand-600"
+                      title={`Look up ${latin} in the dictionary`}
+                    >
+                      {latin}
+                    </button>
+                  ) : (
+                    latin
+                  )}
+                  {` → ${rest}`}
+                </span>
+              );
+            })}
       </Block>
 
       <Block title="Model input" state={trace.stages.translation}>

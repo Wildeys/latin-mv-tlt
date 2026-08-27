@@ -4,6 +4,7 @@ const SUB: Record<Screen, string> = {
   translator: 'Main artefact — Dhivehi ↔ English through a Latin intermediate representation',
   breakdown: 'Viva view — source, Latin, glosses, model input and raw model output',
   chat: 'Demo — translator wraps an optional LLM',
+  dictionary: 'Searchable lexicon browser. Shows the shipped entries as they are, including their known defects.',
   feedback: 'Native-speaker ratings stored on this device',
   benchmarks: 'Pipeline metrics only. Empty cells are not yet measured.',
   about: 'Research idea, architecture, and limits',

@@ -140,7 +140,14 @@ export default function Translator({ onOpenBreakdown }: { onOpenBreakdown: () =>
           </p>
         </div>
       )}
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {/* The download progress above is announced; the failure beside it was
+          not, so a screen-reader user got silence where a sighted user got red
+          text. */}
+      {error && (
+        <p className="text-sm text-red-600" role="alert">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

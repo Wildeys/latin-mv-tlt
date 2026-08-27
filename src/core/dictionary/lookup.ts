@@ -2,13 +2,44 @@ import { normalise } from '../normalize';
 import { stemWord } from '../morphology/suffixParser';
 import { transliterateThaana } from '../transliterator/thaanaToLatin';
 import { ENGLISH_TO_LATIN, LATIN_TO_ENGLISH } from './closedClass';
-import type { DictionaryEntry, DictionaryStats, LookupHit, WordTranslation } from './types';
+import type {
+  DictionaryEntry,
+  DictionaryStats,
+  LookupHit,
+  SearchMatchKind,
+  SearchQuery,
+  SearchResponse,
+  SearchResult,
+  SearchSide,
+  WordTranslation,
+} from './types';
 
 const MIN_PREFIX_LEN = 4;
 const MAX_PARTIAL = 5;
 /** Hard bound on how many prefix candidates are collected before ranking. */
 const MAX_PREFIX_SCAN = 500;
 const MAX_CACHE = 5000;
+
+/**
+ * Browse limits (R-4.8), deliberately separate from the four above.
+ *
+ * `MIN_PREFIX_LEN`, `MAX_PARTIAL` and `MAX_PREFIX_SCAN` bound the *translation*
+ * gloss path: they stop it guessing a gloss from a three-letter stub and stop a
+ * trace carrying more than five candidates. A browse screen has neither duty, so
+ * `searchDictionary` reads none of them — which is also why adding it cannot
+ * change pipeline behaviour or any existing test.
+ */
+const SEARCH_LIMIT = 50;
+const SEARCH_LIMIT_MAX = 200;
+/** Matched keys recorded per side, for the "why did this row appear" column. */
+const MAX_MATCHED_KEYS = 3;
+
+/**
+ * Local, so `core/dictionary` gains no new cross-module dependency. The same
+ * block `segmenter` uses; this module already detects script for itself in
+ * `translateWordUncached`.
+ */
+const THAANA_BLOCK = /[\u0780-\u07BF]/;
 
 let entries: DictionaryEntry[] = [];
 let byLatin = new Map<string, DictionaryEntry[]>();
@@ -319,4 +350,182 @@ export function englishGloss(hit: WordTranslation): string {
 
 export function latinValue(hit: WordTranslation): string {
   return hit.stem || hit.transliteration || hit.translations[0]?.latin || hit.input;
+}
+
+// ---------------------------------------------------------------- browse (R-4.8)
+
+const KIND_RANK: Record<SearchMatchKind, number> = { exact: 0, prefix: 1, contains: 2 };
+
+type Accumulator = {
+  entry: DictionaryEntry;
+  kind: SearchMatchKind;
+  sides: Set<SearchSide>;
+  matchedKeys: { side: SearchSide; key: string }[];
+  perSide: Record<SearchSide, number>;
+};
+
+/** Classify a hit from where in the key it landed. */
+function kindFor(key: string, query: string, at: number): SearchMatchKind {
+  if (at > 0) return 'contains';
+  return key.length === query.length ? 'exact' : 'prefix';
+}
+
+function record(
+  seen: Map<DictionaryEntry, Accumulator>,
+  entry: DictionaryEntry,
+  side: SearchSide,
+  kind: SearchMatchKind,
+  key: string,
+): boolean {
+  const existing = seen.get(entry);
+  if (!existing) {
+    seen.set(entry, {
+      entry,
+      kind,
+      sides: new Set([side]),
+      matchedKeys: [{ side, key }],
+      perSide: { latin: side === 'latin' ? 1 : 0, english: side === 'english' ? 1 : 0 },
+    });
+    return true; // newly counted toward `total`
+  }
+  if (KIND_RANK[kind] < KIND_RANK[existing.kind]) existing.kind = kind;
+  existing.sides.add(side);
+  if (existing.perSide[side] < MAX_MATCHED_KEYS) {
+    existing.perSide[side] += 1;
+    existing.matchedKeys.push({ side, key });
+  }
+  return false;
+}
+
+/** Browse ranking. Total and deterministic — see the `frequency` note below. */
+function compareResults(a: Accumulator, b: Accumulator): number {
+  const byKind = KIND_RANK[a.kind] - KIND_RANK[b.kind];
+  if (byKind) return byKind;
+
+  // A headword hit outranks a gloss-only hit of the same kind. Without this the
+  // next tiebreak compares two incomparable things: for a gloss match, the
+  // *headword's* length says nothing about how well the query matched. Searching
+  // `fen` put the inverted row `see` (glossed "fenun") above `fenu` purely
+  // because "see" is one character shorter.
+  const aLatin = a.sides.has('latin') ? 0 : 1;
+  const bLatin = b.sides.has('latin') ? 0 : 1;
+  if (aLatin !== bLatin) return aLatin - bLatin;
+
+  const byLength = a.entry.latin.length - b.entry.latin.length;
+  if (byLength) return byLength;
+  return a.entry.latin < b.entry.latin ? -1 : a.entry.latin > b.entry.latin ? 1 : 0;
+}
+
+/**
+ * Select the best `limit` accumulators without sorting the whole matched set.
+ *
+ * A one-character query matches ~14,500 of the 15,528 entries. Sorting that many
+ * costs 13–18 ms; keeping only the best `limit` by bounded insertion costs a
+ * fraction of it, because the comparator never revisits rows that already lost.
+ */
+function topK(seen: Iterable<Accumulator>, limit: number): Accumulator[] {
+  const best: Accumulator[] = [];
+  for (const candidate of seen) {
+    if (best.length === limit && compareResults(candidate, best[best.length - 1]) >= 0) {
+      continue;
+    }
+    let i = best.length - 1;
+    while (i >= 0 && compareResults(candidate, best[i]) < 0) i -= 1;
+    best.splice(i + 1, 0, candidate);
+    if (best.length > limit) best.pop();
+  }
+  return best;
+}
+
+function emptyQuery(raw: string): SearchQuery {
+  return { raw, script: 'empty', latin: '', transliterated: false };
+}
+
+/**
+ * Search the lexicon for browsing (R-4.8, R-6.12).
+ *
+ * This is NOT the translation lookup. Three things separate them, each
+ * deliberate:
+ *
+ *   - **It scans exhaustively.** `lookupLatin` binary-searches and breaks at the
+ *     first non-matching key, which is right for its job but can only ever
+ *     report "at least N". The browse screen's contract is "showing 50 of 762",
+ *     and that sentence is only true if everything was looked at. One `indexOf`
+ *     per key over ~32k keys measures under 7 ms even for the pathological
+ *     one-character query, so the exact denominator is cheap.
+ *   - **It does not touch `cache`.** `translateWord` stops *accepting* entries at
+ *     `MAX_CACHE` rather than evicting, so a browse path sharing the cache would
+ *     fill all 5,000 slots after a few hundred keystrokes and silently disable
+ *     memoisation for the whole translation pipeline.
+ *   - **It does not rank by `frequency`.** 14,576 of 15,528 rows (93.9%) sit on
+ *     the placeholder constants 50 or 1, and only 759 carry a `freqSource`.
+ *     Ranking a browse list on a field that is constant for 94% of it is fake
+ *     precision. Headword length then alphabetical is total and reproducible.
+ *     `lookupLatin`'s own frequency tiebreak is untouched.
+ *
+ * Thaana input is transliterated and searches Latin headwords only; ASCII input
+ * searches Latin headwords AND English glosses, and each result says which.
+ */
+export function searchDictionary(input: string, limit = SEARCH_LIMIT): SearchResponse {
+  const capped = Math.max(0, Math.min(limit, SEARCH_LIMIT_MAX));
+  const cleaned = normalise(input ?? '').trim();
+
+  if (!cleaned) {
+    return {
+      query: emptyQuery(input ?? ''),
+      results: [],
+      total: 0,
+      limit: capped,
+      corpusSize: entries.length,
+    };
+  }
+
+  const isThaana = THAANA_BLOCK.test(cleaned);
+  const needle = (isThaana ? transliterateThaana(cleaned) : cleaned).trim().toLowerCase();
+  const query: SearchQuery = {
+    raw: input ?? '',
+    script: isThaana ? 'thaana' : 'ascii',
+    latin: needle,
+    transliterated: isThaana,
+  };
+
+  if (!needle) {
+    return { query, results: [], total: 0, limit: capped, corpusSize: entries.length };
+  }
+
+  const seen = new Map<DictionaryEntry, Accumulator>();
+  let total = 0;
+
+  for (const key of sortedLatinKeys) {
+    const at = key.indexOf(needle);
+    if (at < 0) continue;
+    const kind = kindFor(key, needle, at);
+    for (const entry of byLatin.get(key) ?? []) {
+      if (record(seen, entry, 'latin', kind, key)) total += 1;
+    }
+  }
+
+  // Thaana in means the user is asking about a Dhivehi headword, so the English
+  // gloss index is not searched on that path.
+  if (!isThaana) {
+    for (const [key, matches] of byEnglish) {
+      const at = key.indexOf(needle);
+      if (at < 0) continue;
+      const kind = kindFor(key, needle, at);
+      for (const entry of matches) {
+        if (record(seen, entry, 'english', kind, key)) total += 1;
+      }
+    }
+  }
+
+  const results: SearchResult[] = topK(seen.values(), capped).map((acc) => ({
+    // A copy, so a caller holding a result cannot desynchronise the indexes —
+    // the same promise `loadDictionaryFromData` makes about `entries`.
+    entry: { ...acc.entry, english: [...acc.entry.english] },
+    kind: acc.kind,
+    sides: [...acc.sides],
+    matchedKeys: acc.matchedKeys,
+  }));
+
+  return { query, results, total, limit: capped, corpusSize: entries.length };
 }

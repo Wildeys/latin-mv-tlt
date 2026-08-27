@@ -33,6 +33,14 @@ export type WordTranslation = {
  * still parses.
  */
 export type DictionaryStats = {
+  /**
+   * The three keys the *shipped* `dictionary_stats.json` actually carries.
+   * Declared rather than left to the index signature so Benchmarks reads them
+   * as `number | undefined` and the file's real shape is visible here.
+   */
+  shippedBefore?: number;
+  shippedAfter?: number;
+  frequencyUpdatedFromCorpus?: number;
   rawDbRows?: number;
   uniqueLatin?: number;
   entriesWithEnglish?: number;
@@ -47,4 +55,54 @@ export type DictionaryStats = {
   keysRecovered?: number;
   source?: string;
   [key: string]: number | string | undefined;
+};
+
+// ---------------------------------------------------------------- browse (R-4.8)
+
+/**
+ * How a key matched the query. Deliberately a THREE-member union, distinct from
+ * `LookupHit['matchType']`.
+ *
+ * `matchType` carries `supplement`, `closed_class`, `transliteration` and
+ * `unknown` — four states that describe the *translation* lookup's fallback
+ * chain and are meaningless when browsing. Reusing it would make a reader check
+ * for states that cannot occur, and it flattens onto the entry, leaving nowhere
+ * to record that a row matched on both sides at once.
+ */
+export type SearchMatchKind = 'exact' | 'prefix' | 'contains';
+
+export type SearchSide = 'latin' | 'english';
+
+export type SearchResult = {
+  /** A copy. Safe to hold; mutating it cannot desynchronise the indexes. */
+  entry: DictionaryEntry;
+  /** The best kind across every key that matched this entry. */
+  kind: SearchMatchKind;
+  /** May be both, when the query hits a headword and a gloss. */
+  sides: SearchSide[];
+  /** What actually matched, so a surprising row can explain itself. Capped. */
+  matchedKeys: { side: SearchSide; key: string }[];
+};
+
+export type SearchQuery = {
+  raw: string;
+  script: 'thaana' | 'ascii' | 'empty';
+  /** The term actually searched — Thaana input arrives here transliterated. */
+  latin: string;
+  transliterated: boolean;
+};
+
+export type SearchResponse = {
+  query: SearchQuery;
+  /** At most `limit` rows. */
+  results: SearchResult[];
+  /**
+   * EXACT count of distinct matching entries, not a scan cap. The screen says
+   * "showing 50 of 762", and that sentence is only true if everything was
+   * looked at — which is why the browse scan is exhaustive (R-4.8).
+   */
+  total: number;
+  limit: number;
+  /** `entries.length`, the live count — never the stale stats file. */
+  corpusSize: number;
 };

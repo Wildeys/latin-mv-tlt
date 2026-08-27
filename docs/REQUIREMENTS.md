@@ -1,6 +1,6 @@
 # latin-mv-tlt — Project Requirements Specification
 
-**Version 0.2.3** · Status: draft · Supersedes v0.1 · Applies to repository version `0.2.0`
+**Version 0.2.4** · Status: draft · Supersedes v0.1 · Applies to repository version `0.2.0`
 
 > **Revision 0.2.1 (2026-08-26).** Incorporates the external review in
 > [`docs/v2_review.md`](v2_review.md). Changes: the training learning rate is
@@ -22,6 +22,12 @@
 > rather than a correction to an existing one: nothing in the spec had ever said
 > where a word begins, so no implementation was in breach and no test could fail.
 > Recorded at **§11.1**.
+
+> **Revision 0.2.4 (2026-08-28).** Adds **R-4.8** (a browse entry point on the
+> lexicon) and **R-6.12** (the Dictionary screen that consumes it). Like R-5.8
+> these are genuinely *new* requirements rather than corrections: no
+> implementation was in breach and no test could fail. This also takes the system
+> from six screens to seven. Recorded at **§11.1**.
 
 > **Change of architecture.** v0.1 specified translation through a semantic
 > frame with two sentence-realization models. v0.2 replaces that with a single
@@ -210,6 +216,18 @@ word-level analysis in the Breakdown screen and register tagging.
 | R-4.5 | Honorifics failing to load shall degrade register detection only, never prevent startup. | Must |
 | R-4.6 | Closed-class words shall be handled separately from open-class entries. | Should |
 | R-4.7 | **Planned** — Detected register may be surfaced as a tag on output. It is no longer a model input, so it shall not silently alter generated text. | Could |
+| R-4.8 | Lookup shall expose a **browse entry point**, independent of the translation lookup's thresholds and cache, returning matches from both the Latin and the English index. Each result shall state which side matched and by what kind of match (exact / prefix / contains). The reported total shall be **exact**, not a scan cap. Results shall be copies, so a caller holding one cannot desynchronise the indexes. | Must |
+
+R-4.8 is deliberately a *separate path* from R-4.2's lookup rather than a
+generalisation of it. The translation lookup's bounds (`MIN_PREFIX_LEN`,
+`MAX_PARTIAL`, `MAX_PREFIX_SCAN`) exist to stop it guessing a gloss from a
+three-letter stub and to keep a trace short; a browse screen has neither duty and
+must not inherit them. The exactness clause is the reason browse scans
+exhaustively where lookup binary-searches: a scan that stops at the first
+non-matching key can only report "at least N", and R-6.12 requires the screen to
+say "showing 50 of 762". Browse shall not share the translation cache, which
+stops accepting entries at its ceiling rather than evicting — sharing it would
+let browsing silently disable memoisation for the pipeline.
 
 Traceability: `lookup.ts`, `closedClass.ts`, `suffixParser.ts`, `stemWord.ts`,
 `honorifics.ts`; `App.tsx:22-28` implements R-4.5.
@@ -266,9 +284,23 @@ and `translation` replace them. `dictionary`, `latin`, `thaana`,
 | R-6.9 | Show a loading state while the dictionary loads; on failure show the error and withhold translation screens. About shall stay reachable. | Must |
 | R-6.10 | **Planned** — First model download shall show progress, since it is tens of MB. A silent multi-second stall is a defect. | Must |
 | R-6.11 | **Planned** — The UI **may** display a low-confidence warning when model output contains tokens unseen in training, or when output length is an extreme outlier relative to the input. This is an advisory indicator only; it shall not suppress or alter the output (R-3.9). | Could |
+| R-6.12 | **Dictionary** — a searchable browser over the shipped lexicon, backed by R-4.8. Accept Thaana, Malé Latin or English and auto-detect the script: Thaana is transliterated and searches Latin headwords; ASCII searches Latin headwords **and** English glosses. Each result shall state which side matched and by what kind. Counts shall be reported as *shown of total*, where the total is exact. Thaana on this screen is **generated** from the Latin headword and shall be labelled as generated. A `frequency` with no `freqSource` shall not be rendered as though it were counted. | Must |
+
+The Breakdown's gloss panel (R-6.2) shall link each headword into this screen.
+That is a clause of R-6.12 rather than a requirement of its own: it adds no
+behaviour the lexicon did not already expose, and it is the only path by which a
+reader inspecting a trace can ask what one of its words means without retyping it.
+
+R-6.12 is numbered after R-6.11 rather than beside the other screen requirements
+(R-6.1–R-6.6) on purpose: renumbering would break the R-6.10 citation in
+`Translator.tsx`, the R-6.1–R-6.6 traceability row in `DESIGN.md` §12, and five
+citations in `documentations.md`. The out-of-order number is the cheaper cost.
 
 Traceability: `App.tsx`, `ui/screens/*`, `ui/components/*`, `lib/theme.ts`.
 R-6.2 requires rewriting `TraceView.tsx` and `Breakdown.tsx`.
+R-6.12 adds `ui/screens/Dictionary.tsx`; tests `Dictionary.test.tsx`. R-6.9 is
+covered by `App.test.tsx`, which is also About's only test: About is static prose
+whose one contract — rendering outside the `ready` gate — belongs to the shell.
 
 ### 3.7 Optional LLM (`src/llm/`)
 
@@ -497,13 +529,22 @@ force-push, and is **not** authorised by this document.
 
 ## 11. Amendment log
 
-### 11.1 v0.2.2 → v0.2.3
+### 11.1 v0.2.3 → v0.2.4
+
+| # | Change | Why it was necessary |
+|---|---|---|
+| 1 | **R-4.8** — a browse entry point on the lexicon | The lexicon is the project's largest hand-built artefact and nothing could enumerate it: every public query funnelled through `translateWord`, which answers for one word, caps at five candidates and is cached. A browse screen needs many results, an exact denominator and no cache interaction, and none of those could be expressed by relaxing the existing lookup without changing pipeline behaviour. |
+| 2 | **R-6.12** — the Dictionary screen | There was no way to ask what a word means without running a translation, and no way to see what the lexicon covers. The screen is the first thing in the app to render shipped data with no pipeline in front of it, so the requirement carries the honesty clauses explicitly: generated Thaana labelled as generated, and an uncounted `frequency` never presented as a count. |
+| 3 | **R-6.5 clarified** — Benchmarks reports the live entry count as its dictionary figure | The screen's live-counter block asked `dictionary_stats.json` for seven keys the shipped file does not carry, so every dictionary row was filtered out and the group rendered empty while §6.1 of the design claimed otherwise. The file is also stale — 15,302 against 15,528 shipped — and its `source` is an absolute path on the build machine. The requirement to report only measured values (NFR-8) was not being met by a screen that reported nothing, and reporting the stale figure silently beside the live one would have been worse. |
+| 4 | **R-6.12 clause** — the Breakdown's glosses link into the Dictionary | The screen was reachable only from the nav, including from the panel that renders glosses out of the same lexicon it browses. |
+
+### 11.2 v0.2.2 → v0.2.3
 
 | # | Change | Why it was necessary |
 |---|---|---|
 | 1 | **R-5.8** — one definition of a word, shared by every consumer | The spec constrained sentence segmentation (R-5.7) and required the Breakdown to render dictionary glosses (R-5.2, R-6.2), but never said what a *word* was. Three definitions had accumulated — `tokenizeWords`, `extractWordsOnly`, and a private regex in `enToDv.ts` — so the Breakdown's word list could disagree with the pipeline's for the same sentence. That is a user-visible inconsistency that no requirement forbade and no test could catch. The two secondary clauses pin the defects the divergence hid: decimals shredded into three tokens, and contractions discarded by a letters-only filter. |
 
-### 11.2 v0.2.1 → v0.2.2
+### 11.3 v0.2.1 → v0.2.2
 
 Raised while implementing §8. Each was a place where following the spec
 literally would have produced something that could not work, or could not be
@@ -533,8 +574,9 @@ verified.
 | Lexicon & morphology | R-4.x | `core/dictionary/`, `core/morphology/` | `lookup.test.ts`, `stemWord.test.ts`, `suffixParser.test.ts` |
 | Pipeline | R-5.x | `core/pipeline/` | `pipeline.test.ts`, `enToDv.output.test.ts` |
 | Segmentation & tokenization | R-5.7, R-5.8 | `core/segmenter/textProcessor.ts`, `core/pipeline/enToDv.ts` | `segmentSentences.test.ts` |
-| UI | R-6.x | `App.tsx`, `ui/` | manual / AC-2–AC-7 |
-| LLM | R-7.x | `llm/` | manual |
+| UI | R-6.x | `App.tsx`, `ui/` | AC-2–AC-7; `App.test.tsx`, `TraceView.test.tsx`, `Translator.test.tsx`, `Breakdown.test.tsx`, `Dictionary.test.tsx`, `Chat.test.tsx`, `Feedback.test.tsx`, `Benchmarks.test.tsx` |
+| Lexicon browse | R-4.8, R-6.12 | `core/dictionary/lookup.ts` (`searchDictionary`), `ui/screens/Dictionary.tsx` | `search.test.ts`, `Dictionary.test.tsx`, `App.test.tsx` |
+| LLM | R-7.x | `llm/` | `Chat.test.tsx` (R-6.3 containment, R-7.3 key handling, R-7.4 failure reporting); `llm/adapter.ts` transport still manual |
 | Evaluation | R-8.x | `lib/feedback.ts`, `evaluation/`, `tools/evaluate.py`, `tools/measure_roundtrip.py` | `roundtrip_stats.json`, `scores.json` |
 | Training | R-9.x | `tools/train_translate.py`, `tools/export_onnx.py`, `tools/profile_tokenizer.py`, `colab_train_translate.ipynb` | `training_stats.json`, `export_stats.json`, `tokenizer_profile.json` |
 

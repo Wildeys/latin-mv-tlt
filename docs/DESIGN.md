@@ -360,8 +360,8 @@ downloaded at all.
 longer feeds anything neural — it is analysis and display.
 
 **Interface.** `loadDictionary`, `loadDictionaryFromData`, `translateWord`,
-`isKnownLatin`, `isDictionaryLoaded`, `getDictionaryStats`, `getEntryCount`,
-`englishGloss`, `latinValue`.
+`searchDictionary`, `isKnownLatin`, `isDictionaryLoaded`, `getDictionaryStats`,
+`getEntryCount`, `englishGloss`, `latinValue`.
 
 **In-memory structures**, built once at load:
 
@@ -416,6 +416,31 @@ collapses that remain (`me`/`I` → `aharen`, `going`/`went` → one lemma,
 `closedClass.test.ts`, which fails on any round-trip asymmetry that is not on the
 list. `eyna` is gender-neutral in Dhivehi and is now glossed `he/she` rather than
 picking one.
+
+**Browse is a separate path from lookup** (R-4.8). `searchDictionary` shares the
+`byLatin` / `byEnglish` maps and `sortedLatinKeys`, and none of the thresholds.
+Three differences are each deliberate:
+
+- **It scans exhaustively where lookup binary-searches.** `lookupLatin` breaks at
+  the first non-matching key, which is right for its job but can only report "at
+  least N". The screen's contract is "showing 50 of 762", and that sentence is
+  only true if everything was looked at. One `indexOf` per key over ~32k keys
+  measures **1–9 ms for any realistic query and ~22 ms for a single character**
+  (14,577 of 15,528 rows) on the project's 2016 laptop — cheap enough to buy an
+  exact denominator.
+- **It selects the top *k* by bounded insertion, not `Array.sort`.** Sorting the
+  full matched set of a one-character query costs several times more; the
+  comparator never revisits a row that has already lost.
+- **It does not touch `cache`.** `translateWord` stops *accepting* entries at
+  `MAX_CACHE` rather than evicting, so a browse path sharing the cache would fill
+  all 5,000 slots after a few hundred keystrokes and silently disable memoisation
+  for the whole translation pipeline.
+
+It returns **copies** (`{ ...entry, english: [...entry.english] }`), so the
+private-`entries` promise above survives a screen holding a result. No
+`sortedEnglishKeys` was added: an English prefix index would cost a sort at load
+and still miss most matches, because **67.8% of glosses are multi-word** —
+`water` must find "a kind of water plant" (DD-21).
 
 **Why binary search.** Prefix lookup previously walked all ~16k keys per word. Keys
 sharing a prefix form one contiguous run in sorted order, so `lowerBound` plus a walk
@@ -617,7 +642,7 @@ no API key at all.
 
 App shell in `App.tsx`: single-state screen switch (`useState<Screen>`), no router —
 the deployment is a static Pages site under a base path, and a hash router would buy
-nothing that six screens need.
+nothing that seven screens need.
 
 **Startup ordering** encodes G7 directly:
 
@@ -685,6 +710,7 @@ latinToThaanaDetailed(text: string): { thaana: string; preserved: string[] }
 
 // core/dictionary
 translateWord(word: string, sourceLang: 'dhivehi' | 'english'): WordTranslation  // cached, READ-ONLY
+searchDictionary(input: string, limit?: number): SearchResponse                  // NOT cached; entries are copies
 loadDictionary(dictUrl?: string, statsUrl?: string): Promise<void>               // memoised
 
 // core/morphology
@@ -698,6 +724,10 @@ Two contracts that are easy to violate and are therefore stated explicitly:
   read-only. The cache is cleared whenever the dictionary is (re)loaded.
 - **`translateText` takes an already-prefixed string**, not `(text, direction)`.
   That is what forces prefix construction into one place (§3.6.1).
+- **`searchDictionary` deliberately ignores `MIN_PREFIX_LEN` and `MAX_PARTIAL`.**
+  Those bound the *translation* path. Browse has its own `SEARCH_LIMIT` /
+  `SEARCH_LIMIT_MAX`, accepts a one-character query, and shares no code with
+  `lookupLatin` — which is why adding it could not change pipeline behaviour.
 
 ---
 
@@ -817,10 +847,11 @@ in the wrong devtools panel (R-3.12, amendment 3).
 | Screen | Role | Design commitments |
 |---|---|---|
 | **Translator** | the main artefact | Direction toggle; Thaana IME on the dv→en input; download progress with `role="status" aria-live="polite"`; on failure shows **"Final translation: Unavailable"** plus the reason plus the verbatim model input — never a substitute sentence |
-| **Breakdown** | first-class research deliverable | Renders every trace field; one `TraceView` per sentence; reads `sessionStorage`, so it works after a screen switch |
+| **Breakdown** | first-class research deliverable | Renders every trace field; one `TraceView` per sentence; reads `sessionStorage`, so it works after a screen switch; each gloss headword opens it in the Dictionary |
+| **Dictionary** | searchable lexicon browser | Search-first, never an A–Z listing (§6.6); a script toggle drives the IME; Thaana generated per DD-13 and labelled as generated; `frequency` shown only where `freqSource` exists; counts reported as shown-of-exact-total |
 | **Chat** | optional demo | English only leaves the device |
 | **Feedback** | meaning + naturalness 1–5, optional correction | CSV export |
-| **Benchmarks** | measured metrics only | Live dictionary counters merged with `benchmarks.json`; unmeasured metrics displayed **as** unmeasured |
+| **Benchmarks** | measured metrics only | The live entry count from `getEntryCount()` — the same number the Dictionary reports — merged with the build-script figures `dictionary_stats.json` actually carries and with `benchmarks.json`; a note when the stats file disagrees with the shipped lexicon; the stats file's `source` never rendered; unmeasured metrics displayed **as** unmeasured |
 | **About** | problem, method, architecture, limits | The only screen that renders before `ready` |
 
 ### 6.2 `TraceView` — the method on screen
@@ -842,6 +873,15 @@ RTL), decided per node by `hasThaana(...)`, never per page. The font is bundled
 (`public/fonts/`) so Thaana renders on a machine with no Dhivehi font installed
 (NFR-10); `src` is `local("Faruma")` first, so an installed copy is preferred over
 the download, with `font-display: swap` so text is never invisible while it loads.
+
+**Inside a table cell, `.font-thaana` goes on a `<bdi>`, never on the `<td>`.**
+The class carries `direction: rtl; text-align: right`; on a cell that silently
+flips the whole column's alignment. `<bdi>` is inline and defaults to
+`unicode-bidi: isolate`, which is exactly what a Thaana run sitting between LTR
+cells needs, and `text-align` does not apply to it. Every earlier use puts the
+class on a block that *is* the whole line (`TraceView.tsx`, `Chat.tsx`,
+`Translator.tsx`), which is why the trap had not bitten before the Dictionary
+screen put Thaana in a column.
 
 The `@font-face` URL is the **root-absolute public path** `/fonts/Faruma.ttf`, not a
 base-prefixed literal. Vite injects `base` into public-file references in CSS in both
@@ -879,6 +919,22 @@ a `brand` palette and class-based dark mode; the theme's precedence and persiste
 are described in §3.10.
 
 ---
+
+### 6.6 Why the Dictionary screen is search-first
+
+The lexicon is sorted by headword, and its first two entries are inverted rows —
+`{"latin": "a goal in sport", "english": ["lan'du jehun"]}` — English in the
+headword column, Dhivehi in the glosses. An A–Z browse would therefore open on
+the worst data in the file. An empty query shows an empty state with example
+chips instead, and the alphabet is never the entry point.
+
+The screen also declines to *classify* the defective rows. The obvious heuristic
+— flag a row whose glosses are all themselves known Latin headwords — fires on
+1,565 of 15,528 rows, including correct ones such as `a'zum → ambition`. A badge
+that wrong would attach a confident label to a guess, which is the failure G1
+exists to prevent. The screen states the problem in prose, shows the matched key
+per row so a surprising result explains itself, and leaves classification to a
+human.
 
 ## 7. State and error design
 
@@ -929,6 +985,7 @@ something and could not*. Conflating them is what v0.1 did.
 | StrictMode double-mount | In-flight promise memoisation in `loadDictionary` and `loadHonorifics` |
 | Five regex rebuilds per sentence | `identifyScript` rewritten as one pass with module-level regexes |
 | Silent 80 MB stall | Progress listener set + replay-on-subscribe (R-6.10) |
+| 15k-entry browse scan per keystroke | Exhaustive `indexOf` scan + bounded top-*k* insertion, no full sort. 1–9 ms typical, ~22 ms worst case (one character). `useDeferredValue`, not a debounce — the table render is the slower half, and a debounce would add latency to every keystroke including the fast ones |
 | Model bloat regressing | `check:models` in CI, on bytes **and** on forbidden graph names |
 
 ---
@@ -993,8 +1050,19 @@ of the file that needs it rather than buried in config.
 | `segmentSentences` | all five boundary rules, including decimals and abbreviations; the R-5.8 tokenizer contract, and that both pipeline directions use it |
 | `pipeline`, `enToDv.output` | the empty-input guard, and `latin` being the model's *output* on en→dv |
 | `useThaanaIme` | the pure composition functions |
+| `search`, `Dictionary` | exact totals under truncation, both-sides matching, multi-word gloss hits, copies not references, `<bdi>` never on a `<td>`, uncounted frequency shown as `—`, and that browse left the translation path untouched |
 | `TraceView` | verbatim model input, Unavailable with nothing invented, error surfaced, preserved segments listed, Thaana font applied only to Thaana |
 | `Translator` | the same refusal at screen level, through the *real* pipeline in its not-loaded state; direction switching; the trace reaching `sessionStorage`; QWERTY Latin becoming Thaana in place |
+| `Breakdown` | the empty state vs. a stored trace; one `TraceView` per sentence and numbering only past one; a clicked headword reaching `onLookup`; the glosses still rendering as plain text with no navigator attached |
+| `Chat` | that **nothing is sent** when the model is not loaded — the screen-level form of "only English leaves the device"; the no-key refusal; the composer not stuck after a failed send; QWERTY Latin becoming Thaana; the key field staying `type="password"` |
+| `Feedback` | prefill from the last trace; the stored row carrying that trace's direction; the confirmation clearing when a field changes; and the CSV formula-injection guard in `lib/feedback.ts` |
+| `Benchmarks` | that the live entry count renders even when the stats file carries none of the build-script keys — the regression that made the DICTIONARY group empty; the staleness note appearing only on disagreement; the build machine's absolute path never rendered |
+| `App` | R-6.9 at shell level: the data screens withheld while loading and after a failure, About reachable throughout, and a gloss clicked on the Breakdown arriving in the Dictionary already searched |
+
+There is no `About.test.tsx`. About is static prose with one real contract — that
+it renders outside the `ready` gate — and that is a property of the shell, so it
+is asserted in `App.test.tsx` where the gate lives. A snapshot of the copy would
+assert nothing and would have to be edited every time the prose is.
 
 The `Translator` suite is deliberately not mocked. `MODE === 'test'` puts the runner
 in exactly the state a user hits before the weights exist, so the test exercises the
@@ -1021,10 +1089,12 @@ production refusal path rather than a stand-in for it.
 | DD-13 | Drop the `dhivehi` column | Ship it | 70.4% of it was a deterministic function of a field already present; dropping it saved ~620 KB |
 | DD-14 | Four model states, five stage states | Keep `not_configured`; conflate `empty` with `unavailable` | A state that cannot occur is a state the UI renders wrong |
 | DD-15 | Model-or-nothing output | Fall back to concatenated glosses | A plausible-looking wrong sentence is worse than an honest "Unavailable" (G1) |
-| DD-16 | No router, single-state screen switch | React Router | Six screens on a static base-path deploy; a router adds a build-time and cognitive cost for nothing gained |
+| DD-16 | No router, single-state screen switch | React Router | Seven screens on a static base-path deploy; a router adds a build-time and cognitive cost for nothing gained |
 | DD-17 | **Abandon the semantic-frame architecture** | Keep v0.1 | ~60 content words of coverage for 307 MB tracked / ~148 MB fetched, versus open-domain coverage for one ≤80 MB model. See Appendix A |
 | DD-18 | One tokenizer (`tokenizeWords` / `extractWordsOnly`) for the whole system | Per-consumer tokenizers | Divergent word definitions made the Breakdown's dictionary panel disagree with the pipeline about the same sentence — a visible inconsistency with no error attached. Promoted to **R-5.8** in requirements revision 0.2.3 |
 | DD-19 | Declare closed-class collapses in a list and test them | Force the tables symmetric, or leave them unchecked | Dhivehi genuinely collapses `me`/`I`; forcing symmetry would be wrong. Declaring the collapses makes the *undeclared* ones fail CI |
+| DD-21 | Browse scans exhaustively; lookup keeps its binary search | Reuse `lowerBound` and a scan cap for browse too | A capped scan cannot honestly say "showing 50 of 762". The cap exists to keep the translation path tight; the browse screen's whole contract is the denominator |
+| DD-22 | Rank browse by match kind → headword-hit before gloss-hit → length → alphabetical; **never** by `frequency` | Reuse `lookupLatin`'s frequency tiebreak | 93.9% of rows sit on the placeholder constants 50 or 1; only 759 of 15,528 carry a `freqSource`. A ranking that looks meaningful and is arbitrary is worse than an alphabetical one |
 | DD-20 | Node test environment by default, jsdom per file | jsdom for everything | A jsdom default would hide an accidental DOM reference in `src/core/**`, which must stay headless (NFR-6) |
 
 ---
@@ -1051,6 +1121,7 @@ production refusal path rather than a stand-in for it.
 | R-3.12 | §5.5 Cache Storage API |
 | R-4.2, R-4.3, R-4.6 | §3.4 structures and staged lookup |
 | R-4.4, R-4.5 | §3.5 register detection; §7.3 containment |
+| R-4.8 | §3.4 browse path; §6.3 `<bdi>` rule; DD-21, DD-22 |
 | R-5.1 | §2.4 segment-then-translate |
 | R-5.2 | §3.7 trace fields; §6.2 `TraceView` |
 | R-5.3 | §7.1 five stage states, `error` added |
@@ -1059,7 +1130,7 @@ production refusal path rather than a stand-in for it.
 | R-5.6 | §2.4 glossing beside translation; DD-9 |
 | R-5.7 | §3.2 five segmentation rules, script-aware terminators |
 | R-5.8 | §3.2 one tokenizer, both directions; decimals and contractions preserved |
-| R-6.1 – R-6.6 | §6.1 screens |
+| R-6.1 – R-6.6, R-6.12 | §6.1 screens; §6.6 search-first |
 | R-6.7, R-6.8 | §6.5 layout and theme |
 | R-6.9 | §3.9 startup ordering; §7.3 |
 | R-6.10 | §3.6.2 progress listeners; §6.1 progress bar |

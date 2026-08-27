@@ -1,1 +1,1 @@
-export type Screen = 'chat' | 'translator' | 'breakdown' | 'feedback' | 'benchmarks' | 'about';
+export type Screen = 'chat' | 'translator' | 'breakdown' | 'dictionary' | 'feedback' | 'benchmarks' | 'about';
