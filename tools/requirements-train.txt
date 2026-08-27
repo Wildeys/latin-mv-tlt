@@ -23,3 +23,9 @@ accelerate>=1.1
 optimum[onnxruntime]>=1.23
 onnx>=1.17
 onnxruntime>=1.19
+
+# Not a dependency, a warning: `diffusers` must NOT be importable-but-broken in
+# the same environment. optimum/exporters/utils.py imports it under
+# `if is_diffusers_available():`, so a diffusers/huggingface_hub version mismatch
+# fails this export even though no diffusion model is involved. Colab ships such
+# a pair preinstalled; `pip uninstall -y diffusers` before exporting.

@@ -65,10 +65,13 @@ MAX_SHRINK_RATIO = 0.6
 
 # Imported later in the run, long after the multi-minute export step. Checked up
 # front so a missing one costs a second rather than the whole export.
+# Top-level packages only: preflight answers "is it installed", the export step
+# answers "does it work". Probing a submodule here would import optimum's chain
+# and re-raise its breakage as a traceback, ahead of the code that explains it.
 REQUIRED_IMPORTS = [
-    ("optimum.exporters.onnx", "'optimum[onnxruntime]>=1.23'"),
+    ("optimum", "'optimum[onnxruntime]>=1.23'"),
     ("onnx", "'onnx>=1.17'"),
-    ("onnxruntime.quantization", "'onnxruntime>=1.19'"),
+    ("onnxruntime", "'onnxruntime>=1.19'"),
 ]
 
 
@@ -91,6 +94,10 @@ def preflight() -> None:
             found = importlib.util.find_spec(module) is not None
         except ModuleNotFoundError:
             found = False  # parent package absent
+        except Exception:
+            # Installed, but its import chain raises. That is a different problem
+            # with a far better message downstream — do not report it as missing.
+            found = True
         if not found:
             missing.append((module, pin))
     if not missing:
@@ -159,6 +166,66 @@ def quantize(src: Path, dst: Path) -> None:
         )
 
 
+def run_streaming(cmd: list[str]) -> tuple[int, str]:
+    """Run `cmd`, echoing output live and keeping a copy to diagnose failures.
+
+    The export is minutes long, so the output has to stream; but its failures are
+    100-line import tracebacks whose actual cause is one line near the top, so a
+    copy has to be kept for explain_export_failure().
+    """
+    proc = subprocess.Popen(
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1
+    )
+    captured: list[str] = []
+    assert proc.stdout is not None
+    for line in proc.stdout:
+        sys.stdout.write(line)
+        captured.append(line)
+    sys.stdout.flush()
+    return proc.wait(), "".join(captured)
+
+
+def explain_export_failure(log: str) -> str:
+    """Turn optimum's import tracebacks back into the one thing to actually do.
+
+    optimum imports `diffusers` behind `is_diffusers_available()`, so a diffusers
+    installation that is broken against the installed huggingface_hub takes down
+    an export that never touches diffusion at all. Colab ships both preinstalled,
+    which makes this the default outcome there, not an edge case.
+    """
+    hints = []
+    if "diffusers" in log and ("huggingface_hub" in log or "Failed to import diffusers" in log):
+        hints.append(
+            "The blocker is `diffusers`, not this export.\n"
+            "  optimum/exporters/utils.py imports it under `if is_diffusers_available():`,\n"
+            "  and the installed diffusers is incompatible with the installed\n"
+            "  huggingface_hub. Nothing in this project uses diffusion, so the fix is to\n"
+            "  take diffusers out of the picture and let that branch go dead:\n"
+            f"\n      {sys.executable} -m pip uninstall -y diffusers\n\n"
+            "  then re-run this script — no runtime restart needed, the export is a fresh\n"
+            "  subprocess. (Upgrading huggingface_hub instead also works, but it moves a\n"
+            "  package transformers pins, and that does need a restart.)"
+        )
+    if "No module named" in log and "optimum.exporters.onnx" in log:
+        hints.append(
+            "optimum is installed without its ONNX exporter. Since optimum 2.x that lives\n"
+            "  in a separate distribution:\n"
+            f"\n      {sys.executable} -m pip install -U 'optimum[onnxruntime]>=1.23'"
+        )
+    if "Multiple distributions found for package optimum" in log:
+        hints.append(
+            "The `Multiple distributions found for package optimum` line is expected and\n"
+            "  harmless: optimum 2.x moved the ONNX exporter into the separate optimum-onnx\n"
+            "  distribution, and both share the `optimum` namespace. It is not the failure."
+        )
+    if not hints:
+        hints.append(
+            "No known cause matched. The real error is usually the *first* exception in the\n"
+            "  trace above, not the last one."
+        )
+    return "\n\n".join(hints)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--model", type=Path, required=True, help="trained checkpoint directory")
@@ -186,27 +253,32 @@ def main() -> int:
         "--opset", str(args.opset),
         str(args.work),
     ]
-    result = subprocess.run(cmd)
-    if result.returncode != 0:
+    code, log = run_streaming(cmd)
+    if code != 0:
         # `-m optimum.commands.optimum_cli` is not runnable in every optimum
         # release, so fall back to the console script — but only as a fallback:
         # if it is not on PATH either, the module invocation's failure is the
-        # real one to report.
-        try:
-            result = subprocess.run(
-                ["optimum-cli", "export", "onnx", "--model", str(args.model),
-                 "--task", "text2text-generation-with-past", "--opset", str(args.opset), str(args.work)]
-            )
-        except FileNotFoundError:
+        # real one to report. Retrying is pointless when both entry points share
+        # the import that just failed, so only retry if the module path itself
+        # was what was missing.
+        if "No module named" in log and "optimum.commands" in log:
+            try:
+                code, log = run_streaming(
+                    ["optimum-cli", "export", "onnx", "--model", str(args.model),
+                     "--task", "text2text-generation-with-past",
+                     "--opset", str(args.opset), str(args.work)]
+                )
+            except FileNotFoundError:
+                raise SystemExit(
+                    "optimum-cli export failed, and no `optimum-cli` on PATH to retry with.\n"
+                    f"  interpreter: {sys.executable}\n"
+                    f"  {sys.executable} -m pip install -U 'optimum[onnxruntime]>=1.23'"
+                ) from None
+        if code != 0:
             raise SystemExit(
-                "optimum-cli export failed, and no `optimum-cli` on PATH to retry with.\n"
-                f"  interpreter: {sys.executable}\n"
-                "optimum imports but its CLI did not run — see the traceback above. "
-                "Reinstall with\n"
-                f"  {sys.executable} -m pip install -U 'optimum[onnxruntime]>=1.23'"
-            ) from None
-        if result.returncode != 0:
-            raise SystemExit("optimum-cli export failed")
+                f"\noptimum-cli export failed (exit {code}).\n\n"
+                + explain_export_failure(log)
+            )
 
     # ---- 2. assert the merge is real ---------------------------------------
     print("\n2. verify merged decoder")
@@ -214,7 +286,15 @@ def main() -> int:
     encoder = args.work / "encoder_model.onnx"
     for path in (merged, encoder):
         if not path.exists():
-            raise SystemExit(f"expected {path.name} in {args.work}; export layout changed")
+            produced = sorted(p.name for p in args.work.rglob("*.onnx"))
+            raise SystemExit(
+                f"expected {path.name} in {args.work}, and the export did not produce it.\n"
+                f"  produced: {', '.join(produced) or '(no .onnx files at all)'}\n"
+                "If the merged decoder is missing while decoder_model.onnx and\n"
+                "decoder_with_past_model.onnx are present, post-processing was skipped —\n"
+                "check that --no-post-process was not passed. The runtime needs the merged\n"
+                "graph (R-3.13); an unmerged one cannot take a KV cache."
+            )
     assert_merged_has_cache_branch(merged)
 
     # ---- 3. quantize -------------------------------------------------------
