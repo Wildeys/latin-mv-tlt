@@ -63,8 +63,52 @@ RUNTIME_ONNX = [
 MAX_SHRINK_RATIO = 0.6
 
 
+# Imported later in the run, long after the multi-minute export step. Checked up
+# front so a missing one costs a second rather than the whole export.
+REQUIRED_IMPORTS = [
+    ("optimum.exporters.onnx", "'optimum[onnxruntime]>=1.23'"),
+    ("onnx", "'onnx>=1.17'"),
+    ("onnxruntime.quantization", "'onnxruntime>=1.19'"),
+]
+
+
 def human(n: int) -> str:
     return f"{n / 1e6:.2f} MB"
+
+
+def preflight() -> None:
+    """Refuse to start if the export toolchain is missing from *this* interpreter.
+
+    The failure this replaces was a bare FileNotFoundError on `optimum-cli`,
+    which says nothing about the actual cause: %pip installed into the notebook
+    kernel, and `!python tools/export_onnx.py` ran a different interpreter.
+    """
+    import importlib.util
+
+    missing = []
+    for module, pin in REQUIRED_IMPORTS:
+        try:
+            found = importlib.util.find_spec(module) is not None
+        except ModuleNotFoundError:
+            found = False  # parent package absent
+        if not found:
+            missing.append((module, pin))
+    if not missing:
+        return
+
+    names = ", ".join(m for m, _ in missing)
+    pins = " ".join(pin for _, pin in missing)
+    raise SystemExit(
+        f"missing export dependencies: {names}\n"
+        f"  interpreter: {sys.executable}\n"
+        f"\nInstall them into that interpreter and re-run:\n"
+        f"  {sys.executable} -m pip install -U {pins}\n"
+        "\nIn a notebook, `%pip install` targets the kernel but `!python ...` may "
+        "resolve to a different\ninterpreter — launch this as "
+        "`!{sys.executable} tools/export_onnx.py ...` instead, and restart the\n"
+        "runtime if the install happened in the same session.\n"
+        "tools/requirements-train.txt pins the full set."
+    )
 
 
 def assert_merged_has_cache_branch(path: Path) -> None:
@@ -125,6 +169,8 @@ def main() -> int:
     ap.add_argument("--keep-work", action="store_true", help="keep the fp32 intermediates")
     args = ap.parse_args()
 
+    preflight()
+
     if not args.model.exists():
         raise SystemExit(f"no checkpoint at {args.model}")
 
@@ -142,11 +188,23 @@ def main() -> int:
     ]
     result = subprocess.run(cmd)
     if result.returncode != 0:
-        # Fall back to the plain console script if the module path is unavailable.
-        result = subprocess.run(
-            ["optimum-cli", "export", "onnx", "--model", str(args.model),
-             "--task", "text2text-generation-with-past", "--opset", str(args.opset), str(args.work)]
-        )
+        # `-m optimum.commands.optimum_cli` is not runnable in every optimum
+        # release, so fall back to the console script — but only as a fallback:
+        # if it is not on PATH either, the module invocation's failure is the
+        # real one to report.
+        try:
+            result = subprocess.run(
+                ["optimum-cli", "export", "onnx", "--model", str(args.model),
+                 "--task", "text2text-generation-with-past", "--opset", str(args.opset), str(args.work)]
+            )
+        except FileNotFoundError:
+            raise SystemExit(
+                "optimum-cli export failed, and no `optimum-cli` on PATH to retry with.\n"
+                f"  interpreter: {sys.executable}\n"
+                "optimum imports but its CLI did not run — see the traceback above. "
+                "Reinstall with\n"
+                f"  {sys.executable} -m pip install -U 'optimum[onnxruntime]>=1.23'"
+            ) from None
         if result.returncode != 0:
             raise SystemExit("optimum-cli export failed")
 
