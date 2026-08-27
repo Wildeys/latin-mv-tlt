@@ -255,7 +255,18 @@ def main() -> int:
         pad_token=tokenizer.pad_token,
         eos_token=tokenizer.eos_token,
         unk_token=tokenizer.unk_token,
+        # Carried over, not defaulted. PreTrainedTokenizerFast assumes
+        # token_type_ids; T5 has no such input and generate() rejects it — and
+        # this lands in tokenizer_config.json, so the wrong value would reach
+        # transformers.js and be fed to the ONNX encoder at runtime.
+        model_input_names=list(tokenizer.model_input_names),
+        padding_side=tokenizer.padding_side,
     )
+    if set(trimmed.model_input_names) != set(tokenizer.model_input_names):
+        raise SystemExit(
+            f"model_input_names changed {tokenizer.model_input_names} -> "
+            f"{trimmed.model_input_names}"
+        )
     for name in ("pad_token_id", "eos_token_id", "unk_token_id"):
         before, after = getattr(tokenizer, name), getattr(trimmed, name)
         if before != after:
@@ -284,6 +295,33 @@ def main() -> int:
                     f"  after:   {trimmed.tokenize(text)[:14]}\n"
                     "  A piece the corpus needs was dropped. This is a bug in the keep set, "
                     "not something to work around."
+                )
+            # Pieces alone miss the fields around them: an extra input the model
+            # does not accept, a lost attention mask, different </s> framing.
+            # All three reach the ONNX encoder through the exported
+            # tokenizer_config.json, so compare what the model is actually fed.
+            #
+            # Not the ids themselves — remapping them is the entire point. What
+            # must survive is the *piece* sequence they decode to, this time
+            # including the special tokens that `tokenize()` leaves out.
+            before, after = dict(tokenizer(text)), dict(trimmed(text))
+            if before.keys() != after.keys():
+                raise SystemExit(
+                    "REFUSING TO WRITE: the trimmed tokenizer returns different fields.\n"
+                    f"  before:  {sorted(before)}\n"
+                    f"  after:   {sorted(after)}\n"
+                    "  These are written to tokenizer_config.json and fed to the ONNX "
+                    "encoder by transformers.js."
+                )
+            if before.get("attention_mask") != after.get("attention_mask") or (
+                tokenizer.convert_ids_to_tokens(before["input_ids"])
+                != trimmed.convert_ids_to_tokens(after["input_ids"])
+            ):
+                raise SystemExit(
+                    "REFUSING TO WRITE: encoding changed after trimming.\n"
+                    f"  text:    {text[:90]}\n"
+                    f"  before:  {tokenizer.convert_ids_to_tokens(before['input_ids'])[:14]}\n"
+                    f"  after:   {trimmed.convert_ids_to_tokens(after['input_ids'])[:14]}"
                 )
             checked += 1
     print(f"  ok  {checked:,} texts tokenize identically")
