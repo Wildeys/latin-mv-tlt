@@ -1,0 +1,16 @@
+model,script,meanTokensPerSentence,charsLostToUnkPercent
+local:public/models/dv-en-translate,thaana,22.93,84.85
+t5-small,thaana,22.93,84.85
+google/mt5-small,thaana,66.02,0.01
+google/byt5-small,thaana,175.98,0.0
+facebook/nllb-200-distilled-600M,thaana,32.15,79.18
+local:public/models/dv-en-translate,latin,52.69,0.05
+t5-small,latin,52.69,0.05
+google/mt5-small,latin,34.28,0.0
+google/byt5-small,latin,92.31,0.0
+facebook/nllb-200-distilled-600M,latin,30.66,0.0
+local:public/models/dv-en-translate,english,19.74,0.07
+t5-small,english,19.74,0.07
+google/mt5-small,english,20.54,0.0
+google/byt5-small,english,76.56,0.0
+facebook/nllb-200-distilled-600M,english,18.85,0.0

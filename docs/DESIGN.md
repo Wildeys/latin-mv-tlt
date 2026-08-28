@@ -814,15 +814,42 @@ runtime", 80 MB is unachievable at any model size.
 | `roundtrip_stats.json` | 15,201 lexicon entries — 99.35% Latin-stable, 88.13% exact Thaana, 88.96% folded |
 | `roundtrip_stats_corpus.json` | 5,000-sentence news sample — 99.80% Latin-stable, 27.50% exact, 34.32% folded |
 | `tokenizer_profile.json` | 2,000 word types — **0.0% `<unk>`**, mean **5.697** pieces/word, histogram peaking at 5 with a tail to 15 |
+| `tokenizer_comparison.json` | Five tokenizers x three scripts on aligned sentences — **84.9%** of Thaana source characters lost to `<unk>` under the shipped tokenizer against **0.1%** for the same sentences in Latin |
+| `script_triples.json` | 400 sentences present in Thaana, Malé Latin and English at once — the aligned corpus the comparison needs, since no other file holds all three |
+| `training_curve.json`, `.csv` | 33 eval points and 150 logged losses, recovered from the Colab notebook's cell outputs; every eval row tagged with the population it was scored on |
+| `trim_stats.json` | Vocabulary trim: 32,128 → 23,505 embedding rows, ~8.8 MB saved across the two shipped graphs |
+| `test_sample.jsonl`, `test_sample_stats.json` | The committed scoring sample — 500 pairs per direction per holdout kind, drawn pairwise so the two directions are scored on the same content |
+| `scores.json`, `scores_conversational.json` | BLEU / chrF++ / spellability, per direction and per holdout kind, never mixed |
+| `predict_latency.json` | Per-sentence generation time under Node + ORT wasm — explicitly not browser latency |
+| `acceptance_status.json` | AC-1…AC-13 and GAP-1…GAP-14 resolved against the artefacts above |
 | `gold_sentences.json`, `HUMAN_EVAL.md` | Human evaluation set and protocol |
 
-Two reporting rules the design commits to:
+Three reporting rules the design commits to:
 
 - **Never quote the 0% `<unk>` without the 5.697.** In-vocabulary but heavily
   fragmented is a sequence-length *cost*, not a coverage win.
+- **Never quote a token count for Thaana without the loss beside it.** Under the
+  shipped tokenizer a Thaana sentence is *shorter* than its Latin transliteration
+  (23 tokens against 53) purely because most of it collapsed into `<unk>`. A bare
+  length comparison inverts the finding, which is why
+  `docs/figures/tokenizer_tokens_per_sentence.svg` hatches those bars.
 - **Exact-Thaana recovery is the wrong gate.** It punishes the round trip for
   *normalising* nonstandard source Thaana, which is the correct behaviour. R-1.8
   gates on Latin stability.
+
+### 5.4b Figures (`docs/figures/`)
+
+Every chart is rendered by `tools/render_figures.py` from the artefacts in §5.4
+and nothing else — the renderer holds no numeric literal beyond layout constants,
+so a figure cannot drift from the measurement it depicts. Each ships a PNG, an
+SVG, and a CSV of the exact plotted values, so a printed table and its chart come
+from one source. `architecture.svg` is hand-authored and outside the renderer.
+
+The renderer runs under a **different interpreter** from the measuring scripts: it
+imports only the standard library and matplotlib, while the measuring scripts need
+transformers and sacrebleu. Neither environment has to grow to satisfy the other,
+which matters here because no torch wheel exists for this development machine.
+See `tools/requirements-figures.txt` and `docs/figures/README.md`.
 
 ### 5.5 Client-side storage map
 
@@ -1032,7 +1059,7 @@ test:  checkout → node 22 → npm ci → tsc -b → npm test → npm run check
 deploy: needs: test, skipped on pull_request → npm run build → upload dist/ → Pages
 ```
 
-**Test design.** 103 tests across 12 files. The suite touches no model and no network
+**Test design.** 155 tests across 19 files. The suite touches no model and no network
 (NFR-6), which the runner's test-mode short-circuit guarantees structurally rather
 than by convention.
 

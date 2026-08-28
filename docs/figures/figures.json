@@ -1,0 +1,231 @@
+{
+  "generatedBy": "tools/render_figures.py",
+  "figures": [
+    {
+      "name": "tokenizer_tokens_per_sentence",
+      "caption": "Tokens produced for the same sentence in each script. Because every sentence is present in all three scripts, the columns are directly comparable: the difference is the script, not the content.",
+      "sources": [
+        "evaluation/tokenizer_comparison.json"
+      ],
+      "files": [
+        "tokenizer_tokens_per_sentence.png",
+        "tokenizer_tokens_per_sentence.svg",
+        "tokenizer_tokens_per_sentence.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "tokenizer_information_loss",
+      "caption": "Share of Thaana source characters that fall inside an <unk> token, i.e. are not recoverable from the encoding at any model size. This is the measurement the romanize-first design rests on.",
+      "sources": [
+        "evaluation/tokenizer_comparison.json"
+      ],
+      "files": [
+        "tokenizer_information_loss.png",
+        "tokenizer_information_loss.svg",
+        "tokenizer_information_loss.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "tokenizer_worked_example",
+      "caption": "One sentence, tokenized by t5-small in each of its three scripts. The Thaana row is not a short encoding, it is an empty one: both content tokens are <unk>.",
+      "sources": [
+        "evaluation/tokenizer_comparison.json",
+        "evaluation/script_triples.json"
+      ],
+      "files": [
+        "tokenizer_worked_example.png",
+        "tokenizer_worked_example.svg",
+        "tokenizer_worked_example.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "pieces_per_word",
+      "caption": "How many subword pieces one word becomes. Mal\u00e9 Latin fragments far more than English, which is what spends the 128-token sequence budget. Counted over word tokens in running text; evaluation/tokenizer_profile.json counts word types and reports a higher mean (5.697) for the same tokenizer.",
+      "sources": [
+        "evaluation/tokenizer_comparison.json"
+      ],
+      "files": [
+        "pieces_per_word.png",
+        "pieces_per_word.svg",
+        "pieces_per_word.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "model_size_vs_budget",
+      "caption": "Published checkpoint size against the 80 MB browser budget, log scale. The tokenizers that can represent Thaana belong to models one to two orders of magnitude past what a browser-only app can download.",
+      "sources": [
+        "evaluation/tokenizer_comparison.json",
+        "public/models/dv-en-translate/export_stats.json"
+      ],
+      "files": [
+        "model_size_vs_budget.png",
+        "model_size_vs_budget.svg",
+        "model_size_vs_budget.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "vocab_vs_thaana_coverage",
+      "caption": "The trade-off in one view: the tokenizers that keep Thaana intact are the ones carrying a quarter-million-entry vocabulary. Romanizing buys the coverage back at a 23,505-entry vocabulary.",
+      "sources": [
+        "evaluation/tokenizer_comparison.json"
+      ],
+      "files": [
+        "vocab_vs_thaana_coverage.png",
+        "vocab_vs_thaana_coverage.svg",
+        "vocab_vs_thaana_coverage.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "training_curve",
+      "caption": "Validation chrF++ and BLEU across the run, split by direction. The two eval populations are drawn as separate series: epochs 1-3 were scored on the full 49,948-row validation split, the resumed leg on a 2,000-row subsample.",
+      "sources": [
+        "evaluation/training_curve.json"
+      ],
+      "files": [
+        "training_curve.png",
+        "training_curve.svg",
+        "training_curve.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "training_loss_lr",
+      "caption": "Training loss and learning rate over the logged portion of the run. The x axis starts at epoch 3.01: the earlier session's log was lost with the Colab runtime, so the region before it is missing data rather than flat data.",
+      "sources": [
+        "evaluation/training_curve.json"
+      ],
+      "files": [
+        "training_loss_lr.png",
+        "training_loss_lr.svg",
+        "training_loss_lr.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "scores_by_direction",
+      "caption": "Held-out test scores per direction. Both directions come from one set of weights and are scored on the same underlying sentence pairs, so the gap between them is a property of the directions, not of the test data.",
+      "sources": [
+        "evaluation/scores.json",
+        "evaluation/test_sample_stats.json"
+      ],
+      "files": [
+        "scores_by_direction.png",
+        "scores_by_direction.svg",
+        "scores_by_direction.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "heldout_vs_indomain",
+      "caption": "The generalisation gap. The nine news domains were held out whole, so the model has never seen their subject matter; the conversational rows are a row-level holdout from a register it does train on.",
+      "sources": [
+        "evaluation/scores.json",
+        "evaluation/scores_conversational.json"
+      ],
+      "files": [
+        "heldout_vs_indomain.png",
+        "heldout_vs_indomain.svg",
+        "heldout_vs_indomain.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "latency_distribution",
+      "caption": "Per-sentence generation time under Node.js with the ONNX Runtime wasm backend. This is not browser latency and is not comparable to it.",
+      "sources": [
+        "evaluation/predict_latency.json"
+      ],
+      "files": [
+        "latency_distribution.png",
+        "latency_distribution.svg",
+        "latency_distribution.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "budget_vs_actual",
+      "caption": "Every numeric gate in the specification against its measured value. Bars are drawn as a percentage of the gate so gates in different units share one axis.",
+      "sources": [
+        "evaluation/acceptance_status.json"
+      ],
+      "files": [
+        "budget_vs_actual.png",
+        "budget_vs_actual.svg",
+        "budget_vs_actual.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "acceptance_criteria",
+      "caption": "Acceptance criteria and open gaps with their present status. `unmeasured` is shown as its own category: a criterion with no artefact behind it is not the same claim as one that was measured and failed.",
+      "sources": [
+        "evaluation/acceptance_status.json"
+      ],
+      "files": [
+        "acceptance_criteria.png",
+        "acceptance_criteria.svg",
+        "acceptance_criteria.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "corpus_funnel",
+      "caption": "Why 575,892 source rows became 285,748 training pairs. Each bar is one documented drop rule from tools/build_translation_pairs.py.",
+      "sources": [
+        "data/parallel/corpus_stats.json"
+      ],
+      "files": [
+        "corpus_funnel.png",
+        "corpus_funnel.svg",
+        "corpus_funnel.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "corpus_domains_splits",
+      "caption": "Domain sizes and the split each was assigned to. Whole domains are held out rather than random rows, so a test score measures unseen subject matter.",
+      "sources": [
+        "data/parallel/corpus_stats.json"
+      ],
+      "files": [
+        "corpus_domains_splits.png",
+        "corpus_domains_splits.svg",
+        "corpus_domains_splits.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "roundtrip_three_figures",
+      "caption": "Thaana \u2192 Latin \u2192 Thaana measured three ways on two populations. Exact match is bounded below 100% by design: ten Arabic-derived letters share one romanization, so the mapping cannot be one-to-one.",
+      "sources": [
+        "evaluation/roundtrip_stats.json",
+        "evaluation/roundtrip_stats_corpus.json"
+      ],
+      "files": [
+        "roundtrip_three_figures.png",
+        "roundtrip_three_figures.svg",
+        "roundtrip_three_figures.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    },
+    {
+      "name": "roundtrip_failure_classes",
+      "caption": "What the round-trip failures actually are on real news text. The largest class is source Thaana that is not spelled canonically, which the transliterator normalises rather than reproduces.",
+      "sources": [
+        "evaluation/roundtrip_stats_corpus.json"
+      ],
+      "files": [
+        "roundtrip_failure_classes.png",
+        "roundtrip_failure_classes.svg",
+        "roundtrip_failure_classes.csv"
+      ],
+      "generatedBy": "tools/render_figures.py"
+    }
+  ]
+}

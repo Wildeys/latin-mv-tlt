@@ -356,7 +356,7 @@ translation pairs and should be adapted rather than discarded.
 | NFR-2 | **Offline after first load.** Once weights are cached (R-3.12), translation shall require no network. |
 | NFR-3 | **Privacy.** Input shall not leave the device unless the user explicitly uses the optional LLM chat. Feedback and settings stay in `localStorage`. |
 | NFR-4 | **Type safety.** Strict `tsc -b` shall pass as part of `npm run build`. |
-| NFR-5 | **Tested core.** Transliterator, dictionary, morphology, segmenter, pipeline, translation runner and IME shall each have unit tests; `npm test` shall pass. **9 test files, 70 tests** under v0.2 (4 frame test files deleted, 2 rewritten, 3 added). CI runs them; before v0.2 it did not. |
+| NFR-5 | **Tested core.** Transliterator, dictionary, morphology, segmenter, pipeline, translation runner and IME shall each have unit tests; `npm test` shall pass. **155 tests across 19 files** under v0.2 (4 frame test files deleted, 2 rewritten, the rest added). CI runs them; before v0.2 it did not. |
 | NFR-6 | **Tests do not touch models or network.** |
 | NFR-7 | **Determinism.** Transliteration, lookup, and morphology shall stay deterministic and side-effect free. Only the translation model is stochastic, and with greedy decoding (R-3.5) it should be reproducible too. |
 | NFR-8 | **Honest reporting.** Any metric not measured on this pipeline shall be labelled unmeasured. Results from other repos shall never be presented as this system's. |
@@ -458,7 +458,13 @@ numbers shall be reported as such rather than silently accepted.
 - **AC-8** A push to `main` deploys to GitHub Pages.
 - **AC-9** BLEU and chrF++ are measured on a domain-held-out test set of
   **≥500 sentence pairs per direction** (R-8.9) and published, together with a
-  ≥50-sentence spellability spot-check.
+  ≥50-sentence spellability spot-check. **Met**: 500 pairs per direction
+  from nine whole-domain holdouts — dv→en BLEU 3.63 / chrF++
+  22.70, en→dv BLEU 3.22 / chrF++
+  29.00 — plus a 50-output spellability
+  spot-check (2 flagged). Scored from the committed
+  `evaluation/test_sample.jsonl`, which is a stratified sample of the 40,592-row test
+  split rather than the whole split; `evaluation/scores.json` records that.
 - **AC-10** `public/models/dv-en-translate/**` is ≤80 MB, verified three ways:
   `tools/export_onnx.py` refuses to write over budget, `npm run check:models`
   blocks the deploy, and a devtools check on a cold cache confirms it — then a
@@ -511,16 +517,16 @@ force-push, and is **not** authorised by this document.
 | ID | Gap | Blocking |
 |---|---|---|
 | GAP-1 | ~~Round-trip transliteration accuracy unmeasured.~~ **Measured** over 15,201 dictionary entries: **99.28% Latin-stable** (gate ≥98%), 88.07% exact Thaana. `evaluation/roundtrip_stats.json`. Re-run on the news corpus once M-1 has produced it. | Closed for now |
-| GAP-2 | BLEU / chrF++ unmeasured; no domain-held-out test set yet. | AC-9 |
+| GAP-2 | ~~BLEU / chrF++ unmeasured.~~ **Measured** on a stratified sample of the domain-held-out test split, 500 pairs per direction: dv→en BLEU 3.63 / chrF++ 22.70, en→dv BLEU 3.22 / chrF++ 29.00. The in-domain conversational holdout is scored and reported separately (`evaluation/scores_conversational.json`). | Closed |
 | GAP-3 | No human ratings collected (meaning / fluency). | R-8.3 |
-| GAP-4 | The direct translation model does not exist yet — no corpus, no checkpoint, no export. | AC-2, AC-9, AC-10 |
+| GAP-4 | ~~The direct translation model does not exist yet.~~ **Closed** — corpus built, 4 epochs trained (best validation chrF++ 34.2833), vocabulary trimmed, exported to ONNX INT8 at 70.85 MB, and scored. | Closed |
 | GAP-5 | `public/models/` is 307 MB tracked, ~150 MB of it never loaded at runtime. | NFR-13, AC-10 |
 | GAP-6 | ~~README links to a missing `Context/` folder.~~ **Resolved** — `Context/` is present with `PROJECT.md`, `DATA.md`, `TRAINING.md`, `STATUS.md`, `QUALITY.md`. | Closed |
 | GAP-7 | README quickstart hardcodes a Windows path (`C:\Users\Moham\...`). | Documentation |
 | GAP-8 | README, About, and `benchmarks.json` still describe the v0.1 frame architecture. | R-6.6, AC-6 |
-| GAP-9 | Gold set holds 20 pairs per direction against a ≥500 requirement, and is not domain-held-out. | R-8.9, AC-9 |
+| GAP-9 | `evaluation/gold_sentences.json` still holds 20 pairs per direction. AC-9 is met instead from `evaluation/test_sample.jsonl` — 500 pairs per direction drawn from the nine whole-domain holdouts, plus 500 per direction from the conversational row-holdout, both committed and rescorable. The gold set itself remains undersized. | Open (AC-9 met by another route) |
 | GAP-10 | Corpus is Stage 1 only; no back-translation pipeline exists. | R-2.1b, R-2.10 |
-| GAP-11 | Tokenizer `<unk>` behaviour on Dhivehi Latin is unprofiled. | R-9.6, AC-12 |
+| GAP-11 | ~~Tokenizer `<unk>` behaviour on Dhivehi Latin is unprofiled.~~ **Measured**: 0.0% over 2,000 word types (`evaluation/tokenizer_profile.json`), and compared against four other tokenizers across Thaana, Latin and English (`evaluation/tokenizer_comparison.json`). | Closed |
 | GAP-12 | ~~Sentence segmentation is not script-aware.~~ **Closed** — `۔`, `؟` and line breaks are boundaries, terminator runs collapse, and letterless fragments are never emitted. `segmentSentences.test.ts`. | Closed |
 | GAP-13 | The ten Arabic-derived Thaana letters cannot round-trip exactly, and coda `h` (`ށް` vs `އް`) is resolved by frequency, not evidence. Both are declared, measured classes rather than defects. | Accepted; R-1.8 |
 | GAP-14 | `SUBJECT_LATIN`, `LOCATION_LATIN` and `PARTICLE_LATIN` in `closedClass.ts` lost their only consumers when `frames/` was deleted. Harmless, but dead. | Cleanup |

@@ -1,0 +1,9 @@
+group,direction,metric,value
+held-out domains,dv-en,bleu,3.6285
+conversational (in-domain),dv-en,bleu,12.9762
+held-out domains,en-dv,bleu,3.2226
+conversational (in-domain),en-dv,bleu,8.8122
+held-out domains,dv-en,chrf++,22.7034
+conversational (in-domain),dv-en,chrf++,28.0517
+held-out domains,en-dv,chrf++,28.9957
+conversational (in-domain),en-dv,chrf++,30.0306

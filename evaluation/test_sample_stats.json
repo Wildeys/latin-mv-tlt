@@ -1,0 +1,47 @@
+{
+  "generatedBy": "tools/sample_test_set.py",
+  "source": "data/parallel/test.jsonl",
+  "sourceSha256": "ddd8e25a626081a3de1d76631043e6d3e149c1e04e6ce95f4fdbe9bf67d96108",
+  "sourceRows": 40592,
+  "seed": 11,
+  "pairedDirections": true,
+  "minPerDomain": 20,
+  "rowsWritten": 2000,
+  "pairsDrawn": 1000,
+  "groups": {
+    "heldout": {
+      "pairsAvailable": 16890,
+      "pairsDrawn": 500,
+      "rowsWritten": 1000,
+      "perDirection": 500,
+      "byDomain": {
+        "education": 83,
+        "entertainment": 92,
+        "environment": 61,
+        "health": 104,
+        "law": 20,
+        "religion": 46,
+        "society": 21,
+        "technology": 50,
+        "tourism": 23
+      },
+      "holdout": "whole domains excluded from train (R-2.6 / R-8.8)"
+    },
+    "conversational": {
+      "pairsAvailable": 1491,
+      "pairsDrawn": 500,
+      "rowsWritten": 1000,
+      "perDirection": 500,
+      "byDomain": {
+        "conversational": 500
+      },
+      "holdout": "row-level holdout from a register the model trains on; in-domain, not comparable to the held-out domains"
+    }
+  },
+  "excluded": {
+    "incompletePairs": 384,
+    "duplicateInputs": 1723,
+    "why": "evaluate.py keys predictions by source string, so a repeated input would reuse one prediction against two references"
+  },
+  "sampleNote": "a 2,000-row stratified sample of the 40,592-row test split, not the full split; both directions are drawn from the same underlying pairs so the per-direction scores are directly comparable"
+}

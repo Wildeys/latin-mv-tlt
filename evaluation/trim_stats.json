@@ -1,0 +1,28 @@
+{
+  "generatedBy": "tools/trim_vocab.py, transcribed by tools/extract_notebook_metrics.py",
+  "tokenizerVocabBefore": 32100,
+  "embeddingRowsBefore": 32128,
+  "unreachableRowsDropped": 28,
+  "corpusRowsScanned": 570558,
+  "corpusTextsScanned": 1141116,
+  "distinctIdsUsed": 23404,
+  "keep": {
+    "corpus": 23404,
+    "specialTokens": 101,
+    "asciiSingles": 0,
+    "total": 23505,
+    "of": 32100,
+    "percent": 73.2
+  },
+  "vocabAfter": 23505,
+  "dModel": 512,
+  "savedMbPerGraph": 4.4,
+  "savedMbTotal": 8.8,
+  "verified": {
+    "tokenizationRowsResampled": 2000,
+    "textsIdentical": 4000,
+    "generationProbesIdentical": 8,
+    "specialIdsUnchanged": true
+  },
+  "note": "the untrimmed export measured 80.27 MB against an 80.00 MB budget; the embedding is roughly 42% of the shipped ONNX, so the trim is what put the model inside AC-10 without retraining."
+}

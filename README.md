@@ -69,15 +69,30 @@ pip install -r tools/requirements.txt
 python tools/build_translation_pairs.py     # M-1  build the parallel corpus
 python tools/measure_roundtrip.py           # M-2  transliterator round-trip, gates training
 python tools/profile_tokenizer.py           # M-2b tokenizer <unk> rate
-#    training and export run on Colab: colab_train_translate.ipynb
+#    training and export run on Colab: colab_train_translate_drive.ipynb
 node tools/smoke_translate.mjs "aharen maleah dhaanan"   # check an export before the browser
+
+# after a training run: rescue the metrics, score the model, draw the figures
+python tools/extract_notebook_metrics.py    # training curve out of the notebook's cell outputs
+python tools/compare_tokenizers.py          # what each tokenizer does to Thaana / Latin / English
+python tools/sample_test_set.py             # the committed scoring sample
+npm run predict -- --in evaluation/test_sample.jsonl --out evaluation/predictions.jsonl
+python tools/evaluate.py --test evaluation/test_sample.jsonl \
+    --predictions evaluation/predictions.jsonl --domain '!conversational'
+python tools/build_acceptance_status.py
+python tools/render_figures.py --strict     # needs matplotlib; see tools/requirements-figures.txt
 ```
+
+The figure set lands in [`docs/figures/`](docs/figures/) — PNG, SVG and a CSV of the exact
+plotted numbers per chart. See [`docs/figures/README.md`](docs/figures/README.md) for the full
+regeneration sequence, including how to shard the prediction run.
 
 The corpus builder and round-trip tool call the project's **own** TypeScript transliterator through
 `tools/transliterate.mjs`, so training-time and inference-time Latin are produced by the same code.
 That is also why they run locally rather than on Colab — they need Node.
 
 - Design: [`docs/DESIGN.md`](docs/DESIGN.md)
+- Figures: [`docs/figures/README.md`](docs/figures/README.md)
 - Dictionary: [`Context/DATA.md`](Context/DATA.md)
 - Training: [`Context/TRAINING.md`](Context/TRAINING.md)
 - Measured state: [`Context/STATUS.md`](Context/STATUS.md)

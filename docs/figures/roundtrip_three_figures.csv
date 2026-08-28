@@ -1,0 +1,7 @@
+population,metric,percent
+"dictionary (15,201 entries)",exactPercent,88.132
+"dictionary (15,201 entries)",exactFoldedPercent,88.961
+"dictionary (15,201 entries)",latinStablePercent,99.349
+"news corpus (5,000 sentences)",exactPercent,27.5
+"news corpus (5,000 sentences)",exactFoldedPercent,34.32
+"news corpus (5,000 sentences)",latinStablePercent,99.8

@@ -1,0 +1,37 @@
+{
+  "generatedBy": "tools/evaluate.py",
+  "testSet": "evaluation/test_sample.jsonl#test",
+  "isHeldOut": true,
+  "domainFilter": "conversational",
+  "rowsScored": 1000,
+  "sampleNote": "row-level holdout from a register the model trains on; in-domain, not comparable to scores.json",
+  "predictions": "evaluation/predictions.jsonl",
+  "metrics": {
+    "bleu": "sacrebleu BLEU",
+    "chrf++": "sacrebleu CHRF(word_order=2)"
+  },
+  "scores": {
+    "dv-en": {
+      "pairs": 500,
+      "bleu": 12.9762,
+      "chrf++": 28.0517,
+      "meetsSizeFloor": true
+    },
+    "en-dv": {
+      "pairs": 500,
+      "bleu": 8.8122,
+      "chrf++": 30.0306,
+      "meetsSizeFloor": true
+    }
+  },
+  "spellability": {
+    "sampled": 50,
+    "flagged": 0,
+    "examples": [],
+    "rule": "Male Latin has no w or x, and uses c only in the digraph ch"
+  },
+  "sizeFloor": 500,
+  "directionsBelowSizeFloor": [],
+  "reportable": true,
+  "note": "Scored per direction, never as one mixed average: both directions come from one set of weights and a mixed number can hide one that has collapsed. If directionsBelowSizeFloor is non-empty these scores are indicative only and must not be published as results (R-8.9, NFR-8)."
+}

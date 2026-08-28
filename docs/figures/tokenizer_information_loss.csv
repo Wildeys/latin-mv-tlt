@@ -1,0 +1,6 @@
+model,thaanaCharsLostToUnkPercent,vocabSize
+google/byt5-small,0.0,384
+google/mt5-small,0.009,250100
+facebook/nllb-200-distilled-600M,79.181,256204
+local:public/models/dv-en-translate,84.854,23505
+t5-small,84.854,32100

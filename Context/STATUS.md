@@ -4,9 +4,40 @@ Measured state of **latin-mv-tlt**, not a diary. Data numbers: [DATA.md](DATA.md
 
 ## Now
 
-**v0.2 migration: application code complete, model not yet trained.**
+**v0.2 migration: application code complete, model trained, exported and scored.**
 
-- `npx tsc -b` — clean. `npm test` — **103 passing across 12 files**. `npm run build` — succeeds.
+- `npx tsc -b` — clean. `npm test` — **155 passing across 19 files**. `npm run build` — succeeds.
+- **Model trained, exported and scored** (M-3, M-4, M-10 — closes GAP-2 and GAP-4).
+  `t5-small`, 4 epochs =
+  60,004 steps at batch 32, lr
+  0.0001 on a T4; the session dropped at epoch 3 and resumed from
+  `checkpoint-45003`. Best validation chrF++ **34.2833**,
+  checkpoint selected on chrF++ rather than the last epoch. Note when reading the curve: epochs 1–3
+  were scored on the full 49,948-row valid split and the resumed leg on a 2,000-row subsample, so
+  eval loss *rises* at epoch 3.03 because the population changed. Both are tagged in
+  `evaluation/training_curve.json`; never average them.
+- **Held-out test scores** (stratified 500-pair-per-direction sample of the 40,592-row test split, not the full split):
+  dv→en BLEU **3.63** / chrF++ **22.70**,
+  en→dv BLEU **3.22** / chrF++ **29.00**
+  (500 pairs per direction, nine whole-domain holdouts).
+  On the in-domain conversational row-holdout the same model scores dv→en
+  12.98 / 28.05 and en→dv
+  8.81 / 30.03 — reported separately, never averaged in.
+  Spellability: 2 of 50 sampled Latin
+  outputs flagged. `evaluation/scores.json`, `evaluation/scores_conversational.json`.
+- **Export within budget** (AC-10): **70.85 MB** of 80 MB. It only fits because
+  the vocabulary was trimmed 32,128 → 23,505 rows after the
+  untrimmed export measured 80.27 MB — ~8.8 MB across the two shipped graphs, with no
+  retraining. `evaluation/trim_stats.json`.
+- **Tokenizers compared across scripts** (closes the open half of GAP-11): on aligned sentences the
+  shipped tokenizer loses **84.9%** of Thaana source
+  characters to `<unk>` against **0.1%** for the same
+  sentences in Malé Latin — the measurement the romanize-first design rests on. NLLB-200, the one
+  compared model with an official `div_Thaa` direction, carries exactly **one** Thaana codepoint in a
+  256,204-entry vocabulary. mT5-small and ByT5-small do cover Thaana at 0.0% loss, at 1.2 GB of fp32
+  weights each. `evaluation/tokenizer_comparison.json`.
+- **Figures generated** from the artefacts above into `docs/figures/` (PNG + SVG + a CSV of the
+  plotted numbers per chart), by `tools/render_figures.py`. See `docs/figures/README.md`.
 - Architecture is now one direct Dhivehi Latin ↔ English seq2seq model selected by task prefix.
   `src/core/frames/` and `src/core/realization/` are deleted; `src/core/translate/` replaces them.
 - Runtime is `@huggingface/transformers` ^3.8.1. The ONNX Runtime WASM is vendored into
@@ -67,7 +98,7 @@ Each item is reproducible and was deliberately left. Full design context:
 ## Closed
 
 Each of these was in the Open list and now has a regression test. `npm test` is
-**103 passing across 12 files**; `npx tsc -b` and `npm run build` are clean.
+**155 passing across 19 files**; `npx tsc -b` and `npm run build` are clean.
 
 - `segmentSentences` junk fragments, decimals (`3.14 is pi.`) and abbreviations
   (`Dr. Smith went.`) — five boundary rules now, all tested.

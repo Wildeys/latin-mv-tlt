@@ -1,0 +1,5 @@
+direction,metric,value,pairs
+dv-en,bleu,3.6285,500
+en-dv,bleu,3.2226,500
+dv-en,chrf++,22.7034,500
+en-dv,chrf++,28.9957,500

@@ -45,6 +45,18 @@
       "source": "tools/profile_tokenizer.py → evaluation/tokenizer_profile.json"
     },
     {
+      "group": "TOKENIZER",
+      "name": "Thaana under the shipped tokenizer",
+      "value": "84.9% of Thaana source characters fall inside an <unk> token and are unrecoverable, against 0.1% for the same sentences in Malé Latin. This is why the pipeline romanizes before it models.",
+      "source": "tools/compare_tokenizers.py → evaluation/tokenizer_comparison.json"
+    },
+    {
+      "group": "TOKENIZER",
+      "name": "Tokenizers compared",
+      "value": "t5-small and the shipped trimmed tokenizer lose Thaana entirely; NLLB-200 (79.2% lost) carries exactly one Thaana codepoint in a 256,204-entry vocabulary; mT5-small and ByT5-small cover Thaana at 0.0% loss, at 1.2 GB and 1.2 GB of fp32 weights respectively — 17x the browser budget",
+      "source": "tools/compare_tokenizers.py → evaluation/tokenizer_comparison.json"
+    },
+    {
       "group": "CORPUS",
       "name": "Stage 1 real parallel pairs",
       "value": "285748 pairs kept from 575892 rows read; written twice (one row per direction) as 480018 train / 49948 valid / 40592 test",
@@ -65,43 +77,43 @@
     {
       "group": "TRANSLATION",
       "name": "BLEU — Dhivehi to English",
-      "value": "not measured — no model yet",
-      "source": "tools/evaluate.py"
+      "value": "3.63 on held-out domains (n=500); 12.98 on the in-domain conversational holdout (n=500)",
+      "source": "tools/evaluate.py → evaluation/scores.json, evaluation/scores_conversational.json"
     },
     {
       "group": "TRANSLATION",
       "name": "chrF++ — Dhivehi to English",
-      "value": "not measured — no model yet",
-      "source": "tools/evaluate.py"
+      "value": "22.70 on held-out domains (n=500); 28.05 in-domain",
+      "source": "tools/evaluate.py → evaluation/scores.json, evaluation/scores_conversational.json"
     },
     {
       "group": "TRANSLATION",
       "name": "BLEU — English to Dhivehi",
-      "value": "not measured — no model yet",
-      "source": "tools/evaluate.py"
+      "value": "3.22 on held-out domains (n=500); 8.81 in-domain",
+      "source": "tools/evaluate.py → evaluation/scores.json, evaluation/scores_conversational.json"
     },
     {
       "group": "TRANSLATION",
       "name": "chrF++ — English to Dhivehi",
-      "value": "not measured — no model yet",
-      "source": "tools/evaluate.py"
+      "value": "29.00 on held-out domains (n=500); 30.03 in-domain",
+      "source": "tools/evaluate.py → evaluation/scores.json, evaluation/scores_conversational.json"
     },
     {
       "group": "TRANSLATION",
       "name": "Held-out test set size",
-      "value": "20 pairs per direction — below R-8.9's 500 floor, and not domain-held-out",
-      "source": "evaluation/gold_sentences.json"
+      "value": "500 pairs per direction from the 9 whole-domain holdouts, plus 500 per direction from the conversational row-holdout — meets R-8.9's 500 floor. Drawn from data/parallel/test.jsonl, not evaluation/gold_sentences.json, which still holds only 20 per direction (GAP-9). a 2,000-row stratified sample of the 40,592-row test split, not the full split; both directions are drawn from the same underlying pairs so the per-direction scores are directly comparable",
+      "source": "tools/sample_test_set.py + tools/evaluate.py → evaluation/scores.json"
     },
     {
       "group": "TRANSLATION",
       "name": "Spellability spot-check",
-      "value": "not measured — no model yet",
-      "source": "tools/evaluate.py (R-8.6)"
+      "value": "2 of 50 sampled Latin outputs contain w, x or a non-digraph c on the held-out domains; 0 of 50 in-domain",
+      "source": "tools/evaluate.py → evaluation/scores.json, evaluation/scores_conversational.json"
     },
     {
       "group": "MODEL",
       "name": "Runtime download vs 80 MB budget",
-      "value": "not measured — no model yet",
+      "value": "70.85 MB of the 80 MB budget (88.6%) — encoder 31.10 MB + merged decoder 37.89 MB + tokenizer 1.86 MB",
       "source": "tools/export_onnx.py → export_stats.json; npm run check:models"
     },
     {
@@ -109,6 +121,18 @@
       "name": "ONNX Runtime WASM (separate from the model budget)",
       "value": "21.6 MB, served from public/ort/",
       "source": "scripts/copy-ort.mjs"
+    },
+    {
+      "group": "MODEL",
+      "name": "Vocabulary trim",
+      "value": "32,128 → 23,505 rows (73.2% kept, 23,404 ids seen across 1,141,116 corpus texts), saving ~8.8 MB across the two shipped graphs. The untrimmed export measured 80.27 MB against the 80 MB budget.",
+      "source": "tools/trim_vocab.py → evaluation/trim_stats.json"
+    },
+    {
+      "group": "MODEL",
+      "name": "Training run",
+      "value": "t5-small, 4 epochs (60,004 steps at batch 32, lr 0.0001) on a T4. Best validation chrF++ 34.2833; checkpoint selected on chrF++, not loss.",
+      "source": "tools/train_translate.py → evaluation/training_curve.json"
     },
     {
       "group": "HUMAN EVALUATION",

@@ -1,0 +1,8 @@
+model,sizeMB,kind,thaanaCharsLostPercent
+"ours, shipped
+(INT8 ONNX)",70.85,shipped,84.85
+t5-small,242.04,fp32 checkpoint,84.85
+ByT5-small,1198.63,fp32 checkpoint,0
+mT5-small,1200.79,fp32 checkpoint,0.01
+NLLB-200 distilled 600M,2460.46,fp32 checkpoint,79.18
+budget,80.0,AC-10,

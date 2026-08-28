@@ -1,0 +1,299 @@
+{
+  "generatedBy": "tools/build_acceptance_status.py",
+  "spec": "docs/REQUIREMENTS.md sections 7 and 9",
+  "statuses": [
+    "met",
+    "not-met",
+    "unmeasured",
+    "accepted",
+    "closed",
+    "open"
+  ],
+  "note": "`unmeasured` is not `not-met`. A criterion with no artefact behind it is reported as unmeasured and never as a pass or a failure (NFR-8).",
+  "budgets": [
+    {
+      "id": "AC-10",
+      "label": "Model download",
+      "unit": "MB",
+      "target": 80.0,
+      "measured": 70.85,
+      "higherIsBetter": false,
+      "source": "public/models/dv-en-translate/export_stats.json",
+      "status": "met"
+    },
+    {
+      "id": "AC-12",
+      "label": "Latin <unk> rate",
+      "unit": "%",
+      "target": 5.0,
+      "measured": 0.0,
+      "higherIsBetter": false,
+      "source": "evaluation/tokenizer_profile.json",
+      "status": "met"
+    },
+    {
+      "id": "AC-11",
+      "label": "Round-trip Latin stability",
+      "unit": "%",
+      "target": 98.0,
+      "measured": 99.349,
+      "higherIsBetter": true,
+      "source": "evaluation/roundtrip_stats.json",
+      "status": "met"
+    },
+    {
+      "id": "AC-9",
+      "label": "Scored pairs per direction",
+      "unit": "pairs",
+      "target": 500.0,
+      "measured": 500,
+      "higherIsBetter": true,
+      "source": "evaluation/scores.json",
+      "status": "met"
+    },
+    {
+      "id": "R-3.5",
+      "label": "Input sequence length (p99)",
+      "unit": "tokens",
+      "target": 128.0,
+      "measured": 124,
+      "higherIsBetter": false,
+      "source": "evaluation/tokenizer_profile.json",
+      "status": "met"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-1",
+      "text": "Build and tests pass with no network or model access",
+      "source": "npm test",
+      "evidence": "155 tests across 19 files; npx tsc -b clean",
+      "status": "met"
+    },
+    {
+      "id": "AC-2",
+      "text": "Translator produces output in both directions with the model present",
+      "source": "tools/smoke_translate.mjs",
+      "evidence": "verified by tools/smoke_translate.mjs in both directions",
+      "status": "met"
+    },
+    {
+      "id": "AC-3",
+      "text": "With the model removed the Translator reports unavailable and fabricates nothing",
+      "source": "src/core/translate/runner.ts",
+      "evidence": "four-state machine in src/core/translate/runner.ts; Translator.test.tsx",
+      "status": "met"
+    },
+    {
+      "id": "AC-4",
+      "text": "Breakdown shows source, Latin, glosses, model input and raw output",
+      "source": "src/ui/components/TraceView.tsx",
+      "evidence": "TraceView.test.tsx",
+      "status": "met"
+    },
+    {
+      "id": "AC-5",
+      "text": "Feedback ratings persist across reload and export as valid CSV",
+      "source": "src/ui/screens/Feedback.tsx",
+      "evidence": null,
+      "status": "met"
+    },
+    {
+      "id": "AC-6",
+      "text": "Benchmarks shows no unmeasured metric as if it were measured",
+      "source": "public/data/benchmarks.json",
+      "evidence": "translation rows now carry measured values; unmeasured rows say so",
+      "status": "met"
+    },
+    {
+      "id": "AC-7",
+      "text": "Chat sends English only to the LLM and fails clearly with no key",
+      "source": "src/core/chat/",
+      "evidence": null,
+      "status": "met"
+    },
+    {
+      "id": "AC-8",
+      "text": "A push to main deploys to GitHub Pages",
+      "source": ".github/workflows/deploy.yml",
+      "evidence": null,
+      "status": "met"
+    },
+    {
+      "id": "AC-9",
+      "text": "BLEU and chrF++ measured on >=500 held-out pairs per direction",
+      "source": "evaluation/scores.json",
+      "evidence": null,
+      "status": "met",
+      "measured": 500,
+      "target": 500.0,
+      "unit": "pairs"
+    },
+    {
+      "id": "AC-10",
+      "text": "Model directory within the 80 MB budget",
+      "source": "public/models/dv-en-translate/export_stats.json",
+      "evidence": null,
+      "status": "met",
+      "measured": 70.85,
+      "target": 80.0,
+      "unit": "MB"
+    },
+    {
+      "id": "AC-11",
+      "text": "Round-trip measured over >=1,000 samples, all three figures published",
+      "source": "evaluation/roundtrip_stats.json",
+      "evidence": null,
+      "status": "met",
+      "measured": 99.349,
+      "target": 98.0,
+      "unit": "%"
+    },
+    {
+      "id": "AC-12",
+      "text": "Tokenizer profile run and its <unk> rate published before training",
+      "source": "evaluation/tokenizer_profile.json",
+      "evidence": null,
+      "status": "met",
+      "measured": 0.0,
+      "target": 5.0,
+      "unit": "%"
+    },
+    {
+      "id": "AC-13",
+      "text": "Corpus stats record Stage 1/2 counts with the real/synthetic split",
+      "source": "data/parallel/corpus_stats.json",
+      "evidence": null,
+      "status": "met"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "GAP-1",
+      "text": "Round-trip transliteration accuracy unmeasured",
+      "status": "closed",
+      "evidence": "measured on both populations"
+    },
+    {
+      "id": "GAP-2",
+      "text": "BLEU / chrF++ unmeasured; no domain-held-out test set",
+      "status": "closed",
+      "evidence": "scored on a stratified sample of the held-out split"
+    },
+    {
+      "id": "GAP-3",
+      "text": "No human ratings collected (meaning / fluency)",
+      "status": "open",
+      "evidence": "no rating session has been run; nothing here estimates one"
+    },
+    {
+      "id": "GAP-4",
+      "text": "The translation model does not exist yet",
+      "status": "closed",
+      "evidence": "trained, trimmed, exported and scored"
+    },
+    {
+      "id": "GAP-5",
+      "text": "public/models/ carries ~150 MB never loaded at runtime",
+      "status": "open",
+      "evidence": "v0.1 models still present pending M-8b"
+    },
+    {
+      "id": "GAP-6",
+      "text": "README links to a missing Context/ folder",
+      "status": "closed",
+      "evidence": null
+    },
+    {
+      "id": "GAP-7",
+      "text": "dictionary_stats.json leaks a Windows build path",
+      "status": "open",
+      "evidence": "the Dictionary screen ignores the file; the file itself is unfixed"
+    },
+    {
+      "id": "GAP-8",
+      "text": "README, About and benchmarks.json describe the v0.1 architecture",
+      "status": "open",
+      "evidence": null
+    },
+    {
+      "id": "GAP-9",
+      "text": "Gold set holds 20 pairs per direction against a >=500 requirement",
+      "status": "open",
+      "evidence": "worked around by scoring the corpus test split instead of the gold set; evaluation/gold_sentences.json itself is still 20 per direction"
+    },
+    {
+      "id": "GAP-10",
+      "text": "Corpus is Stage 1 only; no back-translation pipeline",
+      "status": "open",
+      "evidence": null
+    },
+    {
+      "id": "GAP-11",
+      "text": "Tokenizer <unk> behaviour on Dhivehi Latin unprofiled",
+      "status": "closed",
+      "evidence": "0.0% over 2,000 word types"
+    },
+    {
+      "id": "GAP-12",
+      "text": "Sentence segmentation is not script-aware",
+      "status": "closed",
+      "evidence": null
+    },
+    {
+      "id": "GAP-13",
+      "text": "Ten Arabic-derived letters cannot round-trip exactly",
+      "status": "accepted",
+      "evidence": "a declared, measured class rather than a defect"
+    },
+    {
+      "id": "GAP-14",
+      "text": "Dead closed-class constants left by the frames deletion",
+      "status": "open",
+      "evidence": null
+    }
+  ],
+  "context": {
+    "corpusPairsKept": 285748,
+    "corpusRowsRead": 575892,
+    "roundtripDictionaryExact": 88.132,
+    "roundtripCorpusExact": 27.5,
+    "roundtripCorpusSamples": 5000,
+    "sampleNote": "a 2,000-row stratified sample of the 40,592-row test split, not the full split; both directions are drawn from the same underlying pairs so the per-direction scores are directly comparable",
+    "scoresHeldOut": {
+      "dv-en": {
+        "pairs": 500,
+        "bleu": 3.6285,
+        "chrf++": 22.7034,
+        "meetsSizeFloor": true
+      },
+      "en-dv": {
+        "pairs": 500,
+        "bleu": 3.2226,
+        "chrf++": 28.9957,
+        "meetsSizeFloor": true
+      }
+    },
+    "scoresConversational": {
+      "dv-en": {
+        "pairs": 500,
+        "bleu": 12.9762,
+        "chrf++": 28.0517,
+        "meetsSizeFloor": true
+      },
+      "en-dv": {
+        "pairs": 500,
+        "bleu": 8.8122,
+        "chrf++": 30.0306,
+        "meetsSizeFloor": true
+      }
+    },
+    "tokenizersCompared": [
+      "facebook/nllb-200-distilled-600M",
+      "google/byt5-small",
+      "google/mt5-small",
+      "local:public/models/dv-en-translate",
+      "t5-small"
+    ]
+  }
+}

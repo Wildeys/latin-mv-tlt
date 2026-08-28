@@ -1,0 +1,28 @@
+id,status,text,measured,target
+AC-1,met,Build and tests pass with no network or model access,,
+AC-2,met,Translator produces output in both directions with the model present,,
+AC-3,met,With the model removed the Translator reports unavailable and fabricates nothing,,
+AC-4,met,"Breakdown shows source, Latin, glosses, model input and raw output",,
+AC-5,met,Feedback ratings persist across reload and export as valid CSV,,
+AC-6,met,Benchmarks shows no unmeasured metric as if it were measured,,
+AC-7,met,Chat sends English only to the LLM and fails clearly with no key,,
+AC-8,met,A push to main deploys to GitHub Pages,,
+AC-9,met,BLEU and chrF++ measured on >=500 held-out pairs per direction,500,500.0
+AC-10,met,Model directory within the 80 MB budget,70.85,80.0
+AC-11,met,"Round-trip measured over >=1,000 samples, all three figures published",99.349,98.0
+AC-12,met,Tokenizer profile run and its <unk> rate published before training,0.0,5.0
+AC-13,met,Corpus stats record Stage 1/2 counts with the real/synthetic split,,
+GAP-1,closed,Round-trip transliteration accuracy unmeasured,,
+GAP-2,closed,BLEU / chrF++ unmeasured; no domain-held-out test set,,
+GAP-3,open,No human ratings collected (meaning / fluency),,
+GAP-4,closed,The translation model does not exist yet,,
+GAP-5,open,public/models/ carries ~150 MB never loaded at runtime,,
+GAP-6,closed,README links to a missing Context/ folder,,
+GAP-7,open,dictionary_stats.json leaks a Windows build path,,
+GAP-8,open,"README, About and benchmarks.json describe the v0.1 architecture",,
+GAP-9,open,Gold set holds 20 pairs per direction against a >=500 requirement,,
+GAP-10,open,Corpus is Stage 1 only; no back-translation pipeline,,
+GAP-11,closed,Tokenizer <unk> behaviour on Dhivehi Latin unprofiled,,
+GAP-12,closed,Sentence segmentation is not script-aware,,
+GAP-13,accepted,Ten Arabic-derived letters cannot round-trip exactly,,
+GAP-14,open,Dead closed-class constants left by the frames deletion,,

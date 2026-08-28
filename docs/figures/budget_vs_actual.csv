@@ -1,0 +1,6 @@
+id,label,measured,target,unit,percentOfGate,gateDirection,status
+AC-10,Model download,70.85,80.0,MB,88.56,≤,met
+AC-12,Latin <unk> rate,0.0,5.0,%,0.0,≤,met
+R-3.5,Input sequence length (p99),124,128.0,tokens,96.88,≤,met
+AC-11,Round-trip Latin stability,99.349,98.0,%,101.38,≥,met
+AC-9,Scored pairs per direction,500,500.0,pairs,100.0,≥,met

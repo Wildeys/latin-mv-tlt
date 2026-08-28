@@ -1,0 +1,6 @@
+model,vocabSize,thaanaCharsLostPercent,checkpointMB
+local:public/models/dv-en-translate,23505,84.854,
+t5-small,32100,84.854,242.0
+google/mt5-small,250100,0.009,1200.8
+google/byt5-small,384,0.0,1198.6
+facebook/nllb-200-distilled-600M,256204,79.181,2460.5

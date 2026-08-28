@@ -46,6 +46,20 @@ MIN_PAIRS_PER_DIRECTION = 500
 UNSPELLABLE = re.compile(r"[wx]|c(?!h)")
 
 
+def rel(path: Path) -> str:
+    """Repo-relative display path.
+
+    `Path.relative_to` compares strings, not locations, so it raises on any
+    relative argument - which meant --test and --out only ever worked with the
+    absolute defaults. Resolving first is what makes
+    `--test evaluation/test_sample.jsonl` behave like the documented usage.
+    """
+    try:
+        return str(path.resolve().relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
 def load_pairs(path: Path, args_block: str = "test") -> list[dict]:
     """Accept either the gold-set JSON or a corpus JSONL split."""
     if not path.exists():
@@ -106,6 +120,11 @@ def main() -> int:
                     help="only score rows whose provenance.domain equals this "
                          "(e.g. `conversational`); `--domain !conversational` inverts")
     ap.add_argument("--spot-check", type=int, default=50, help="R-8.6 spellability sample")
+    # Two runs that differ only by --domain produce two files that are otherwise
+    # byte-identical in structure and indistinguishable once opened, and nothing
+    # in the report says whether the set was the whole split or a sample of it.
+    # Both facts belong in the artefact, not in whoever ran it (NFR-8).
+    ap.add_argument("--note", default="", help="recorded as sampleNote in the report")
     ap.add_argument("--out", type=Path, default=OUT)
     args = ap.parse_args()
 
@@ -178,8 +197,11 @@ def main() -> int:
 
     report = {
         "generatedBy": "tools/evaluate.py",
-        "testSet": f"{args.test.relative_to(ROOT)}#{args.block}",
+        "testSet": f"{rel(args.test)}#{args.block}",
         "isHeldOut": args.block == "test",
+        "domainFilter": args.domain or None,
+        "rowsScored": len(pairs),
+        "sampleNote": args.note or None,
         "predictions": str(args.predictions),
         "metrics": {"bleu": "sacrebleu BLEU", "chrf++": "sacrebleu CHRF(word_order=2)"},
         "scores": scores,
@@ -207,7 +229,7 @@ def main() -> int:
         flag = "" if s["meetsSizeFloor"] else f"  <- only {s['pairs']} pairs"
         print(f"{direction}   BLEU {s['bleu']:>7.2f}   chrF++ {s['chrf++']:>7.2f}{flag}")
     print(f"\nspellability  {len(flagged)} of {len(sample)} sampled outputs flagged")
-    print(f"wrote {args.out.relative_to(ROOT)}")
+    print(f"wrote {rel(args.out)}")
 
     if undersized:
         print(

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 400" width="920" height="400"
+     font-family="DejaVu Sans, Helvetica, Arial, sans-serif" role="img"
+     aria-label="Latin core, Thaana edges: Thaana is transliterated to Male Latin by rule before any model sees it; one T5 model translates between Male Latin and English in both directions.">
+  <rect width="920" height="400" fill="#fcfcfb"/>
+
+  <text x="20" y="34" font-size="17" fill="#0b0b0b">Latin core, Thaana edges</text>
+  <text x="20" y="56" font-size="12" fill="#52514e">No NLP component — dictionary, morphology, T5 — ever receives a Thaana codepoint.</text>
+
+  <!-- the core region -->
+  <rect x="196" y="86" width="704" height="196" rx="14" fill="#2a78d6" fill-opacity="0.05"
+        stroke="#2a78d6" stroke-opacity="0.35" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="888" y="108" font-size="11" fill="#2a78d6" text-anchor="end">Latin core — ASCII only</text>
+
+  <!-- Thaana edge -->
+  <rect x="20" y="140" width="140" height="88" rx="10" fill="#ffffff" stroke="#eb6834" stroke-width="1.8"/>
+  <text x="90" y="170" font-size="13" fill="#0b0b0b" text-anchor="middle">Thaana</text>
+  <text x="90" y="189" font-size="10.5" fill="#52514e" text-anchor="middle">user-facing text</text>
+  <text x="90" y="206" font-size="10.5" fill="#52514e" text-anchor="middle">right-to-left</text>
+  <text x="90" y="252" font-size="10.5" fill="#eb6834" text-anchor="middle">Thaana edge</text>
+
+  <!-- transliterator: sits on the boundary -->
+  <rect x="196" y="140" width="150" height="88" rx="10" fill="#ffffff" stroke="#52514e" stroke-width="1.5"/>
+  <text x="271" y="168" font-size="12.5" fill="#0b0b0b" text-anchor="middle">transliterator</text>
+  <text x="271" y="186" font-size="10.5" fill="#52514e" text-anchor="middle">rule-based, reversible</text>
+  <text x="271" y="203" font-size="10.5" fill="#52514e" text-anchor="middle">99.35% Latin-stable</text>
+  <text x="271" y="219" font-size="10.5" fill="#52514e" text-anchor="middle">no model, no network</text>
+
+  <!-- Male Latin -->
+  <rect x="382" y="140" width="140" height="88" rx="10" fill="#ffffff" stroke="#2a78d6" stroke-width="1.8"/>
+  <text x="452" y="170" font-size="13" fill="#0b0b0b" text-anchor="middle">Malé Latin</text>
+  <text x="452" y="189" font-size="10.5" fill="#52514e" text-anchor="middle">the pivot representation</text>
+  <text x="452" y="206" font-size="10.5" fill="#52514e" text-anchor="middle">0.0% &lt;unk&gt; on t5-small</text>
+
+  <!-- model -->
+  <rect x="558" y="140" width="164" height="88" rx="10" fill="#ffffff" stroke="#1baf7a" stroke-width="1.8"/>
+  <text x="640" y="166" font-size="12.5" fill="#0b0b0b" text-anchor="middle">T5-small, ONNX INT8</text>
+  <text x="640" y="184" font-size="10.5" fill="#52514e" text-anchor="middle">one model, both directions</text>
+  <text x="640" y="201" font-size="10.5" fill="#52514e" text-anchor="middle">selected by task prefix</text>
+  <text x="640" y="218" font-size="10.5" fill="#52514e" text-anchor="middle">70.85 MB of an 80 MB budget</text>
+
+  <!-- English -->
+  <rect x="758" y="140" width="140" height="88" rx="10" fill="#ffffff" stroke="#2a78d6" stroke-width="1.8"/>
+  <text x="828" y="176" font-size="13" fill="#0b0b0b" text-anchor="middle">English</text>
+  <text x="828" y="195" font-size="10.5" fill="#52514e" text-anchor="middle">user-facing text</text>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#52514e"/>
+    </marker>
+  </defs>
+
+  <!-- bidirectional links -->
+  <line x1="162" y1="184" x2="192" y2="184" stroke="#52514e" stroke-width="1.6" marker-end="url(#a)" marker-start="url(#a)"/>
+  <line x1="348" y1="184" x2="378" y2="184" stroke="#52514e" stroke-width="1.6" marker-end="url(#a)" marker-start="url(#a)"/>
+  <line x1="524" y1="184" x2="554" y2="184" stroke="#52514e" stroke-width="1.6" marker-end="url(#a)" marker-start="url(#a)"/>
+  <line x1="724" y1="184" x2="754" y2="184" stroke="#52514e" stroke-width="1.6" marker-end="url(#a)" marker-start="url(#a)"/>
+
+  <!-- the boundary itself -->
+  <line x1="178" y1="96" x2="178" y2="272" stroke="#eb6834" stroke-width="1.6" stroke-dasharray="5 4"/>
+  <text x="178" y="290" font-size="10.5" fill="#eb6834" text-anchor="middle">script boundary — Thaana stops here</text>
+
+  <!-- prefixes -->
+  <text x="452" y="322" font-size="11" fill="#0b0b0b">Task prefixes pinned in one place (R-2.5), shared by the corpus builder and the runtime:</text>
+  <text x="452" y="342" font-size="11" fill="#1baf7a" font-family="DejaVu Sans Mono, monospace">"translate Dhivehi Latin to English: "</text>
+  <text x="452" y="360" font-size="11" fill="#1baf7a" font-family="DejaVu Sans Mono, monospace">"translate English to Dhivehi Latin: "</text>
+
+  <text x="20" y="322" font-size="11" fill="#52514e">Everything runs in the browser:</text>
+  <text x="20" y="340" font-size="11" fill="#52514e">no server, no third-party fetch</text>
+  <text x="20" y="358" font-size="11" fill="#52514e">on the translation path.</text>
+</svg>

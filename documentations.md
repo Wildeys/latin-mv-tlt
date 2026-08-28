@@ -169,9 +169,12 @@ State each as a bounded, declared limit with its evidence — not an apology.
 - **English glosses in the lexicon are Radheef definitions, not translation
   glosses** — 289 entries gloss as "a kind of plant", 254 as "a kind of fish".
   A ceiling on EN→DV lexical quality. `[Context/DATA.md]`
-- **Model not yet trained at time of writing** — Chapter 6 reports method and
-  pre-training gates in full, with translation metrics marked
-  `⟨fill after M-3/M-4⟩`. `[GAP-4]`
+- **Model trained, exported and scored.** t5-small,
+  4 epochs (60,004 steps), best validation
+  chrF++ 34.2833; exported to ONNX INT8 at
+  70.85 MB. Held-out test scores are in §6.4. The only figures
+  still marked `⟨fill after M-3/M-4⟩` are the **human ratings** in §6.5, which
+  require a rating session that has not been run. `[GAP-3]`
 
 ---
 
@@ -807,7 +810,19 @@ Two datasets, built by different scripts. Keep them apart in the write-up.
   to 3 epochs; loss near zero from step one → the model is copying, check input ≠
   target; one direction's chrF++ far below the other → never report the mixed
   average alone.
-- Status: `⟨fill after M-3 — training has not been run⟩`. `[GAP-4]`
+- Status: **run and recorded.** t5-small,
+  4 epochs = 60,004 steps at batch
+  32, lr 0.0001, fp16 on a T4.
+  The session dropped at epoch 3 and was resumed from `checkpoint-45003`
+  (step 45,003), which is why the metric series changes shape there:
+  the resumed leg evaluated every 500 steps against a
+  2,000-row validation subsample, where epochs 1–3 used the full 49,948-row split. The two
+  populations are tagged separately in `evaluation/training_curve.json` and drawn as separate
+  series in `docs/figures/training_curve.svg`; averaging them would be wrong.
+  Best validation chrF++ **34.2833**, and the checkpoint was selected on it rather
+  than on the last epoch — which is the diagnostic this section asks for, since eval loss is
+  *higher* at epoch 4 than at epoch 3 while chrF++ is higher too.
+  `[evaluation/training_curve.json, docs/figures/training_curve.svg, docs/figures/training_loss_lr.svg]`
 
 ## 5.6 ONNX Conversion and Quantization
 
@@ -830,8 +845,17 @@ Two datasets, built by different scripts. Keep them apart in the write-up.
   150 MB of 307 MB was dead. `[R-3.13 note]`
 - Contingency if the budget gate fails: vocabulary trimming first, and it must
   happen **before** retraining, not after.
-- Status: `⟨fill after M-4⟩` — measured export size, per-graph sizes, and
-  `export_stats.json`.
+- Status: **exported and within budget.** 70.85 MB of the
+  80 MB ceiling (88.6%):
+  encoder 31.10 MB, merged decoder
+  37.89 MB, tokenizer
+  1.86 MB, opset 14, QInt8. The contingency above was
+  exercised: the untrimmed export measured 80.27 MB, so `tools/trim_vocab.py` cut the
+  embedding from 32,128 to 23,505 rows
+  (73.2% kept, 23,404 ids actually seen across
+  1,141,116 corpus texts) for ~8.8 MB across the two shipped
+  graphs — **before** retraining, and without needing it.
+  `[export_stats.json, evaluation/trim_stats.json, docs/figures/model_size_vs_budget.svg]`
 
 ## 5.7 Translation Pipeline Implementation
 
@@ -965,7 +989,20 @@ Two datasets, built by different scripts. Keep them apart in the write-up.
   different case suffix scores as a whole-word miss.
 - State the tokenizer/`sacrebleu` configuration you used, so the number is
   reproducible.
-- Results: `⟨fill after M-3/M-4 — dv-en, en-dv, and conversational separately⟩`
+- Configuration: `sacrebleu.BLEU()` at defaults (13a tokenization), scored per direction
+  and per holdout kind, never as one mixed average. `[R-8.4]`
+- Results, stratified 500-pair-per-direction sample of the 40,592-row test split, not the full split:
+
+  | | dv→en | en→dv |
+  |---|---|---|
+  | held-out domains (n=500 per direction) | **3.63** | **3.22** |
+  | conversational, in-domain (n=500) | 12.98 | 8.81 |
+
+  The row gap is larger than the column gap, which is the finding: unseen subject
+  matter costs this model more than direction does. The conversational rows are a
+  *row*-level holdout from a register the model trains on, so they are not
+  comparable to the domain holdouts and are never averaged with them.
+  `[evaluation/scores.json, evaluation/scores_conversational.json, docs/figures/scores_by_direction.svg, docs/figures/heldout_vs_indomain.svg]`
 
 ### 6.4.2 chrF++
 
@@ -974,7 +1011,20 @@ Two datasets, built by different scripts. Keep them apart in the write-up.
   `sacrebleu.CHRF(word_order=2)`; bare `CHRF()` is chrF, a different metric.
 - chrF++ is also the **checkpoint-selection** metric, so the two uses should be
   distinguished in the text. `[R-8.5]`
-- Results: `⟨fill after M-3/M-4⟩`
+- Results, same test sample as §6.4.1:
+
+  | | dv→en | en→dv |
+  |---|---|---|
+  | held-out domains | **22.70** | **29.00** |
+  | conversational, in-domain | 28.05 | 30.03 |
+
+  Note the disagreement with BLEU worth discussing: on the held-out domains en→dv
+  scores *lower* than dv→en on BLEU (3.22 vs 3.63) but
+  *higher* on chrF++ (29.00 vs 22.70). That is the
+  morphology argument made concrete — a Dhivehi Latin output with the wrong case suffix is a
+  whole-word miss for BLEU and a near-miss for a character n-gram metric, which is exactly
+  why chrF++ is the primary metric here and the checkpoint-selection metric. `[R-8.5]`
+  `[evaluation/scores.json, evaluation/scores_conversational.json]`
 
 ### 6.4.3 Spellability spot-check (recommended subsection)
 
@@ -983,7 +1033,13 @@ Two datasets, built by different scripts. Keep them apart in the write-up.
   regardless of BLEU. `[R-8.6]`
 - This is the check no automatic metric performs, and it is Dhivehi-specific —
   worth arguing as a methodological contribution.
-- Results: `⟨fill after M-3/M-4⟩`
+- Results: **2 of 50** sampled en→dv
+  outputs on the held-out domains contain a `w`, `x`, or a `c` outside the digraph `ch`;
+  **0 of 50** on the in-domain sample.
+  The rule is mechanical (`Male Latin has no w or x, and uses c only in the digraph ch`) and the flagged strings are kept in
+  `evaluation/scores.json` so a reader can judge them rather than take the count on trust.
+  A low count here is a weaker claim than it looks: it says the model's Latin is *writable*,
+  not that it is *right*. `[R-8.6, evaluation/scores.json]`
 
 ## 6.5 Human Evaluation
 
@@ -1047,12 +1103,26 @@ Two datasets, built by different scripts. Keep them apart in the write-up.
 ## 6.7 Results
 
 - Structure the section as: pre-training gates (measured) → automatic metrics
-  (pending) → human ratings (pending) → acceptance matrix.
-- Tables to build: round-trip three-figure table across both populations;
-  tokenizer profile; corpus composition and split; per-direction BLEU/chrF++;
-  human means with standard deviations; the AC matrix.
-- Every pending cell keeps its `⟨fill after M-3/M-4⟩` marker until the checkpoint
-  exists. `[NFR-8]`
+  (measured) → human ratings (**still pending**) → acceptance matrix.
+- Every table this section asks for now has a rendered figure and a CSV of the exact
+  plotted numbers beside it in `docs/figures/`, generated by `tools/render_figures.py`
+  from the committed artefacts — so an appendix table and its figure cannot disagree:
+
+  | Table | Figure | CSV |
+  |---|---|---|
+  | round-trip, both populations | `roundtrip_three_figures` | `.csv` alongside |
+  | round-trip failure classes | `roundtrip_failure_classes` | ″ |
+  | tokenizer profile | `pieces_per_word` | ″ |
+  | cross-tokenizer script comparison | `tokenizer_tokens_per_sentence`, `tokenizer_information_loss`, `tokenizer_worked_example` | ″ |
+  | browser-footprint comparison | `model_size_vs_budget`, `vocab_vs_thaana_coverage` | ″ |
+  | corpus composition and split | `corpus_funnel`, `corpus_domains_splits` | ″ |
+  | training curve | `training_curve`, `training_loss_lr` | ″ |
+  | per-direction BLEU / chrF++ | `scores_by_direction`, `heldout_vs_indomain` | ″ |
+  | human means and SDs | — | **not collected** `[GAP-3]` |
+  | the AC matrix | `acceptance_criteria`, `budget_vs_actual` | ″ |
+
+- The only cells that keep their `⟨fill after M-3/M-4⟩` marker are the human ratings
+  in §6.5. Nothing here estimates them. `[NFR-8]`
 
 ## 6.8 Discussion
 

@@ -1,0 +1,12 @@
+rule,rowsDropped
+length_bounds,88111
+over_max_tokens,83158
+duplicate_exact,49752
+latin_in_dhivehi,23555
+non_ascii_latin,17492
+too_few_words,15382
+timestamp_fragment,9999
+length_ratio,1643
+duplicate_near,629
+thaana_in_english,409
+ui_string,14

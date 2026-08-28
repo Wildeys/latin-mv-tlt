@@ -1,0 +1,50 @@
+{
+  "generatedBy": "tools/evaluate.py",
+  "testSet": "evaluation/test_sample.jsonl#test",
+  "isHeldOut": true,
+  "domainFilter": "!conversational",
+  "rowsScored": 1000,
+  "sampleNote": "stratified 500-pair-per-direction sample of the 40,592-row test split, not the full split",
+  "predictions": "evaluation/predictions.jsonl",
+  "metrics": {
+    "bleu": "sacrebleu BLEU",
+    "chrf++": "sacrebleu CHRF(word_order=2)"
+  },
+  "scores": {
+    "dv-en": {
+      "pairs": 500,
+      "bleu": 3.6285,
+      "chrf++": 22.7034,
+      "meetsSizeFloor": true
+    },
+    "en-dv": {
+      "pairs": 500,
+      "bleu": 3.2226,
+      "chrf++": 28.9957,
+      "meetsSizeFloor": true
+    }
+  },
+  "spellability": {
+    "sampled": 50,
+    "flagged": 2,
+    "examples": [
+      {
+        "output": "aishwaryaaah dheefai oiy massalaeh neiy: irufaan",
+        "tokens": [
+          "aishwaryaaah"
+        ]
+      },
+      {
+        "output": "jaaz & koage 'instant hijab' dhehvaan 3 way",
+        "tokens": [
+          "way"
+        ]
+      }
+    ],
+    "rule": "Male Latin has no w or x, and uses c only in the digraph ch"
+  },
+  "sizeFloor": 500,
+  "directionsBelowSizeFloor": [],
+  "reportable": true,
+  "note": "Scored per direction, never as one mixed average: both directions come from one set of weights and a mixed number can hide one that has collapsed. If directionsBelowSizeFloor is non-empty these scores are indicative only and must not be published as results (R-8.9, NFR-8)."
+}

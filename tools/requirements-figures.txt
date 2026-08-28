@@ -1,0 +1,25 @@
+# Dependencies for the figure *rendering* stage only (tools/render_figures.py).
+#
+# The pipeline deliberately runs under two interpreters, for the same reason
+# tools/requirements.txt and tools/requirements-train.txt are separate files:
+#
+#   measure   .venv/bin/python        transformers, tokenizers, sacrebleu
+#   predict   node                    @huggingface/transformers + ONNX Runtime
+#   render    an interpreter with     matplotlib and nothing else
+#             matplotlib
+#
+# The measuring scripts write JSON; the renderer reads JSON. Nothing crosses, so
+# neither environment has to grow to satisfy the other — and on this machine
+# neither can, since there is no torch wheel for x86_64 macOS at the version
+# transformers wants.
+#
+# On the development machine /usr/local/bin/python3 already satisfies this and no
+# install is needed:
+#
+#     /usr/local/bin/python3 tools/render_figures.py
+#
+# Elsewhere:
+#
+#     python3 -m pip install -r tools/requirements-figures.txt
+
+matplotlib>=3.9

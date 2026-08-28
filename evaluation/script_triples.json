@@ -1,0 +1,2459 @@
+{
+  "generatedBy": "tools/build_script_triples.py",
+  "sources": [
+    "data/parallel/roundtrip_sample.jsonl",
+    "data/parallel/valid.jsonl",
+    "data/parallel/test.jsonl",
+    "data/parallel/train.jsonl"
+  ],
+  "sourceSha256": "068001f1d2801c1838a0b44fdbe09c3ec86380f30beef11bc8a9f65b8533a0ed",
+  "joinKey": "latin",
+  "sampleRows": 5000,
+  "matchedBeforeSampling": 5000,
+  "kept": 400,
+  "seed": 11,
+  "domains": {
+    "business": 14,
+    "conversational": 56,
+    "crime": 10,
+    "education": 6,
+    "entertainment": 5,
+    "environment": 1,
+    "health": 10,
+    "international": 8,
+    "local news": 10,
+    "politics": 32,
+    "religion": 4,
+    "source:alakxender/dhivehi-english-parallel": 228,
+    "sports": 15,
+    "technology": 1
+  },
+  "domainsBeforeSampling": {
+    "business": 168,
+    "conversational": 738,
+    "crime": 201,
+    "education": 65,
+    "entertainment": 86,
+    "environment": 44,
+    "health": 96,
+    "international": 100,
+    "law": 1,
+    "local news": 196,
+    "other": 7,
+    "politics": 383,
+    "religion": 27,
+    "source:alakxender/dhivehi-english-parallel": 2722,
+    "sports": 141,
+    "technology": 22,
+    "tourism": 3
+  },
+  "showcase": {
+    "thaana": "ދިވެހިރާއްޖޭގެ ރައީސުލްޖުމްހޫރިއްޔާ",
+    "latin": "dhivehiraahjeyge raeesuljumhooriyyaa",
+    "english": "the President of the Maldives",
+    "note": "hand-checked; not drawn from the corpus"
+  },
+  "triples": [
+    {
+      "thaana": "\"ބެޔަސް ނުބެޔަސް\" ސްކީމަށް ބޭރުގެ ފަރާތްތަކުން ވެސް ޝައުގުވެރިވޭ: މިނިސްޓަރު",
+      "latin": "\"beyas nubeyas\" skeemah beyruge faraaiythakun ves shauguverivey: ministaru",
+      "english": "Interest from foreign parties in the \"Buy or Not Buy\" scheme: Minister",
+      "domain": "business"
+    },
+    {
+      "thaana": "\"ބިގް ބޮސް 9\"ގެ ބައިވެރިން އިއުލާންކޮށްފި",
+      "latin": "\"big bos 9\"ge baiverin iulaankohfi",
+      "english": "Participants of \"Big Boss 9\" Announced",
+      "domain": "entertainment"
+    },
+    {
+      "thaana": "\"ވަރިހަމަ\" ދިވެހިރާއްޖެ އަށް މަރުހަބާ!",
+      "latin": "\"varihama\" dhivehiraajje ah maruhabaa!",
+      "english": "\"Whatever\" Welcome to Maldives!",
+      "domain": "entertainment"
+    },
+    {
+      "thaana": "(10 ޑިސެމްބަރުގެ ބަޔާގުޅޭ)",
+      "latin": "(10 disembaruge bayaagulhey)",
+      "english": "(Related to the 10 December section)",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "* އެއް މޭޒުމަތީ ސަމުސާ ވިނިގަރ",
+      "latin": "* eh meyzumathee samusaa vinigar",
+      "english": "* One tablespoon vinegar",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "- އޭޑީކޭ ކަންމަތީގައި ހެދޭ 85 އެނދާއި, ދަރިމައިވުމުގެ ކަންތަކުގެ ކްލިނިކް, އުމުރުން ދުވަސްވީ މީހުންނަަށް ހާއްސަ ސްކީރީންގް އާއި އެލްޑަރލީ ކެއަރގެ ހިދުމަތް.",
+      "latin": "- eydeekey kanmatheegai hedhey 85 en'dhaai, dharimaivumuge kanthakuge klinik, umurun dhuvasvee meehunnaah haassa skeereeng aai eldarlee kearge hidhumaiy.",
+      "english": "- 85 beds, maternity clinic, screening for the elderly and elderly care services.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "- އިހަވަންދޫ ކްލަބު ޕޯލްސްޓަރގެ ޖަރޒީ ނަމްބަރ 5, އައިޝަތު އަޒްހާރާ",
+      "latin": "- ihavandhoo klabu poalstarge jarzee nambar 5, aishathu azhaaraa",
+      "english": "- Ihavan Club Polestar jersey number 5, Aisha Azhara",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "- ރާއްޖޭގެ އެންމެ ހަލުވި ސްޕީޑްގެ (100 އެމް.ބީ.ޕީ.އެސްއާއި ހަމައަށް) ފައިބަރ ބްރޯޑްބޭންޑްގެ ހިދުމަތް ތައާރަފްކުރުން",
+      "latin": "- raajjeyge enme haluvi speedge (100 em.bee.pee.esaai hamaah) faibar broadbeyndge hidhumaiy thaaarafkurun",
+      "english": "- Introduction of the fastest speed (up to 100 Mbps) fiber broadband service in Sri Lanka",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "..ހަވީރު 05:30 ގެ ފަހުން ރިޕޯޓް ލިބޭނީ.. ސުލިޕްކޮޅު ދެމުން ނަރުސްކުއްޖާ ބުނެލިއެވެ.",
+      "latin": "..haveeru 05:30 ge fahun ripoat libeynee.. sulipkolhu dhemun naruskujjaa bunelieve.",
+      "english": "..the report will be available after 05:30 pm.. the nurse said handing me the slip.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "03:43 - 15 މާޗް 2014",
+      "latin": "03:43 - 15 maach 2014",
+      "english": "03:43 - 15 March",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "04:59 - 17 ޖުލައި 2012",
+      "latin": "04:59 - 17 julai 2012",
+      "english": "04:59 - 17 July",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "05:04 ޔާމިން ސައީދް",
+      "latin": "05:04 yaamin saeedh",
+      "english": "05:04 Yamin Saeed",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "05:31 - 3 ޖެނުއަރީ 2014",
+      "latin": "05:31 - 3 jenuaree 2014",
+      "english": "05:31 - 3 January",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "07 މެއި 2013 އާ ގުޅޭ",
+      "latin": "07 mei 2013 aa gulhey",
+      "english": "Retrieved 07 May",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "08:34 - 15 ޖުލައި 2012",
+      "latin": "08:34 - 15 julai 2012",
+      "english": "08:34 - 15 July",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "09:22 - 31 މޭ 2015",
+      "latin": "09:22 - 31 mey 2015",
+      "english": "09:22 - 31 May",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "1 އަހަރު 5 މަސް ކުރިން - 21 ފެބްރުއަރީ 2015",
+      "latin": "1 aharu 5 mas kurin - 21 februaree 2015",
+      "english": "1 year 5 months ago - 21 February",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "1 ނޮވެމްބަރ 2010 - 2010 ވަނަ އަހަރުގެ 3 ވަނަ ދައުރުގެ 11 ވަނަ ޖަލްސާ",
+      "latin": "1 novembar 2010 - 2010 vana aharuge 3 vana dhauruge 11 vana jalsaa",
+      "english": "1 November 2010 - 11th Session of the 3rd Term of",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "1 އޮރެންޖްގެ ދިޔަ",
+      "latin": "1 orenjge dhiya",
+      "english": "1 orange juice",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "1. އިންޒާލުކުރުމެއްނެތި ރަމަޟާންމަހު ދުވާލު ޖިމާޢުވުމަކީ ޙަރާމްކަމެއްނޫން ކަމަށް ހީކޮށް, އިސްލާމްދީނުގައި އެކަމުގެ ޙުކުމް ނޭނގޭ ޙާލު, ރަމަޟާން މަހު ދުވާލު ޖިމާޢުވުން.",
+      "latin": "1. inzaalukurumennethi ramadaanmahu dhuvaalu jimaauvumakee haraamkamennoon kamah heekoh, islaamdheenugai ekamuge hukum neyn'gey haalu, ramadaan mahu dhuvaalu jimaauvun.",
+      "english": "1. Having intercourse during the day in Ramadan without knowing the ruling on it in Islam, thinking that it is not haraam.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "1. މުސްލިމުންނާ މުޞީބާތެއް ކުރިމަތިވެފައި ނުވާނަމަ, ފަތިސް ނަމާދުގައި ޤުނޫތު ކިއުމާމެދު ޢިލްމުވެރިންގެ މެދުގައިވަނީ ޚިލާފު އުފެދިފަ އެވެ.",
+      "latin": "1. muslimunnaa museebaatheh kurimathivefai nuvaanama, fathis namaadhugai qunoothu kiumaamedhu ilmuveringe medhugaivanee khilaafu ufedhifa eve.",
+      "english": "1. There is disagreement among the scholars about reciting the Qunut in the morning prayer unless a disaster has befallen the Muslims.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "11:40 - 26 މާޗް 2014",
+      "latin": "11:40 - 26 maach 2014",
+      "english": "11:40 - 26 March",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "16 އޭޕްރީލް 2012 - 2012 ވަނަ އަހަރުގެ ފުރަތަމަ ދައުރުގެ 8 ވަނަ ޖަލްސާ",
+      "latin": "16 eypreel 2012 - 2012 vana aharuge furathama dhauruge 8 vana jalsaa",
+      "english": "16 April 2012 - 8th Session of the 2012 First Term",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "17:28 - 28 އޯގަސްޓް 2013",
+      "latin": "17:28 - 28 oagast 2013",
+      "english": "17:28 - 28 August",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "17:59 ގޮތްދޫކުރުމެއްނެތި, ޕީޕީއެމްގެ މައްސަލަ ގޯހުން ގޯހަށް",
+      "latin": "17:59 goiydhookurumennethi, peepeeemge massala goahun goahah",
+      "english": "17:59 Without compromise, the PPP case goes from bad to worse",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "18 ބިލިއަން ރުފިޔާއަށްވުރެ ބޮޑު ބަޖެޓަކާއިއެކު ބަޖެޓު ކޮމިޓީގެ މަސައްކަތް ނިންމާލައިފި",
+      "latin": "18 bilian rufiyaaahvure bodu bajetakaaieku bajetu komiteege masakkaiy ninmaalaifi",
+      "english": "The Budget Committee has completed its work with a budget of over Rs 18 billion",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "18 ޖުލައި \"ވަގުތު\" އިން ލަންދޫސްކޫލަށް ޕްރިންޓަރެއް ހަދިޔާ ކުރައްވައިފި.",
+      "latin": "18 julai \"vaguthu\" in landhooskoolah printareh hadhiyaa kurahvaifi.",
+      "english": "18 July \"Time\" donates a printer to Llandudno School.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "1855 ވަނަ އަހަރު ނިއުޔޯކުގައި ވިގް ޕާޓީއާއި އެންޓި ނެބްރަސްކާ ޕާޓީ ގުޅިގެން ރިޕަބްލިކަން ޕާޓީ އުފެއްދިއެވެ .",
+      "latin": "1855 vana aharu niuyoakugai vig paateeaai enti nebraskaa paatee gulhigen ripablikan paatee ufehdhieve .",
+      "english": "In 1855 , the Whig Party and the Anti-Nebraska Party merged in New York to form the Republican Party .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "1907 ވަނަ އަހަރުގެ ސީޒަނަށް ފަހު ސިންސިނާޓީގެ ކޯޗުކަމުގެ މަގާމަށް ޖޯން ގަންޒެލްގެ ފަހަތުން ހޮވޭނެ ކަމަށް ނެޑް ހެންލޮން އުންމީދު ކުރި ނަމަވެސް އޭގެ ބަދަލުގައި ރެޑްސް ދިޔައީ ހަގިންސްއާ އެކުގަ އެވެ .",
+      "latin": "1907 vana aharuge seezanah fahu sinsinaateege koachukamuge magaamah joan ganzelge fahathun hoveyne kamah ned henlon unmeedhu kuri namaves eyge badhalugai reds dhiyaee haginsaa ekuga eve .",
+      "english": "Although Ned Hanlon hoped to be selected as John Ganzel 's successor as Cincinnati 's manager after the 1907 season , the Reds instead went with Huggins .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "1945 ވަނަ އަހަރު އެމެރިކާ މީހުން ސަލްޒްބާގުގައި ބްލޫމް އަތުލައިގަނެ ލެންޑްސްބަރގް ޖަލަށް ގެންދިޔައެވެ .",
+      "latin": "1945 vana aharu emerikaa meehun salzbaagugai bloom athulaigane lendsbarg jalah gendhiyaeve .",
+      "english": "In 1945 , Blume was captured in Salzburg by the Americans and brought to Landsberg Prison .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "1950 ވަނަ އަހަރު މައުންޓް ރެއިނިއަރ ނޭޝަނަލް ޕާކް މެޓީރިއަލް އިން އެލެކްސް އެޗް ސްމިތު އާއި ޑޭނިއަލް އެލިއަޓް ސްޓަންޓްޒް ސިފަކުރެއްވި `` ކޯޓިނޭރިއަސް ރެއިންއެރެންސިސް '' އަކީ އެއް މާނައެއްގެ ލަފުޒެކެވެ .",
+      "latin": "1950 vana aharu maunt reiniar neyshanal paak meteerial in eleks ech smithu aai deynial eliat stantz sifakurehvi `` koatineyrias reinerensis '' akee eh maanaegge lafuzekeve .",
+      "english": "`` Cortinarius rainierensis '' , described by Alex H. Smith and Daniel Elliot Stuntz from the Mount Rainier National Park material in 1950 , is a synonym .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "1964 އިން 1968 އަށް އެސްއާރު 82 މިހާރު އޮތް ނިމުމުން އުތުރުން ބެއިޝޯރ ބޯލްވާޑް އިން ފާއިތުވެގެން ގޮސް ސެން ފްރެންސިސްކޯގެ އަލެމަނީ ބޯލްވާޑް އަށް ދިޔައެވެ ( ތިރީގައި ބަލާށެވެ ) .",
+      "latin": "1964 in 1968 ah esaaru 82 mihaaru oiy nimumun uthurun beishoar boalvaad in faaithuvegen gos sen frensiskoage alemanee boalvaad ah dhiyaeve ( thireegai balaasheve ) .",
+      "english": "From 1964 to 1968 , SR 82 continued past its current end north on Bayshore Boulevard to Alemany Boulevard in San Francisco ( see below ) .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "19:21 - 18 އޮކްޓޯބަރު 2013",
+      "latin": "19:21 - 18 oktoabaru 2013",
+      "english": "19:21 - 18 October",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "2 ޖޫން ލަންދޫގައި ވޮލީގެ ފޯރިގަދަވެފައި",
+      "latin": "2 joon landhoogai voleege foarigadhavefai",
+      "english": "2 June Volleyball excitement in Llandudno",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "2-3 ގެ ނަތީޖާއިން އާސެނަލް ބަލިވި އެ މެޗުގައި, ވެންގާ ފުރުސަތު ދިނީ އެޓީމުގެ ދެ ނަމްބަރު ކީޕަރު ޑޭވިޑް އޮސްޕީނާއަށެވެ. އެ މެޗުގައި އޮސްޕީނާ އަތުން ބައިކޮޅަށް ވެސް ގޯލެއް ވަދެފައިވެއެވެ.",
+      "latin": "2-3 ge natheejaain aasenal balivi e mechugai, vengaa furusathu dhinee eteemuge dhe nambaru keeparu deyvid ospeenaaasheve. e mechugai ospeenaa athun baikolhah ves goaleh vadhefaiveeve.",
+      "english": "In the 2-3 defeat, Wenger gave his number two goalkeeper David Ospina a chance. Ospina also scored a goal in the second half.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "2. ލިޔެވިފައިވާ, އުޞޫލުލްފިޤުހުގެ ފެށުން:",
+      "latin": "2. liyevifaivaa, usoolulfiquhuge feshun:",
+      "english": "2. Written, the beginning of the principle of fiqh:",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "2. ތިރީގައިވާ ފާލަމަށް ޒިޔާރަތްކޮށްލައްވާށެވެ!",
+      "latin": "2. thireegaivaa faalamah ziyaaraiykohlahvaasheve!",
+      "english": "2. Visit the bridge below!",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "2.ހަކުރު ގިނައިން ހުންނަ ތައްޔާރީ ޖޫސް, ކޯލާ ފަދަ ބުއިންތައް ބޭނުން ނުކުރުން.",
+      "latin": "2.hakuru ginain hunna thayyaaree joos, koalaa fadha buinthah beynun nukurun.",
+      "english": "2. Avoid sugary drinks such as juices and cola.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "2009 ވަނަ އަހަރު ހަނާ ހެޑްލަންޑް ވަނީ އޭނާގެ ކުއަރ އާއި އެކު `` ކޯރސްލަގޭޓް '' ގައި ލަވަ ރެކޯޑްކޮށްފައެވެ . އެލިޒަބަތު އެންޑްރިއަސަން މި ލަވަ ކިޔައިދިނީ 2009 ވަނަ އަހަރު ނެރުނު އަލްބަމް `` ސްޕެލްމަން '' ގައެވެ .",
+      "latin": "2009 vana aharu hanaa hedland vanee eynaage kuar aai eku `` koarslageyt '' gai lava rekoadkohfaeve . elizabathu endriasan mi lava kiyaidhinee 2009 vana aharu nerunu albam `` spelman '' gaeve .",
+      "english": "In 2009 , Hanna Hedlund recorded the song , with her choir at `` Körslaget '' . Elisabeth Andreassen performed the song on the 2009 album `` Spelleman '' .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "2017 ވަނަ އަހަރުގެ ފެބްރުއަރީ މަހު ޕްރޮޑްރައިވް އިން ވަނީ 2018 ވަނަ އަހަރުގެ އެފްއައިއޭ ވޯލްޑް ރެލީކްރޮސް ޗެމްޕިއަންޝިޕްގައި ގުއެރްލޭން ޗިޗެރިޓް އަށް ރެނޯލްޓް މެގަން އަށް ވަންނަކަން އިއުލާންކޮށްފަ އެވެ .",
+      "latin": "2017 vana aharuge februaree mahu prodraiv in vanee 2018 vana aharuge efaiey voald releekros chempianshipgai guerleyn chicherit ah renoalt megan ah vannakan iulaankohfa eve .",
+      "english": "In February 2017 , Prodrive announced that they will enter a Renault Mégane for Guerlain Chicherit at the 2018 FIA World Rallycross Championship .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "2019ގައި އައިއޯއައިޖީ ރާއްޖޭގައި ބާއްވަން ބިޑް ކުރަނީ",
+      "latin": "2019gai aioaaijee raajjeygai baahvan bid kuranee",
+      "english": "Sri Lanka is bidding to host the 2019 IOIG",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "20:29 އަލީ ރިފްޝާން",
+      "latin": "20:29 alee rifshaan",
+      "english": "20:29 Ali Rifshan",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "27 އޭޕްރީލް 2014",
+      "latin": "27 eypreel 2014",
+      "english": "27 April 2014",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "4)ކުޑަކުދީންގެ ނެޕީ ބަދަލްކުރުމަށްފަހުގައިވެސް ޚާއްޞަކޮށް އަތްދޮވުމާ, އަދި ބޭނުންކޮށްފައިވާ ނެޕީ ރައްކާތެރި ގޮތުގައި",
+      "latin": "4)kudakudheenge nepee badhalkurumahfahugaives khaassakoh aiydhovumaa, adhi beynunkohfaivaa nepee rakkaatheri gothugai",
+      "english": "4) Wash your hands, especially after changing your baby's diaper, and use used diapers safely",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "4. ބައެއް މީހުން އަންހެނާއާއި ގުޅުންހުރި އެންމެހާ ކަންކަން ބިނާ ކުރަނީ ސައްދުއް ޛަރީޢާގެ މައްޗަށެވެ.",
+      "latin": "4. baeh meehun anhenaaaai gulhunhuri enmehaa kankan binaa kuranee sahdhuh dhareeaage machchasheve.",
+      "english": "4. Some people base all matters relating to women on the righteous method.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "40 ވޮޓްގެ އަޕްޓައުން އަކީ ބޮޑު އަދި ޕްރޮފެޝަނަލް ތަނެއް ކަމަށާއި 80 ގެ އަހަރުތަކުގައި މިނިވަން އަންޑަގްރައުންޑް މިއުޒިކް ކުޅުންތެރިންނަށް ލިބުނު ބޮޑު ހުއްޓުމެއް ކަމަށް ވެސް ވިދާޅުވި އެވެ .",
+      "latin": "40 votge aptaun akee bodu adhi profeshanal thaneh kamashaai 80 ge aharuthakugai minivan andagraund miuzik kulhuntherinnah libunu bodu huttumeh kamah ves vidhaalhuvi eve .",
+      "english": "The 40 Watt Uptown was large and professional , and it was a major stop for independent underground music players in the 80s .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "5. މުޖުތަމަޢުގައި ކުޑަކުދިން ކުށްކުރުމަށް ދިމާވާ ސަބަބުތައް ދެނެގަތުމުގެ ދިރާސާތައްކުރުމާއި, އެ މަޢުލޫމާތު ކަމާބެހޭ މުއައްސަސާތަކާ ހިއްސާކުރުން.",
+      "latin": "5. mujuthamaugai kudakudhin kuhkurumah dhimaavaa sababuthah dhenegathumuge dhiraasaathakkurumaai, e mauloomaathu kamaabehey muassasaathakaa hissaakurun.",
+      "english": "5. Conduct research to identify the causes of child crime in the society and share the information with the relevant institutions.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "6 ދުވަސް 10 ގަޑި ކުރިން - 29 ޖުލައި 2016",
+      "latin": "6 dhuvas 10 gadi kurin - 29 julai 2016",
+      "english": "6 days 10 hours ago - 29 July",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "6 ދުވަސް 8 ގަޑި ކުރިން - 28 ޖުލައި 2016",
+      "latin": "6 dhuvas 8 gadi kurin - 28 julai 2016",
+      "english": "6 days 8 hours ago - 28 July",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "7 ޖޫން 2011 - 2011 ވަނަ އަހަރުގެ 2 ވަނަ ދައުރުގެ 3 ވަނަ ޖަލްސާ",
+      "latin": "7 joon 2011 - 2011 vana aharuge 2 vana dhauruge 3 vana jalsaa",
+      "english": "7 June 2011 - 2011 2nd Term 3rd Session",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "7. ޗުއްޓީ ދުވަސް ދުވަހު ކައިރި ރަށްރަށަށް ދަތުރު ދިޔުމުގެ އިންތިޒާމު ހަމަޖެއްސުން.",
+      "latin": "7. chuttee dhuvas dhuvahu kairi rahrashah dhathuru dhiyumuge inthizaamu hamajessun.",
+      "english": "7. Arrange trips to nearby villages on holidays.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "8 މަސް 21 ގަޑި ކުރިން - 03 ޑިސެމްބަރ 2015",
+      "latin": "8 mas 21 gadi kurin - 03 disembar 2015",
+      "english": "8 months 21 hours ago - 03 December",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "8. ހުސައިން ނިޔާޒް (ބޮކުރީ)",
+      "latin": "8. husain niyaaz (bokuree)",
+      "english": "8. Hussain Niaz (Bokri)",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "9. ގިނަގުނަވެގެންވާ ހެޔޮދަރުމަޔާއި ޘަވާބުލިބުން.",
+      "latin": "9. ginagunavegenvaa heyodharumayaai thavaabulibun.",
+      "english": "9. Abundant goodness and reward.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "[މަދަމާރޭ ކާނީ ބޭރުންނެވެ. ފިލްމެއްވެސް ބަލާލަން ދާންވާނެއެވެ. މިކަމާ ރަމްލާ ބުނަނީ ކީކޭހެއްޔެވެ?",
+      "latin": "[madhamaarey kaanee beyrunneve. filmehves balaalan dhaanvaaneeve. mikamaa ramlaa bunanee keekeyheyyeve?",
+      "english": "[Tomorrow night we will eat out. You should also go see a movie. What does Ramla say about this?",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "[މީރުފެން ތަޤްވާގެ ބައްސަވަމުން އެއައި މޫސުމް ހިލޭ",
+      "latin": "[meerufen thaqvaage bassavamun eai moosum hiley",
+      "english": "[Sweet water of piety distributing the season free",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "[ޔާދިރަކީ, ވަރަށް އަނގަމަޑު މީހެކެވެ. އޭނާއަކީ ވަރަށް ހިތްހެޔޮ މީހެކެވެ.]",
+      "latin": "[yaadhirakee, varah an'gamadu meehekeve. eynaaakee varah hiiyheyo meehekeve.]",
+      "english": "[Yadir is a very talkative person. He is a very kind man.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "`` ދަ ބްރޫޓް މޭން '' އަކީ 1996 ވަނަ އަހަރުގެ ފެބްރުއަރީ މަހުގެ 10 ވަނަ ދުވަހު ކޮމެޑީ ސެންޓްރަލް އިން ގެނެސްދިން ހަތް ވަނަ ސީޒަންގެ ދެވަނަ އެޕިސޯޑެވެ .",
+      "latin": "`` dha broot meyn '' akee 1996 vana aharuge februaree mahuge 10 vana dhuvahu komedee sentral in genesdhin haiy vana seezange dhevana episoadeve .",
+      "english": "`` The Brute Man '' was the second episode of the seventh season that was broadcast on February 10 , 1996 at Comedy Central .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "`` ޖޯނީގެ ތީމް '' ދިރިއުޅުން ފެށިގެން އައީ 1959 ވަނަ އަހަރު ޕޯލް އަންކާ ރެކޯޑްކޮށްފައިވާ އަދި ޓޫޓީގެ ޓްރަމްޕެޓްސް އިން ތައްޔާރުކުރި ޕޮޕް އިންސްޓްރޫމެންޓަލް `` ޓޫޓް ސްވީޓް '' ގެ ނަމުންނެވެ .",
+      "latin": "`` joaneege theem '' dhiriulhun feshigen aee 1959 vana aharu poal ankaa rekoadkohfaivaa adhi tooteege trampets in thayyaarukuri pop instroomental `` toot sveet '' ge namunneve .",
+      "english": "`` Johnny 's Theme '' began life as `` Toot Sweet '' , a pop instrumental recorded in 1959 by Paul Anka and composed by Tutti 's Trumpets .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "`` ކެޕްޓަން '' 1739 ވަނަ އަހަރު ފަޅައިގެން ގޮސް އެންމެ ފަހުން 1762 ވަނަ އަހަރު ރޯލްއަޕް ވެގެން ދިޔައެވެ .",
+      "latin": "`` keptan '' 1739 vana aharu falhaigen gos enme fahun 1762 vana aharu roalap vegen dhiyaeve .",
+      "english": "`` Captain '' was broken in 1739 , and eventually rolled up in 1762 .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "`` ނިއުޔޯކް ޓައިމްސް '' ރިޕޯޓްކޮށްފައިވާ ގޮތުގައި : '' މެޗުގެ ފުރަތަމަ ހާފުގައި ކްލާކް އަށް އާ ޕިޗަރެއް ކަމަށްވާ ވިލިއަމްސް , '96 ގެ ކުޅުންތެރިއަކު ލިބުނެވެ `` .",
+      "latin": "`` niuyoak taims '' ripoatkohfaivaa gothugai : '' mechuge furathama haafugai klaak ah aa pichareh kamahvaa viliams , '96 ge kulhuntheriaku libuneve `` .",
+      "english": "`` The New York Times '' reported : '' Clarke had a new pitcher , Williams , '96 during the first half of the game `` .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "`` ޕޯސްޓް މެޓަލޯސީން '' އަށް ނިސްބަތްވަނީ މެޓަލޯސީން ނޫން އެއްގޮތް ކެޓަލައިސްޓްތަކުގެ ކްލާހަކަށެވެ .",
+      "latin": "`` poast metaloaseen '' ah nisbaiyvanee metaloaseen noon eggoiy ketalaistthakuge klaahakasheve .",
+      "english": "`` Post-metallocene '' refers to a class of homogeneous catalysts that are not metallocenes .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "`` ސްކެޗް '' އަކީ ބެސިސްޓް އާޓޫރޯ ގާސިއާ އާއި ބެރުވެރިޔާ ނީނާ ސޯޓޯ އާއި އެކު ރެކޯޑްކުރި އެންމެ ފަހު އަލްބަމެވެ .",
+      "latin": "`` skech '' akee besist aatooroa gaasiaa aai beruveriyaa neenaa soatoa aai eku rekoadkuri enme fahu albameve .",
+      "english": "`` Sketch '' was the last album recorded with bassist Arturo Garcia and drummer Nina Souto .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އާދޭ އެތެރެއަށް... ހައިރާންވެފައި ހުރެ މޫނިސާ ބުނެލިއެވެ. ޝަނޫޒާ ފާޑަކަށް ބަލަން ހުއްޓާ އޭނާގެ ފޯނު ރިންގުވާން ފެށިއެވެ. އެހެންވެ އަނެއްކާ ވެސް މޫނިސާ ގާތު ދަނީއޭ ބުނެ ހިނގައްޖެއެވެ.",
+      "latin": "aadhey ethereah... hairaanvefai hure moonisaa bunelieve. shanoozaa faadakah balan huttaa eynaage foanu ringuvaan feshieve. ehenve anekkaa ves moonisaa gaathu dhaneeey bune hin'gajjeeve.",
+      "english": "Come in... Munisa said in surprise. Shanuza looked at him when his phone started ringing. So he told Munisa again and left.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އާއި 10 އާއި ދެމެދުގެ ރެންޑަމް އިންޓިޖަރެއް އުފެއްދުން. 7",
+      "latin": "aai 10 aai dhemedhuge rendam intijareh ufehdhun. 7",
+      "english": "Generate a random integer between 5 and 10. 7",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އާލިއާ ބަޓް --",
+      "latin": "aaliaa bat --",
+      "english": "Alia Bhatt --",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އާނ.. ދެން މަންމަ އެއްޗެހިވެސް ގަންނަންވީނު.. މަންމަގެ ފިރެހެންދަރިފުޅު މަންމަގެ ގާތަށް އައީ ވިއްޔަ! ދެން ބުނެބަލަ ދަރިފުޅު ކޯއްޗެއް ކާނީ ?",
+      "latin": "aan.. dhen manma echchehives gannanveenu.. manmage firehendharifulhu manmage gaathah aee viyya! dhen bunebala dharifulhu koachcheh kaanee ?",
+      "english": "Yeah.. Then I should have bought things too.. My son came to my mother! Then tell me what you will eat?",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އާސަންދައިގެ ޑިޕާޓްމަންޓެއް އުވައިލާތީ މުވައްޒަފުންގެ ކަންބޮޑުވުންތަކާއެކު ޕެޓިޝަނެއް ހުށަހަޅައިފި",
+      "latin": "aasandhaige dipaatmanteh uvailaathee muvazzafunge kanboduvunthakaaeku petishaneh hushahalhaifi",
+      "english": "Petition submitted with employee concerns over the dissolution of an Aasandha department",
+      "domain": "business"
+    },
+    {
+      "thaana": "އާސެނަލްއިން ޗެކްއަށް ފާރަލަމުންދާތާ ދުވަސްތަކެއް ވެފައިވާއިރު, ޔުނައިޓެޑްގެ ކީޕަރު ޑޭވިޑް ޑެހެޔާ މި ސީޒަނަށްފަހު އެޓީމު ދޫކޮށްލައިފިނަމަ, ޔުނައިޓެޑުން ޗެކް ހޯދުމަކީ އެކަށީގެންވާ ކަމެކެވެ.",
+      "latin": "aasenalin chekah faaralamundhaathaa dhuvasthakeh vefaivaairu, yunaitedge keeparu deyvid deheyaa mi seezanahfahu eteemu dhookohlaifinama, yunaitedun chek hoadhumakee ekasheegenvaa kamekeve.",
+      "english": "Arsenal have been linked with a move for Czech, with United likely to sign him if David De Gea leaves the club after the season.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އާޓިފިޝަލް އިންޓެލިޖެންސްއާ ބެހޭ ބްލޮގް ޕޯސްޓަކަށް މައުޟޫއެއް އުފެއްދުން. \"އެކްސްޕްލޯރިންގ ދަ ޕޮޓެންޝަލް އިމްޕެކްޓް އޮފް އާޓިފިޝަލް އިންޓެލިޖެންސް އޮން ސޮސައިޓީ އެންޑް އެތިކްސް\"",
+      "latin": "aatifishal intelijensaa behey blog poastakah maudooeh ufehdhun. \"eksploaring dha potenshal impekt of aatifishal intelijens on sosaitee end ethiks\"",
+      "english": "Generate a topic for a blog post about artificial intelligence. \"Exploring the Potential Impact of Artificial Intelligence on Society and Ethics\"",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އަބީ ކީއްކުރަން މިތާ? ބުމަ ކައިރިކޮށްލަމުން ޖަންނަތު އަހާލި އެވެ.",
+      "latin": "abee keekkuran mithaa? buma kairikohlamun jannathu ahaali eve.",
+      "english": "What are you doing here, Abby? Jannath asked, raising her eyebrows.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އަބީ ކީއްތަ ތި ކުރަނީ? އަހްޔާންއަށް އުނދަގޫ ވެގެން އަހާލި އެވެ.",
+      "latin": "abee keeththa thi kuranee? ahyaanah un'dhagoo vegen ahaali eve.",
+      "english": "What are you doing, Abby? Ahyan asked in distress.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އަބުރު ރައްކާތެރިކުރުމާއި ޚިޔާލުފާޅުކުރުމުގެ މިނިވަންކަމުގެ ބިލަށް ބަހުސް ކުރުން މާދަމާ ބާއްވާ ރައްޔިތުންގެ މަޖިލީހުގެ ޖަލްސާއަށް ވަނީ އެޖެންޑާ ކޮށްފަ އެވެ.",
+      "latin": "aburu rakkaatherikurumaai khiyaalufaalhukurumuge minivankamuge bilah bahus kurun maadhamaa baahvaa rayyithunge majileehuge jalsaaah vanee ejendaa kohfa eve.",
+      "english": "The debate on the Protection of Defamation and Freedom of Expression Bill is on the agenda for tomorrow's session of the Parliament.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އައްޑޫ ޝަރީފު ޖުމްހޫރީ ޕާޓީ އަށް ސޮއިކޮށްފި",
+      "latin": "addoo shareefu jumhooree paatee ah soikohfi",
+      "english": "Addu Shareef signs with Jumhooree Party",
+      "domain": "politics"
+    },
+    {
+      "thaana": "އައްޑޫ ސިޓީ ހިތަދޫ އަހިވަށްމާގޭގައި އަލިފާން ރޯވެ ލިބުނު ގެއްލުމުގެ ތެރެއިން -- ފޮޓޯ: އެމްއެންޑީއެފް",
+      "latin": "addoo sitee hithadhoo ahivahmaageygai alifaan roave libunu gellumuge therein -- fotoa: emendeeef",
+      "english": "Fire in Hithadu, Andhra Pradesh -- Photo: MNDF",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އައްޑޫގައި އަރިދަފުސް ރޯގާއާއި އިންފްލުއެންޒާ ފެތުރުން އިތުރުވެއްޖެ",
+      "latin": "addoogai aridhafus roagaaaai influenzaa fethurun ithuruvejje",
+      "english": "Cold and Influenza Spread Increases in Addu",
+      "domain": "health"
+    },
+    {
+      "thaana": "އައްޑޫގައި ބާއްވާ އެންމެ ފޯރިގަދަ ފުޓްސަލް މުބާރާތް ބެޓީ ކްރޮކާ ގޯދިއްޔާ ފުޓްސަލް 2016 ގެ ޗެމްޕިއަންކަން މި އަހަރު ވެސް ފޭދޫ ހަބޭސް އިން...",
+      "latin": "addoogai baahvaa enme foarigadha futsal mubaaraaiy betee krokaa goadhiyyaa futsal 2016 ge chempiankan mi aharu ves feydhoo habeys in...",
+      "english": "The Betty Crocker Godwin Football 2016 is the most exciting football tournament in Andhra Pradesh.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އަދި ޢާއިޝަތުގެފާނުގެ ބަސްފުޅެއްގައި ވެސް މިދެންނެވި އިމާމުން ހިފަހައްޓަވައެވެ. އެބަސްފުޅުގައި ވެއެވެ.",
+      "latin": "adhi aaishathugefaanuge basfulheggai ves midhennevi imaamun hifahattavaeve. ebasfulhugai veeve.",
+      "english": "These priests also hold to a saying of Aisha. The Word says:",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އަދި އެ ހުރިހާ މީހުންނަކީވެސް ދިވެހިން ކަމަށް ފުލުހުން ބުނެ އެވެ.",
+      "latin": "adhi e hurihaa meehunnakeeves dhivehin kamah fuluhun bune eve.",
+      "english": "All of them are Dhanvantaris, police said.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އަދި އޭނާ އަކީ މިދިޔަ މަހު ނިއުގެ އާ ބޯޑު އިންތިހާބު ކުރުމުގަ އާއި އަންނަ ސީޒަނަށް ޓީމު އެކުލަވާލުމުގެ ކަންތައްތަކުގައި ވެސް އެންމެ އިސްކޮށް ހަރަކާތްތެރިވި އެއް ބޭފުޅާ އެވެ.",
+      "latin": "adhi eynaa akee midhiya mahu niuge aa boadu inthihaabu kurumuga aai anna seezanah teemu ekulavaalumuge kanthaththakugai ves enme iskoh harakaaiytherivi eh beyfulhaa eve.",
+      "english": "He was also involved in the election of the new board last month and the formation of the team for next season.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އަދި މިއީ މާގިނަ އިރެއް ވެސް ނަގާ ކަމެއް ނޫން. ނަގާނީ ގާތްގަނޑަކަށް ފަސް ވަރަކަށް މިނެޓު ނަމަވެސް މިކަމުގައި އެހެނިހެން ގަވާއިދު ތަކެއް ހުރުމުގެ ސަބަބުން މިކަން ކުރެވޭކަށް ނެތް ޑރ. ސުދީރް ބުނެފައިވެއެވެ.",
+      "latin": "adhi miee maagina ireh ves nagaa kameh noon. nagaanee gaaiygan'dakah fas varakah minetu namaves mikamugai ehenihen gavaaidhu thakeh hurumuge sababun mikan kureveykah neiy dr. sudheer bunefaiveeve.",
+      "english": "And this doesn't take long. It will take about five minutes, but there are other rules. Sudeer said.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އަހަންނާއި އެކު ހިނގާ... ވައިގެތެރެއަށް ފުންނޭވާއެއް ދޫކޮށްލުމަށްފަހު ފިޔާޒް އައިސް އަހަރެންގެ ކޮނޑުގައި އަތް ބާއްވާ ލަމުން ބުންޏެވެ.",
+      "latin": "ahannaai eku hin'gaa... vaigethereah funneyvaaeh dhookohlumahfahu fiyaaz ais aharenge kon'dugai aiy baahvaa lamun bungneve.",
+      "english": "Come with me... After taking a deep breath, Fiaz came and put his hand on my shoulder.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އަހަރެމެން މިއައީ ހަނީމޫންއަށް.. އަހަރެން ބޭނުމެއް ނޫން މިނޫން އެހެންތާކަށް ދާކަށެއް...",
+      "latin": "aharemen miaee haneemoonah.. aharen beynumeh noon minoon ehenthaakah dhaakasheh...",
+      "english": "We're on our honeymoon.. I don't want to go anywhere else.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އަހަރެން އަޅައެއް ނުލަން.",
+      "latin": "aharen alhaeh nulan.",
+      "english": "I don't care.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އަހަރެން ނުބުނަންތަ ޢިޒްވާ އަހަރެން ގެންދާނަމެކޭ, މިދުވަސް އަންނާނެކަން ޝަދަފަށް ނޭނގިއެއް ނޯންނާނެ ގޭގެ އެންމެ ތިރީ ސިޑިދޮށުގައި މަޑުކޮށްލައިގެން ހުރި ޝަދަފު ފެނުމާއެކު ހާމިޒު ބުންޏެވެ.",
+      "latin": "aharen nubunantha izvaa aharen gendhaanamekey, midhuvas annaanekan shadhafah neyn'gieh noannaane geyge enme thiree sididhoshugai madukohlaigen huri shadhafu fenumaaeku haamizu bungneve.",
+      "english": "I didn't tell you I'd take you, this day would come Shadaf wouldn't know it when he saw Shadaf waiting at the bottom of the stairs.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އަޙްމަދު ދާއޫދު / ލަންދޫ 25 ނޮވެމްބަރ 2015 ޚިޔާލެއް ދެއްވާ",
+      "latin": "ahmadhu dhaaoodhu / landhoo 25 novembar 2015 khiyaaleh dhehvaa",
+      "english": "Ahmed David / Lund 25 November 2015 Please comment",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އަޙްމަދު ދާއޫދު / ލަންދޫ 27 މެއި 2014 ޚިޔާލެއް ދެއްވާ",
+      "latin": "ahmadhu dhaaoodhu / landhoo 27 mei 2014 khiyaaleh dhehvaa",
+      "english": "Ahmed David / Lund 27 May 2014 Leave a comment",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އަހުމަދު ޒާހިދު ހަސަން 6 މަސް 2 ހަފްތާ ކުރިން.",
+      "latin": "ahumadhu zaahidhu hasan 6 mas 2 hafthaa kurin.",
+      "english": "Ahmed Zahid Hassan 6 months 2 weeks ago.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އަލް ޚުބާ އަކީ ސައުދީ އަރަބިއްޔާގެ ހުޅަނގު ދެކުނު ޕްރޮވިންސް ޖިޒާންގައި އޮންނަ ރަށެކެވެ .",
+      "latin": "al khubaa akee saudhee arabiyyaage hulhan'gu dhekunu provins jizaangai onna rashekeve .",
+      "english": "Al Khubah is a village in Saudi Arabia , in the south-western province of Jizan .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އަޅުގަނޑަށް ފެންނަނީ މާދަން ތިކަން ބަލަން. މިއީ ކޮންފަދަ ބިރުވެރި ކަމެއްކަން އެނގެނީއެއްވެސް ނޫން. އަމިއްލައަށް އަޅުގަނޑުމެން އެކަމުގެ ތެރެއަށް ފުންމާލުން ރަގަޅުހެން ހިޔެއްނުވޭ..\"\" ކާކަސް ބުނެލިއެވެ.",
+      "latin": "alhugan'dah fennanee maadhan thikan balan. miee konfadha biruveri kamekkan en'geneeehves noon. amillaah alhugan'dumen ekamuge thereah funmaalun ragalhuhen hiyennuvey..\"\" kaakas bunelieve.",
+      "english": "I think I'll see you tomorrow. I don't even know what a terrible thing this is. Personally, we don't think it's right to jump into it.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އަޅުގަނޑަށް ހީވާ ގޮތުގައި މި ފޮޓޯގައި ވަނީ ފުޓިން އާ ދެކޮޅަށް މުޒާހަރާކުރި 'ޓޮޕްލެސް' ގުރޫޕުގެ ފޮޓޮއެއްހެން",
+      "latin": "alhugan'dah heevaa gothugai mi fotoagai vanee futin aa dhekolhah muzaaharaakuri 'toples' guroopuge fotoehhen",
+      "english": "I think this photo is of the 'topless' group protesting against footing",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އަޅުގަނޑު ބުނެލަން ބޭނުންވަނީ އަޅުގަނޑު ހުންނާނަމޭ މިހެން ހަމަ. ކުރިއަށް އޮތް ތަނުގައި ވަރަށް ރަނގަޅު ޝޯތަކައް ހަމަ ގިނަ ޕްރޮޑަކްޝަންތަކެއް ބެލުންތެރިންނާ ހަމައަށް ދާނޭ.",
+      "latin": "alhugan'du bunelan beynunvanee alhugan'du hunnaanamey mihen hama. kuriah oiy thanugai varah ran'galhu shoathakah hama gina prodakshanthakeh beluntherinnaa hamaah dhaaney.",
+      "english": "I want to say I will be like this. There will be many productions for very good shows in the future.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އަޅުގަނޑުގެ އަބުރާ ބެހުނަސް އުނދަގުލެއް ނުވާނެ: ރައީސް ޔާމީން",
+      "latin": "alhugan'duge aburaa behunas un'dhaguleh nuvaane: raees yaameen",
+      "english": "It does not bother me if my reputation is tarnished: President Yameen",
+      "domain": "politics"
+    },
+    {
+      "thaana": "އަނެއްކާ އުފާވެރި ހަބަރެއްތަ? ޖަންނަތު ހިނިތުން ވެލަމުން ޝައްކުވެފައި ހުރެ އަހާލި އެވެ. ސާރާ ލަދުރަކި ގޮތަކަށް ހީލަމުން ބޯ ޖަހާލި އެވެ.",
+      "latin": "anekkaa ufaaveri habareththa? jannathu hinithun velamun shakkuvefai hure ahaali eve. saaraa ladhuraki gothakah heelamun boa jahaali eve.",
+      "english": "Another good news? Jannath asked suspiciously, smiling. Sarah nodded with a shy smile.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އަންނަ މަހު 3ގައި ނޫސްވެރިންގެ ބައްދަލުވުމެއް ބާއްވާނަން: ރައީސް",
+      "latin": "anna mahu 3gai noosveringe bahdhaluvumeh baahvaanan: raees",
+      "english": "Press Conference to be Held on the 3rd of Next Month: President",
+      "domain": "politics"
+    },
+    {
+      "thaana": "އަންނަނިވި ޖުމްލައިގައި ފިލި ޖަމްޢުއަށް ބަދަލުކުރުން. ބަނޑޮސްތައް އެނދުމައްޗަށް ފުންމާލައެވެ.",
+      "latin": "annanivi jumlaigai fili jamuah badhalukurun. ban'dosthah en'dhumachchah funmaalaeve.",
+      "english": "Change the verb to plural in the following sentence. The cats jump on the bed.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އަސީލު ދިރިއުޅުއްވާގެ ދެވަނަ ފަހަރަށް ބަލާ ފާސްކޮށްފި",
+      "latin": "aseelu dhiriulhuhvaage dhevana faharah balaa faaskohfi",
+      "english": "Asil's residence searched for the second time",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އަޝްރަފް އަލީ ދިވެހި ބަހުގެ އެކަޑަމީގެ މެންބަރު ކަމަށް އައްޔަންކުރައްވާ ރައީސް މުހައްމަދު ނަޝީދު ސަލާމް ކުރައްވަނީ -- ވީފައިލް ފޮޓޯ",
+      "latin": "ashraf alee dhivehi bahuge ekadameege menbaru kamah ayyankurahvaa raees muhammadhu nasheedhu salaam kurahvanee -- veefail fotoa",
+      "english": "Ashraf Ali is appointed as a member of the Dhvehi Language Academy -- VFILE PHOTO",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އަސްލު މަބުނަންތަ ? މަށަކަށް ނުފެނޭ ތި ކައިވެނި ކުރާކަށް?",
+      "latin": "aslu mabunantha ? mashakah nufeney thi kaiveni kuraakah?",
+      "english": "Do I really mean ? I don't think you're getting married?",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އަސްވާޑު ފުލުސް އޮފީހަށް ހާޒިރުވާން އަންގައިފި",
+      "latin": "asvaadu fulus ofeehah haaziruvaan angaifi",
+      "english": "Aswad Ordered to Report to Polic Station",
+      "domain": "crime"
+    },
+    {
+      "thaana": "ބާސާ އެއްވަރުވިއިރު, ރެއާލް ފަސޭހަކަމާއެކީ މޮޅުވެއްޖެ",
+      "latin": "baasaa ehvaruviiru, reaal faseyhakamaaekee molhuvejje",
+      "english": "Barcelona drew, Real won easily",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ބާތިލް ވޯޓްގެ އަދަދު 07 ވޯޓް",
+      "latin": "baathil voatge adhadhu 07 voat",
+      "english": "Number of invalid votes 07 votes",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ބަޑީގެ ހަމަލާއެއްގައި ޕާކިސްތާނުގެ ހަނގުރާމަވެރި ޖަމާއަތެއްގެ ލީޑަރު މަރާލައިފި",
+      "latin": "badeege hamalaaeggai paakisthaanuge han'guraamaveri jamaaathegge leedaru maraalaifi",
+      "english": "Leader of Pakistani militant group killed in gun attack",
+      "domain": "international"
+    },
+    {
+      "thaana": "ބަދިގެއަކުން ފެންނާނެ ހަތަރު އެއްޗެއްގެ ނަން ކިޔާށެވެ. 1. ފްރިޖް 2. އަވަން 3. މައިކްރޯވޭވް 4. ޑިޝްވާޝަރ",
+      "latin": "badhigeakun fennaane hatharu echchegge nan kiyaasheve. 1. frij 2. avan 3. maikroaveyv 4. dishvaashar",
+      "english": "Name four items that you would find in a kitchen. 1. Refrigerator 2. Oven 3. Microwave 4. Dishwasher",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ބައެއް ބޭފުޅުންނަށް ބޮޑަށް ކަމުދާނީ އިސްލާމްދީން ހުއްދަނުކުރާ ގައިގެ ވަނާތަށް ބޮޑަށްފެންނަ ހެދުންތައް ކީކޭބުނާނީ މިއީ ހެދުމެއްތޯ?",
+      "latin": "baeh beyfulhunnah bodah kamudhaanee islaamdheen huhdhanukuraa gaige vanaathah bodahfenna hedhunthah keekeybunaanee miee hedhumeththoa?",
+      "english": "Some people prefer clothes that are not allowed by Islam. What about this dress?",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ބަގްރާޖް އަކީ އިންޑިއާގެ މަދްޔަ ޕްރަދޭޝްގެ ބެރާސިއާ ޑިސްޓްރިކްޓްގައި އޮންނަ ރަށެކެވެ . އެއީ ބޯޕާލް ތަހްސިލްގައި ހުންނަ ތަނެކެވެ .",
+      "latin": "bagraaj akee indiaage madhya pradheyshge beraasiaa distriktgai onna rashekeve . eee boapaal thahsilgai hunna thanekeve .",
+      "english": "Bagraj is a village in the Berasia district of Madhya Pradesh , India . It is located in the Bhopal tehsil .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ބަކަރި އޯކޭ, ޝަލަބީ އޯކޭ, މެނޭޖަރު ކޮންމައްސަލައެއް",
+      "latin": "bakari oakey, shalabee oakey, meneyjaru konmassalaeh",
+      "english": "Goat OK, Shalabi OK, manager what's the matter",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ބަލަ ހުޅުދޫއަށް ނިސްބަތް ވާ ތިޔަ ވިދާޅު ބޭފުޅުން މުއްސަންދި ތިރަށުގަ ވަޔަފާރިކޮށް ތިރަށް ނިސްބަތްވިމަތޯ ތިއުޅެނީ ބަޔަކަ ބުރަ މަސައްކަތް ކޮށްގެނ ފައިސާ ހޯދިމާ ހަސަދެވެރިވެގެނން",
+      "latin": "bala hulhudhooah nisbaiy vaa thiya vidhaalhu beyfulhun mussandhi thirashuga vayafaarikoh thirah nisbaiyvimathoa thiulhenee bayaka bura masakkaiy kohgen faisaa hoadhimaa hasadheverivegenn",
+      "english": "Look at the rich people who belong to the town and do business in the town and are jealous of the hard work of others",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ބަލަދުވެރިއެއް ނެތިގެން ނައިފަރުގައި މަގުމަތިވެފައިވާ ހިންނަވަރު މީހެއް!",
+      "latin": "baladhuverieh nethigen naifarugai magumathivefaivaa hinnavaru meeheh!",
+      "english": "A Hinnavar man on the streets of Naifar without a guardian!",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ބަލިމަޑުކަމުގެ ސަބަބުން ނުވަތަ ދުރުހިސާބެއްގައި ހުރުމުގެ ސަބަބުން ނުވަތަ އެކަމުގައި ބުރަތަކެއް އުފުލަންޖެހޭތީ އަސްލު ހެކިވެރިޔާ ޙާޟިރުވަން ޢުޛުރުވެރިވުން",
+      "latin": "balimadukamuge sababun nuvatha dhuruhisaabeggai hurumuge sababun nuvatha ekamugai burathakeh ufulanjeheythee aslu hekiveriyaa haadiruvan udhuruverivun",
+      "english": "The original witness is excused from appearing because of illness or distance or burdens",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ބަންދްރާ އަކީ އިންޑިއާގެ މަހާރާޝްތުރާ ސްޓޭޓްގެ ހުޅަނގު ބަންދްރާގައި އޮންނަ އަވަށްޓެރި ރަށެއް ކަމަށާއި ބޮލީވުޑްގައި ހަރަކާތްތެރިވާ ގިނަ ޝަޚުސިއްޔަތުތަކެއް މުމްބާއީގައި ދިރިއުޅެފައިވާ ކަމަށެވެ .",
+      "latin": "bandhraa akee indiaage mahaaraashthuraa steytge hulhan'gu bandhraagai onna avahteri rasheh kamashaai boleevudgai harakaaiytherivaa gina shakhusiyyathuthakeh mumbaaeegai dhiriulhefaivaa kamasheve .",
+      "english": "Bandra is a neighborhood located in western Bandra in the state of Maharashtra , India many personalities active in Bollywood , in cricket and in politics , have lived in Mumbai .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ބަޔާންގައި އެޓޭކްކުރާ ގިނަ ކުޅުންތެރިން ތިބުމުން މިރޭގެ މެޗަކީ އުނދަގޫ މެޗަކަށްވާނެ ކަމަށާއި, ބަޔާންގައި ހުރީ އެހާމަ މޮޅު ކޯޗެއްކަން ސިމިއޯނީ ފާހަގަކުރިއެވެ.",
+      "latin": "bayaangai eteykkuraa gina kulhuntherin thibumun mireyge mechakee un'dhagoo mechakahvaane kamashaai, bayaangai huree ehaama molhu koachekkan simioanee faahagakurieve.",
+      "english": "\"It will be a difficult game with a lot of attacking players and Bayern have such a good coach,\" Simeone said.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ބީލަން ހުޅުވުން އޮތީ މިނިސްޓްރީ އޮފް ފިނޭންސް އެންޑް ޓްރެޜަރީގެ ޕަބްލިކް ޕްރޮކިޔުމަންޓް ޑިވިޜަންގެ ޖަލްސާކުރާ މާލަމުގައި, މި މަހުގެ 29 ވާ އާދިއްތަ ދުވަހުގެ 10:00 ގައެވެ.",
+      "latin": "beelan hulhuvun othee ministree of fineyns end trezhareege pablik prokiyumant divizhange jalsaakuraa maalamugai, mi mahuge 29 vaa aadhiththa dhuvahuge 10:00 gaeve.",
+      "english": "Bids will be opened at the Public Procurement Division, Ministry of Finance and Treasury on Tuesday, 29th of this month at 10:00 am.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ބިދޭސީއަކު ފިލައިފިނަމަ 48 ގަޑިއިރުގެ ތެރޭގައި އެކަން އިމިގްރޭޝަނަށް އަންގަންޖެހޭ ގޮތަށް ބިދޭސީންގެ ވިސާއާއި ބެހޭ ގަވައިދު އިސްލާހުކޮށް ގެޒެޓްކޮށްފި އެވެ.",
+      "latin": "bidheyseeaku filaifinama 48 gadiiruge thereygai ekan imigreyshanah anganjehey gothah bidheyseenge visaaaai behey gavaidhu islaahukoh gezetkohfi eve.",
+      "english": "The Foreigners Visa Rules have been amended and gazetted to require a foreigner to notify Immigration within 48 hours if he escapes.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ބޯޅަ ކޮންޓްރޯލް ކުރުމުގެ ތެރޭގައި ލަވޭޒީ އިޝްތިހާރު ބޯޑުގައި ޖެހި ފަހަތަށް ވެއްޓެނީ ---",
+      "latin": "boalha kontroal kurumuge thereygai laveyzee ishthihaaru boadugai jehi fahathah vettenee ---",
+      "english": "Lavezzi hits the advertising board while controlling the ball ---",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ބޮޑު ޑިޕްރެޝަންގެ ތެރޭގައި އުފަން ޓެރީ އަކީ ތަމްރީނު ހޯދައިގެން ކާލް ސްޕިޓްޒްގެ މިލްކުވެރިއެކެވެ .",
+      "latin": "bodu dipreshange thereygai ufan teree akee thamreenu hoadhaigen kaal spitzge milkuveriekeve .",
+      "english": "Terry , born in the midst of the Great Depression , was trained and owned by Carl Spitz .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ބޮޑުހުޅު ރައީސް",
+      "latin": "boduhulhu raees",
+      "english": "The Great Fire President",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ޗައިނާ އިން ދޭ ޕީއެޗްޑީގެ 14 ފުރުޞަތާއި މާސްޓަރސް ޑިގްރީގެ 25 ފުރުޞަތަށް ކުރިމަތިލުމަށް ހުޅުވާލައިފި",
+      "latin": "chainaa in dhey peeechdeege 14 furusathaai maastars digreege 25 furusathah kurimathilumah hulhuvaalaifi",
+      "english": "China Opens Applications for 14 PhD and 25 Master's Degree Scholarships",
+      "domain": "education"
+    },
+    {
+      "thaana": "އދ ދަނގެތި ދާއިރާ ސެކްރެޓަރީ",
+      "latin": "dh dhan'gethi dhaairaa sekretaree",
+      "english": "UN Dangethi Constituency Secretary",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އދ. މާމިގިލީ ކޯޓްގެ އިސް މެޖިސްޓްރޭޓް އަހްމަދު ނިހާން ކްރިމިނަލް ކޯޓަށް ހާޒިރުކުރުމަށްފަހު, ކަރެކްޝަންސްގެ ބެލުމުގެ ދަށުން ޖަލަށް ގެންދަން ވެހިކަލަށް އަރުވަނީ -- ސަން ފޮޓޯ: ޔޫސުފް ޞަފްވާން",
+      "latin": "dh. maamigilee koatge is mejistreyt ahmadhu nihaan kriminal koatah haazirukurumahfahu, karekshansge belumuge dhashun jalah gendhan vehikalah aruvanee -- san fotoa: yoosuf safvaan",
+      "english": "The UN. Mamigili Court Chief Magistrate Ahmed Nihan is produced before the Criminal Court and loaded into a vehicle to be taken to jail under the custody of corrections -- Sun Photo: Yousuf Safwan",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ދަތިކުރުމުގެ ފިޔަވަޅު އެޅުން މަނާކުރުމުގެ ބިލް މަޖިލީހަށް ބަލައިގެންފި",
+      "latin": "dhathikurumuge fiyavalhu elhun manaakurumuge bil majileehah balaigenfi",
+      "english": "Bill to prohibit imposing sanctions accepted by parliament",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ދީބަލަ ހަންރެޑް ރުފިޔާ!",
+      "latin": "dheebala hanred rufiyaa!",
+      "english": "Give me a hundred rupees!",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ދީފައިވާ ޖުމްލަ އެކަށީގެންވާ ގުނަވަންތައް ބޭނުންކޮށްގެން އަލުން ލިޔެލާށެވެ. އޭނާ ހޭން ފެށި ނަމަވެސް ދެން ހުއްޓުނީއެވެ.",
+      "latin": "dheefaivaa jumla ekasheegenvaa gunavanthah beynunkohgen alun liyelaasheve. eynaa heyn feshi namaves dhen huttuneeeve.",
+      "english": "Rewrite the given sentence using the appropriate conjunctions. He started laughing, but then he stopped.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ދީފައިވާ ލަފުޒަށް ފަސް ސިނޮނިމްގެ ލިސްޓެއް ހެދުން. 1. އުފާވެރިކަން 2. އުފާވެރިކަން 3. ނިޢުމަތް 4. އުފާވެރިކަން 5. އުފާވެރިކަން",
+      "latin": "dheefaivaa lafuzah fas sinonimge listeh hedhun. 1. ufaaverikan 2. ufaaverikan 3. niumaiy 4. ufaaverikan 5. ufaaverikan",
+      "english": "Construct a list of five synonyms for the given word. 1. Happiness 2. Delight 3. Bliss 4. Euphoria 5. Pleasure",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ދީނީ އިލްމުވެރިންގެ މަހާސިންތާ ފަށައިފި",
+      "latin": "dheenee ilmuveringe mahaasinthaa fashaifi",
+      "english": "Religious scholars' conference begins",
+      "domain": "religion"
+    },
+    {
+      "thaana": "ދެމަފިރިންގެ މެދުގަ މައްސަލަ ޖެހޭނަމަވެސް ދަރިން ނުބައިމަގުންދާނަމަވެސް ދެފަރިންނަށް ނުވަތަ އެކަކަށް ނަމަވެސް ފާފަކުރެވޭ ވަރާއިމެދު ވިސްނަން ޖެހޭނެ!",
+      "latin": "dhemafiringe medhuga massala jeheynamaves dharin nubaimagundhaanamaves dhefarinnah nuvatha ekakah namaves faafakurevey varaaimedhu visnan jeheyne!",
+      "english": "Even if there are problems between a couple or if children go astray, both partners or either one must consider the extent to which they may be sinning!",
+      "domain": "business"
+    },
+    {
+      "thaana": "ދޭ ދަރިފުޅާ! ދޭ.. އަލާނިޔާ ގާތަށް ދޭ! އޭނާ މިގެއަށް ގެނޭ.. އަދި އޭނަ ރުހެންޏާ އޭނަ އާއި އެކު ދިރިއުޅުން އާރާސްތުކުރަން މަސައްކަތްކުރޭ...",
+      "latin": "dhey dharifulhaa! dhey.. alaaniyaa gaathah dhey! eynaa migeah geney.. adhi eyna ruhengnaa eyna aai eku dhiriulhun aaraasthukuran masakkaiykurey...",
+      "english": "Come on, son! Go.. go to Alania! Bring him here.. and if he likes, try to rebuild your life with him.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ދިރާގު މޯލްޑިވްސް ގޭމިން ކޮންކުއެސްޓް މި މަހު 31ގައި ބާއްވަނީ",
+      "latin": "dhiraagu moaldivs geymin konkuest mi mahu 31gai baahvanee",
+      "english": "Dhiraagu Maldives Gaming Conquest to be held on the 31st of this month",
+      "domain": "entertainment"
+    },
+    {
+      "thaana": "ދިވެހި ހައްޖުވެރިންގެ ހާލު ރަނގަޅު, މިރޭ އަރަފާތަށް ދާން ފުރާނެ: ހައްޖު މިޝަން",
+      "latin": "dhivehi hajjuveringe haalu ran'galhu, mirey arafaathah dhaan furaane: hajju mishan",
+      "english": "Maldivian pilgrims in good condition, will depart for Arafat tonight: Hajj Mission",
+      "domain": "international"
+    },
+    {
+      "thaana": "ދިވެހިރާއްޖޭގެ ޤައުމީ ބަހަކީ ދިވެހިބަހެވެ.",
+      "latin": "dhivehiraajjeyge qaumee bahakee dhivehibaheve.",
+      "english": "the national language of the maldives is dhivehi.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ދޮންބެ ލައިއަށް ތަދުކުރަނީއޭ, ދޮންބެ ލައިގެ ގައިގަ އަތްލާތިއޭ ތަދުވަނީ... ރޮމުން ރޮމުން ލައިބާ ބުނެލިއެވެ.",
+      "latin": "dhonbe laiah thadhukuraneeey, dhonbe laige gaiga aiylaathiey thadhuvanee... romun romun laibaa bunelieve.",
+      "english": "Don't hurt Lai, don't touch Lai... Laiba said crying.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ދުމުގެ އުނދަގުލުން ސަލާމަތްވެ ހަމަ ނޭވާ ލެވިއްޖެ",
+      "latin": "dhumuge un'dhagulun salaamaiyve hama neyvaa levijje",
+      "english": "Freed from Smoke Trouble, Able to Breathe Easy",
+      "domain": "health"
+    },
+    {
+      "thaana": "ދުންފަތުގެ ވިޔަފާރިކުރާ ފަރާތްތަކުން އެ ވިޔަފާރި ދޫކޮށްލައި, އެހެން ވިޔަފާރިއަކަށް ބަދަލުވުމަށް ރައީސް އެދިވަޑައިގަންނަވައިފި",
+      "latin": "dhunfathuge viyafaarikuraa faraaiythakun e viyafaari dhookohlai, ehen viyafaariakah badhaluvumah raees edhivadaigannavaifi",
+      "english": "President urges tobacco traders to quit the business and switch to another",
+      "domain": "health"
+    },
+    {
+      "thaana": "ދުނިޔޭގެ ދެވަނަ އަށް އެންމެ ބޮޑު އިގްތިސޯދު, ޗައިނާގެ އިގްތިސާދު މިދިޔަ 10 އަހަރު ތެރޭ ފުރަތަމަ ފަހަރަށް ދަށަށް ހިނގައްޖެ އެވެ.",
+      "latin": "dhuniyeyge dhevana ah enme bodu igthisoadhu, chainaage igthisaadhu midhiya 10 aharu therey furathama faharah dhashah hin'gajje eve.",
+      "english": "China's economy, the world's second largest, has contracted for the first time in 10 years.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ދުނިޔޭގެ އެންމެ ނުފޫޒު ގަދަ 100 މީހުންގެ ލިސްޓުގައި ބަލޮޓެލީ",
+      "latin": "dhuniyeyge enme nufoozu gadha 100 meehunge listugai balotelee",
+      "english": "Balotelli on list of world's 100 most influential people",
+      "domain": "sports"
+    },
+    {
+      "thaana": "އެ ގެއަށް އައިއިރު ޒާހިރު ގެނައީ ލަތީފާގެ އަލަމާރި އާއި ޒާހިރުގެ ފޮށްޓެވެ.",
+      "latin": "e geah aiiru zaahiru genaee latheefaage alamaari aai zaahiruge fohteve.",
+      "english": "When Zahir moved, he brought along with him his clothes and Latheefa's cupboard.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އެ މާއްދާގައި ބުނެފައި ވަނީ ސިޓީ ކައުންސިލުގެ ރައީސަށް މުހާތަބުކުރާނީ \"\"މޭޔަރު\"\" މިގޮތަށެވެ. އަދި ސިޓީ ކައުންސިލްގެ ނައިބު ރައީސާ މުހާތަބުކުރާނީ \"\"ޑެޕިއުޓީ މޭޔަރު\"\" މިގޮތަށެވެ.",
+      "latin": "e maahdhaagai bunefai vanee sitee kaunsiluge raeesah muhaathabukuraanee \"\"meyyaru\"\" migothasheve. adhi sitee kaunsilge naibu raeesaa muhaathabukuraanee \"\"depiutee meyyaru\"\" migothasheve.",
+      "english": "The article states that the president of the city council shall be addressed as \"Mayor\" The Vice-President of the City Council shall be addressed as \"\"Deputy Mayor\"",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އެ މޫނުތަކަށް ކަޅުއަނދިރިކަމެއް ވެރިވާނެތެވެ.",
+      "latin": "e moonuthakah kalhuan'dhirikameh verivaanetheve.",
+      "english": "Covered with the blackness (of shame):",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އެ ވަރަށް ކަންނެތް މީހެއް! އަބަދު ކަމަކީ ރާޒުވާކުޅުން! މަ ބުނީމެއްނު އެ ގަޑީގަ ވެސް އާދަނު އޯޑަރުދިނެވެ.",
+      "latin": "e varah kanneiy meeheh! abadhu kamakee raazuvaakulhun! ma buneemennu e gadeega ves aadhanu oadarudhineve.",
+      "english": "That very lazy person! Always the thing is wrestling! I told you that Adam ordered at that time.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އެއާ ޓެކްސީ ކްރޫންގެ ހަޅުތާލު: ކޮއްތު ފައިސާ ބޮޑުނުކޮށްގެން ކްރޫން ހަޅުތާލު ފެށުމުން, ޓީއެމްއޭގެ މުވައްޒަފުން ބޭނުންކޮށްގެން އެއާ ޓެކް",
+      "latin": "eaa teksee kroonge halhuthaalu: koththu faisaa bodunukohgen kroon halhuthaalu feshumun, teeemeyge muvazzafun beynunkohgen eaa tek",
+      "english": "Air Taxi Crew Strike: Crew Begins Strike Due to Non-Increase in Meal Allowance, Air Taxi Uses TMA Staff",
+      "domain": "local news"
+    },
+    {
+      "thaana": "އެއާޓެލް ރިސީވަރު ރާއްޖެ އެތެރެކުރުން މަނާކުރަން ނިންމައިފި",
+      "latin": "eaatel riseevaru raajje etherekurun manaakuran ninmaifi",
+      "english": "Decision made to ban the import of Airtel receivers to the Maldives",
+      "domain": "business"
+    },
+    {
+      "thaana": "އެއަށްފަހު, ފަހުގެ ކުރެހުންތައް ކުރަހައި, ސްޓްރަކްޗުރަލް ކުރެހުންތަކާއި, މެކެނިކަލް އަދި އިލެކްޓްރިކަލް ކުރެހުންތައް އާކިޓެކްޓް ތައްޔާރު ކުރިއެވެ.",
+      "latin": "eahfahu, fahuge kurehunthah kurahai, strakchural kurehunthakaai, mekenikal adhi ilektrikal kurehunthah aakitekt thayyaaru kurieve.",
+      "english": "this architect and his team then prepared the final drawings, structural drawings, the mechanical & electrical drawings.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އެޑްމަންޓަން އޮއިލާސް އިން ފްރީ އޭޖެންޓް ޓޯނީ ކަރީ ސޮއިކުރި ނޯޑިކްސް އަށް ގެއްލުނީ ޓޮރޮންޓޯ މެޕަލް ލީފްސް އަށް ސޮއިކުރި ބްލޭކް ވެސްލީ އެވެ .",
+      "latin": "edmantan oilaas in free eyjent toanee karee soikuri noadiks ah gellunee torontoa mepal leefs ah soikuri bleyk veslee eve .",
+      "english": "The Nordiques signed free agent Tony Currie from the Edmonton Oilers , while they lost Blake Wesley , who signed with the Toronto Maple Leafs .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އެއީ އެމީހުންގެ ބްރޭކްތްރޫ އަލްބަމް `` ސްމޭޝް '' ( 1994 ) ގެ ތިންވަނަ ޓްރެކާއި ހަތަރުވަނަ ސިންގަލް އެވެ .",
+      "latin": "eee emeehunge breykiyroo albam `` smeysh '' ( 1994 ) ge thinvana trekaai hatharuvana singal eve .",
+      "english": "It is the third track and fourth single from their breakthrough album `` Smash '' ( 1994 ) .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އެއީ ހުވަދު އަތޮޅާއި ފުވައްމުލަކުގެ ރައްޔިތުން ވެސް ބަޣާވާތުގައި ބައިވެރިވީއެވެ.",
+      "latin": "eee huvadhu atholhaai fuvammulakuge rayyithun ves baghaavaathugai baiveriveeeve.",
+      "english": "as residents of thinadhoo island in huvadhoo atoll and fuvahmulah joined the revolt.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އީމަން އުކްޕާ އަކީ ނައިޖީރިއާގެ އަކުވާ އިބޮމް ސްޓޭޓްގެ އުރޫއަން އިބިބިއޯ ސަރުކާރު ސަރަހައްދުގައި އޮންނަ ރަށެކެވެ . ލޯކަލް ރައްޔިތުންނަކީ އީމާން އުކުޕާ އަވަށުގައި ދިރިއުޅޭ ބައެކެވެ .",
+      "latin": "eeman ukpaa akee naijeeriaage akuvaa ibom steytge urooan ibibioa sarukaaru sarahahdhugai onna rashekeve . loakal rayyithunnakee eemaan ukupaa avashugai dhiriulhey baekeve .",
+      "english": "Eman Ukpa is a village in Uruan Ibibio government area of Akwa Ibom State , Nigeria . The local people are occupants of the Eman Ukpa village .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އީތަން ބުނަނީ ދޮގު ވާހަކައެއްނޫންކަން މިއަދު އެނގިއްޖެ. އޭނާ އަބަދުވެސް ބުނޭ ކައިލަން ލޯބިވާކަން އަހަރެންދެކެ ޖަޒްލާ މިހެންބުނެ ހީނލިއެވެ. އެއާއެކު ކައިލަން ވެސް ހީނލާފައި މާފަށްއެދުނެވެ.",
+      "latin": "eethan bunanee dhogu vaahakaennoonkan miadhu en'gijje. eynaa abadhuves buney kailan loabivaakan aharendheke jazlaa mihenbune heenlieve. eaaeku kailan ves heenlaafai maafahedhuneve.",
+      "english": "Today I know that Ethan is not lying. He always says Kylan loves me Jazzy said and smiled. At that, Kylan smiled and apologized.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އީތަން ކައިރީ ބުނެލާތި ރިކަވަރ ވީހާ އަވަހަކަށް އަހަންނަށް ގުޅާލައްޗޭ. މާ ހާލު ބޮޑިއްޔާ ގޮވާލަން އަންނަން ވާނެއެއްނު",
+      "latin": "eethan kairee bunelaathi rikavar veehaa avahakah ahannah gulhaalachchey. maa haalu bodiyyaa govaalan annan vaaneennu",
+      "english": "Tell Ethan to call me as soon as he recovers. If you're too sick, you should come and call",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އެފްއޭއެމް ކޮންގްރެސްގެ ޕްރައިމަރީ މިރޭ ބާއްވަނީ",
+      "latin": "efeyem kongresge praimaree mirey baahvanee",
+      "english": "FAML Congress Primaries to be Held This Evening",
+      "domain": "politics"
+    },
+    {
+      "thaana": "އެއް ކެންޑިޑޭޓަކު ނެރުމުގެ ވިސްނުން އެބަހުރި: ހަސަން",
+      "latin": "eh kendideytaku nerumuge visnun ebahuri: hasan",
+      "english": "There is a thought to field only one candidate: Hassan",
+      "domain": "politics"
+    },
+    {
+      "thaana": "އެހާ ގިނައިރެއްނުވާނެއޭ, ނޫނީ ތި ދެމީހުން ބައިވެރިވާންވީނު",
+      "latin": "ehaa ginairennuvaaneey, noonee thi dhemeehun baiverivaanveenu",
+      "english": "It won't be that long, or you two should join",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އެހީ ދައްކަން އުޅެނިކޮށް މައްސަލައެއް ޖެހިއްޖެ",
+      "latin": "ehee dhakkan ulhenikoh massalaeh jehijje",
+      "english": "There was an error displaying help.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އެހީތެރިކަމާއި މަދަދު ހޯދާނީ ކިހިނެތް?",
+      "latin": "eheetherikamaai madhadhu hoadhaanee kihineiy?",
+      "english": "How to Seek Help and Assistance?",
+      "domain": "health"
+    },
+    {
+      "thaana": "އެހެން ހުރިހާ ވިންޑޯއަކަށް ވުރެ ކުރިޔަށް މިވިންޑޯ ގެނޭ",
+      "latin": "ehen hurihaa vindoaakah vure kuriyah mivindoa geney",
+      "english": "Raise window above other windows",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އެހެންމީހަކަށް ދަރިން ނުލިބޭތީ ނުވަތަ ލިބުން ލަސްވެގެން ވާހަކަދައްކާ މީހުންގެ ތެރޭގައި ގިނަ ދަރިންތަކެއް ލިބިފައިވީނަމަވެސް އަޅައިލާނެ ދަރިއަކު ނެތް ކިތައް މީހުން ހިމެނޭހެއްޔެވެ?: މުފްތީ މެންކް",
+      "latin": "ehenmeehakah dharin nulibeythee nuvatha libun lasvegen vaahakadhakkaa meehunge thereygai gina dharinthakeh libifaiveenamaves alhailaane dhariaku neiy kithah meehun himeneyheyyeve?: mufthee menk",
+      "english": "Among Those Who Talk About Others Not Having Children or Having Them Late, How Many Have Many Children but No One to Care for Them?: Mufti Menk",
+      "domain": "religion"
+    },
+    {
+      "thaana": "އެހެންނަމަވެސް މިފަހަރު އެމީހުން ފެނިފައިވަނީ ޕެރޫއިން ކުރިން ބޮލީވިއާގައި ހޯދިފައިވާ `` ޕީ.",
+      "latin": "ehennamaves mifaharu emeehun fenifaivanee perooin kurin boleeviaagai hoadhifaivaa `` pee.",
+      "english": "However this time they were found in Peru a long way from the previous `` P. unicornis '' discoveries in Bolivia .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އެކަމުގެ ހެއްކަކީ ސްރީލަންކާ ގެ ސަރުކާރުގެ ފަރާތުން ގެންނަމުން ގެންދިޔަ ސޯޝަލިސްޓް ސިޔާސަތުތަކެވެ.",
+      "latin": "ekamuge hekkakee sreelankaa ge sarukaaruge faraathun gennamun gendhiya soashalist siyaasathuthakeve.",
+      "english": "this was evident from the sri lankan government's fast adoption of socialist policies.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އެކުލަވާލާނީ ގައުމީ އެއްބައިވަންތަކަމުގެ ސަރުކާރެއް: ރައީސް",
+      "latin": "ekulavaalaanee gaumee ebbaivanthakamuge sarukaareh: raees",
+      "english": "A national unity government will be formed: President",
+      "domain": "politics"
+    },
+    {
+      "thaana": "އެމްޑީޕީއަށް ސޮއިކުރެއްވުމުން ސޯލިހް އަޅުގަނޑަށް ގުޅުއްވި: ނަޝީދު",
+      "latin": "emdeepeeah soikurehvumun soalih alhugan'dah gulhuhvi: nasheedhu",
+      "english": "Solih called me after signing with MDP: Nasheed",
+      "domain": "politics"
+    },
+    {
+      "thaana": "އެމެރިކާ ލީގުން ދިވެހި ކުޅުންތެރިންނަށް ގައުމީ ކޯޗު ފުރުސަތު ހޯދައިދެނީ",
+      "latin": "emerikaa leegun dhivehi kulhuntherinnah gaumee koachu furusathu hoadhaidhenee",
+      "english": "American League Provides Opportunities for Maldivian Players Through National Coach",
+      "domain": "sports"
+    },
+    {
+      "thaana": "އެނައުންސަރަކީ ޖޯން ރީޑް ކިންގް ކަމަށާއި އޯކޭސްޓްރާ ޑައިރެކްޓް ކުރީ ރޭ ބްލޮކް ކަމަށެވެ .",
+      "latin": "enaunsarakee joan reed king kamashaai oakeystraa dairekt kuree rey blok kamasheve .",
+      "english": "John Reed King was the announcer , and Ray Bloch directed the orchestra .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އެންމެ ރަނގަޅު. ދެން ކާން ދާނީ ކޮން އިރަކުން? އަހަރެން ބޭނުމީ މެރީ ބްރައުން އަށް ދާން އިނގޭ މިއާ ހީނގަތެވެ.",
+      "latin": "enme ran'galhu. dhen kaan dhaanee kon irakun? aharen beynumee meree braun ah dhaan in'gey miaa heen'gatheve.",
+      "english": "ok. When are you going to eat next? I want to go to Mary Brown, Mia smiled.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އެންމެ ވަރުގަދަ ލީގަކީ އިނގިރޭސި ލީގު, އެންމެ މޮޅު ކްލަބަކީ ބާސެލޯނާ: ސުއަރޭޒް",
+      "latin": "enme varugadha leegakee in'gireysi leegu, enme molhu klabakee baaseloanaa: suareyz",
+      "english": "The Strongest League is the English League, The Best Club is Barcelona: Suárez",
+      "domain": "sports"
+    },
+    {
+      "thaana": "އެޕޯލޯގެ މައްސަލައިގައި އިންޑިޔާ ސަރުކާރާ އެކު މި ދަނީ ވާހަކަ ދައްކަމުން: ޕްރެސް ސެކްރެޓަރީ",
+      "latin": "epoaloage massalaigai indiyaa sarukaaraa eku mi dhanee vaahaka dhakkamun: pres sekretaree",
+      "english": "Press Secretary: Currently in discussions with Indian government over Apollo issue",
+      "domain": "international"
+    },
+    {
+      "thaana": "އެސް. ޕީ. ސީ. ޕީ. އެން./ޕީ. ސީ. އެން. ނިޒާމުގެ މައްޗަށް ބިނާކޮށް އާ ސެޓަލައިޓެއް މިހާރު ވަނީ ބޭނުންކުރަން ފަށާފައެވެ.",
+      "latin": "es. pee. see. pee. en./pee. see. en. nizaamuge machchah binaakoh aa setalaiteh mihaaru vanee beynunkuran fashaafaeve.",
+      "english": "a new satellite based on scpc/pcn system was now in operation.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އޭއައިސީއާރު އިން ކުރިއަށް ގެންދަނީ އޮލް އިންޑިއާ ކައުންސިލް އޮފް ޓެކްނިކަލް އެޑިއުކޭޝަން , ނިއުދިއްލީ އިން ފާސްކޮށްފައިވާ ދެ އަހަރުގެ ރެޒިޑެންޝަލް ޓައިމް ފުލް ޕީޖީޑީއެމް ޕްރޮގްރާމެކެވެ.",
+      "latin": "eyaiseeaaru in kuriah gendhanee ol indiaa kaunsil of teknikal ediukeyshan , niudhillee in faaskohfaivaa dhe aharuge rezidenshal taim ful peejeedeeem prograamekeve.",
+      "english": "AICAR offers a two-year residential-time full PGDM programme approved by the All India Council of Technical Education , New Delhi .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އޭނާ ބުނި ކަލޭ ފިލްމު ބަލާހިތްވެޔޭ",
+      "latin": "eynaa buni kaley filmu balaahiiyveyey",
+      "english": "he said you like to watch movies.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އޭނާ ސްޓްރޯކް ދުއްވައިގެން ޓްރެކް ޓީމަށް ޝޮޓް އުކާލާފައި ކޮލަމްބަސް އީސްޓް ހައި ސްކޫލްގެ ފުޓްބޯޅަ ޓީމުގައި ކުޅުނެވެ .",
+      "latin": "eynaa stroak dhuhvaigen trek teemah shot ukaalaafai kolambas eest hai skoolge futboalha teemugai kulhuneve .",
+      "english": "He ran strokes and threw the shot on the track team and played on the football team at Columbus East High School .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އޭނާގެ ސަތާރަ ފިލްމެއްގެ ތީމްތަކުގެ ސީޑީއެއް 2008 ވަނަ އަހަރު ފިލިޕް ޕަވަރސް ޕްރޮޑިއުސްކޮށް 1އެމް1 ރެކޯޑްސް އިން ނެރުނެވެ .",
+      "latin": "eynaage sathaara filmegge theemthakuge seedeeeh 2008 vana aharu filip pavars prodiuskoh 1em1 rekoads in neruneve .",
+      "english": "A CD of themes from fourteen of his films was produced in 2008 by Philip Powers and released by 1M1 Records .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އޭރު ލޮލަށް ވެރިވަމުންދިޔައީ ކުރިން އިހުސާސް ކުރެވިފައި ނުވާ ކަހަލަ ލޮޑުކަމެކެވެ.",
+      "latin": "eyru lolah verivamundhiyaee kurin ihusaas kurevifai nuvaa kahala lodukamekeve.",
+      "english": "His eyes felt lethargic unlike before.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އޭރުން.........އޭރުން ކިހިނެއްވާނީ........ މިޝަލް ދެއަތްދެއަތާ ޖޯޑުކޮއްލަމުން ބުނެލިއެވެ.",
+      "latin": "eyrun.........eyrun kihinehvaanee........ mishal dheaiydheathaa joadukollamun bunelieve.",
+      "english": "Then.........then what........ Michelle said, clasping her hands.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ފާފަތައް ފުއްސަވައިދެއްވެވުން އެދި ކޮންމެ ދުވަހަކު ކުރަންޖެހޭ ޛިކުރުކުރަން އެންމެ ފައިދާހުރި ވަޤުތު-: މުފްތީ މެންކް",
+      "latin": "faafathah fussavaidhehvevun edhi konme dhuvahaku kuranjehey dhikurukuran enme faidhaahuri vaquthu-: mufthee menk",
+      "english": "The most beneficial time for daily dhikr seeking forgiveness for sins - Mufti Menk",
+      "domain": "religion"
+    },
+    {
+      "thaana": "ފައިނަލް މެޗުގައި މާކް ނޯލްސް އާއި މެކްސް މިރްނީ މޮޅުވީ 6 -- 3 , 6 -- 4 އިން އޯ ' ; ބްރައިއަން އާއި ޕާމަރ އެވެ .",
+      "latin": "fainal mechugai maak noals aai meks mirnee molhuvee 6 -- 3 , 6 -- 4 in oa ' ; braian aai paamar eve .",
+      "english": "Mark Knowles and Max Mirnyi won in the final 6 -- 3 , 6 -- 4 against O ' ; Brien and Palmer .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ފަންވުޑް ހުންނަނީ 12 ވަނަ ކޮންގްރެސް ޑިސްޓްރިކްޓްގައި ކަމަށާއި މިއީ ނިއު ޖާޒީގެ 22 ވަނަ ސްޓޭޓް ލެޖިސްލޭޓިވް ޑިސްޓްރިކްޓްގެ ބައެކެވެ .",
+      "latin": "fanvud hunnanee 12 vana kongres distriktgai kamashaai miee niu jaazeege 22 vana steyt lejisleytiv distriktge baekeve .",
+      "english": "Fanwood is located in the 12th Congressional District and is part of the 22nd State Legislative District in New Jersey .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ފަރިޔާލު.... ތަހުސީނަށް އެ ނަން ކިޔާލެވުމާއެކު ސޯފާއިން ތެދުވެވުނީ ބޭއިޚްތިޔާރުގައެވެ.",
+      "latin": "fariyaalu.... thahuseenah e nan kiyaalevumaaeku soafaain thedhuvevunee beyikhthiyaarugaeve.",
+      "english": "Fariyal.... Tahseen got up from the sofa involuntarily.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ފަސްޓް ނޭޝަނަލް ފައިނޭންޝަލް ކޯޕަރޭޝަންގެ ސީސީއޯއަކަށް ވިސާމް އައްޔަނުކޮށްފި",
+      "latin": "fast neyshanal faineynshal koapareyshange seeseeoaakah visaam ayyanukohfi",
+      "english": "Visaam appointed as CEO of First National Financial Corporation",
+      "domain": "business"
+    },
+    {
+      "thaana": "ފިހާރަތަކުގެ ބިއްލޫރި ތަޅަމުން ދިޔަ އަންހެނަކު ހައްޔަރުކޮށްފި",
+      "latin": "fihaarathakuge billoori thalhamun dhiya anhenaku hayyarukohfi",
+      "english": "Woman arrested for smashing store windows",
+      "domain": "crime"
+    },
+    {
+      "thaana": "ފިރިހެން ސިންގަލްސް ފައިނަލަށް އަޖުފާނާއި ޝާރިމް",
+      "latin": "firihen singals fainalah ajufaanaai shaarim",
+      "english": "Ajufaan and Shaarim reach men's singles final",
+      "domain": "sports"
+    },
+    {
+      "thaana": "ފިޔާ ކިލޯއެއްގެ 60ރ. އަށް އެރުމަށްފަހު 55ރ. އަށް ދަށަށް ހިނގައްޖެ",
+      "latin": "fiyaa kiloaegge 60r. ah erumahfahu 55r. ah dhashah hin'gajje",
+      "english": "Onion price drops to 55r from 60r per kilo",
+      "domain": "business"
+    },
+    {
+      "thaana": "ފިޔޯރީގައި ޤާއިމްކުރާ މަސްކިރާ ކާރުޚާނާގެ މަސައްކަތް ޗައިނާގެ ކުންފުންޏަކާ ހަވާލުކޮށްފި",
+      "latin": "fiyoareegai qaaimkuraa maskiraa kaarukhaanaage masakkaiy chainaage kunfungnakaa havaalukohfi",
+      "english": "Chinese company awarded contract for fish processing factory in Fioari",
+      "domain": "business"
+    },
+    {
+      "thaana": "ފްލެޓް ލިބުނު 4000 ގެ ލިސްޓު ވެރިފައި ކުރަނީ",
+      "latin": "flet libunu 4000 ge listu verifai kuranee",
+      "english": "Verification of the list of 4000 individuals who received flats",
+      "domain": "local news"
+    },
+    {
+      "thaana": "ފޯރިގަދަ ފައިނަލަކަށް ނުކުންނައިރު އިނގުރައިދޫގެ ރޫހު ރަނގަޅު ފޯރިގަދަ ފައިނަލަކަށް ނުކުންނައިރު އިނގުރައިދޫގެ ރޫހު ރަނގަޅު",
+      "latin": "foarigadha fainalakah nukunnairu in'guraidhooge roohu ran'galhu foarigadha fainalakah nukunnairu in'guraidhooge roohu ran'galhu",
+      "english": "Good Spirit in Inguraidhoo as They Head into an Exciting Final",
+      "domain": "sports"
+    },
+    {
+      "thaana": "ފޮކްސް ވަނީ ބައިނަލްއަގްވާމީ ގޮތުން ކެނެޑާއަށް ދެ ފަހަރެއްގެ މަތިން ކުޅެފައި ކަމަށާއި އެއީ 1990 އާއި 1994 ވަނަ އަހަރުގެ ފީބާ ވޯލްޑް ޗެމްޕިއަންޝިޕްގަ އެވެ .",
+      "latin": "foks vanee bainalagvaamee gothun kenedaaah dhe faharegge mathin kulhefai kamashaai eee 1990 aai 1994 vana aharuge feebaa voald chempianshipga eve .",
+      "english": "Fox played twice for Canada internationally , at the 1990 and 1994 FIBA World Championships .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ފްރާންސްގެ ގާރިސަން ހަވާލުވުމުގެ ކުރިން ޖެނެރަލް ޒޮލަރގެ ކޮމާންޑުގެ ދަށުން 22 ޑިސެމްބަރ 1813 އިން 14 އޭޕްރީލް 1814 އާ ހަމައަށް މި ކިއްލާ އަނެއްކާވެސް ވަށާލިއެވެ .",
+      "latin": "fraansge gaarisan havaaluvumuge kurin jeneral zolarge komaanduge dhashun 22 disembar 1813 in 14 eypreel 1814 aa hamaah mi killaa anekkaaves vashaalieve .",
+      "english": "The fortress was besieged again from 22 December 1813 until 14 April 1814 by Bavarian troops under the command of General Zoller before the French garrison surrendered .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ފުރަތަމަ ސްޓާޓިންގަ ކޮންމެ ޓީމަކަށް ވެސް ތައްޔާރުވާން ވަކިވަރެއްދޭނީ. ދެން އޭގެ ފަހުން ޓީމުތައް ރޭންކްވާނެ. އެރޭންކިން އަށް ބަލައިގެން ދެން ފައިސާ ލިބެމުންދާނީ, ރިޔާޒް ވިދާޅުވި އެވެ.",
+      "latin": "furathama staatinga konme teemakah ves thayyaaruvaan vakivarehdheynee. dhen eyge fahun teemuthah reynkvaane. ereynkin ah balaigen dhen faisaa libemundhaanee, riyaaz vidhaalhuvi eve.",
+      "english": "Each team will be given a time to prepare in the first start. Then after that the teams will be ranked. Then the money will be paid based on the ranking, Riaz said.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ގައުމީ އިނާމު ދޭ އުސޫލަށް ބަދަލުތަކެއް ބޭނުންވޭ",
+      "latin": "gaumee inaamu dhey usoolah badhaluthakeh beynunvey",
+      "english": "Changes Needed to the National Award Criteria",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ގޭންގްތަކަށް އެހީތެރިވާ ސިޔާސީ މީހުން ގައިގައި ވެސް \"އަތްލެވެން\" ޖެހޭ",
+      "latin": "geyngthakah eheetherivaa siyaasee meehun gaigai ves \"aiyleven\" jehey",
+      "english": "Political figures aiding gangs must also be \"touched\"",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ޣައްޒާ އާރާސްތުކުރަން އަރަބި ލީގުން ނިންމެވި ނިންމެވުމަށް ރާއްޖެއިން މަރުހަބާ ކިޔައިފި",
+      "latin": "ghazzaa aaraasthukuran arabi leegun ninmevi ninmevumah raajjein maruhabaa kiyaifi",
+      "english": "Maldives welcomes Arab League's decision to rebuild Gaza",
+      "domain": "international"
+    },
+    {
+      "thaana": "ގްރީސްގެ ހުށަހެޅުމަށް ޔޫރޯޒޯނުން އެއްބަސްވެއްޖެ",
+      "latin": "greesge hushahelhumah yooroazoanun ebbasvejje",
+      "english": "Eurozone agrees to Greece's proposal",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ހާބަޓް އެ ޓީމުގެ ކޯޗުކަމުން ވަކިވީ ބްރެޒިލްގައި މިދިޔަ އަހަރު ބޭއްވި ވޯލްޑް ކަޕަށް ކޮލިފައި ނުކޮށްދެވުމުން އެކަމުގެ ޒިންމާ ނަގާ ކަމަށް ބުނުމަށް ފަހއެވެ.",
+      "latin": "haabat e teemuge koachukamun vakivee brezilgai midhiya aharu beyhvi voald kapah kolifai nukohdhevumun ekamuge zinmaa nagaa kamah bunumah faheve.",
+      "english": "Harbatt resigned as coach after claiming responsibility for failing to qualify for last year's World Cup in Brazil.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ހާއްސަ މަޖިލީހުގެ މ. މެމްބަރު ޝަފީގު ދުއްވާ ސައިކަލު އަންދާލައިފި",
+      "latin": "haassa majileehuge m. membaru shafeegu dhuhvaa saikalu andhaalaifi",
+      "english": "Special Majlis member Shafeeq's motorcycle set on fire",
+      "domain": "crime"
+    },
+    {
+      "thaana": "ހަހަހަ ނުކެރުނުދޯ ރަދީފްގެ ކޮމެންޓް ޖަހަން. ސާބަސް. ހަޖަމު ނުވާ ވަގުތު.",
+      "latin": "hahaha nukerunudhoa radheefge koment jahan. saabas. hajamu nuvaa vaguthu.",
+      "english": "Hahaha didn't you dare to comment on the rhyme. Congratulations. When not digested.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ޙައްޖުވެރިންގެ ފުރަތަމަ ގުރޫޕުގައި 234 ޙައްޖުވެރިން ފުރައިފި",
+      "latin": "hajjuveringe furathama guroopugai 234 hajjuverin furaifi",
+      "english": "First group of 234 pilgrims departs for Hajj",
+      "domain": "local news"
+    },
+    {
+      "thaana": "ހައްލަކީ އަދި ބުމަރެއްވެސް ނޫނެވެ.",
+      "latin": "hallakee adhi bumarehves nooneve.",
+      "english": "The solution isn't even a bummer yet.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ހަމާ ލޯ ބޯ އަވިން ފިއްސާ, ލޮނާ ފަސް ހަގަޑި އިރު މެކިލާ",
+      "latin": "hamaa loa boa avin fissaa, lonaa fas hagadi iru mekilaa",
+      "english": "Hama low head sun fix, salt five or six hours makekila",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ހަތިޔާރު ބޭނުންކޮށްގެން މައްސަލަ ހައްލުކުރަން ވިސްނާފައެއް ނެތް: އެމްއެންޑީއެފް",
+      "latin": "hathiyaaru beynunkohgen massala hallukuran visnaafaeh neiy: emendeeef",
+      "english": "No Consideration of Resolving Issues with Weapons: MNDF",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ހަވާނަފްސް ކިތަންމެ ބޮޑަށް އެދުނަސް އަމިއްލައަށް އެދުން ފުއްދައިގެން ނުވާނެ ސަބަބުތައް-",
+      "latin": "havaanafs kithanme bodah edhunas amillaah edhun fuhdhaigen nuvaane sababuthah-",
+      "english": "Reasons why self-gratification should not be indulged in, no matter how strong the desire",
+      "domain": "health"
+    },
+    {
+      "thaana": "ހަވީރުގެ ޚާއްޞަ ސަޕްލިމަންޓަކަށް ނަޒަރެއް",
+      "latin": "haveeruge khaassa saplimantakah nazareh",
+      "english": "A look at a special evening supplement",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ހެލޯ......... ފިރިހެންވަންތަ އަޑަކުން ގޮވާލުމުން އަލީޒާގެ ފިޔަވަޅު ވަގުތުން ހުއްޓުނެވެ.",
+      "latin": "heloa......... firihenvantha adakun govaalumun aleezaage fiyavalhu vaguthun huttuneve.",
+      "english": "Hello......... A masculine voice called out and Aliza's footsteps stopped immediately.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ހެންރީ ފޮސް ކުޅެފައިވަނީ ސެންޗުއަރީގެ ކޮމްޕިއުޓަރާއި ސެކިއުރިޓީ ސިސްޓަމްތައް ހިންގާ ރަޔަން ރޮބިންސްގެ ރޯލެވެ .",
+      "latin": "henree fos kulhefaivanee senchuareege kompiutaraai sekiuritee sistamthah hingaa rayan robinsge roaleve .",
+      "english": "Henry Foss plays Ryan Robbins , who runs the Sanctuary 's computer and security systems .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ހިބަޅިދޫން ފެނުނު ހަތިޔާރުތަކާ އައްލާމާ ގުޅުމެއް ނެތް: ވަކީލް",
+      "latin": "hibalhidhoon fenunu hathiyaaruthakaa allaamaa gulhumeh neiy: vakeel",
+      "english": "Weapons found on Hibaldhoo have no connection to Allamah: Lawyer",
+      "domain": "crime"
+    },
+    {
+      "thaana": "ހިތުތެރޭގައި ވަރަށް ގިނަ ސުވާލުތައް އުފެދިއްޖެއެވެ. މިސުވާލުތައް",
+      "latin": "hithuthereygai varah gina suvaaluthah ufedhijjeeve. misuvaaluthah",
+      "english": "Many questions have arisen in my heart. These questions",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ހޫމް! ތިއީ އެއްވެސް ކަމެއްނޫން, އިންނަގޮތަށް ދޫނުކުރާވަރުވެސް ކޮށްލަދީފާނަން އީސަ ފޮނިކޮށް ބުނެލި އެވެ.",
+      "latin": "hoom! thiee ehves kamennoon, innagothah dhoonukuraavaruves kohladheefaanan eesa fonikoh buneli eve.",
+      "english": "Hmm! You're nothing, I'll even let you stay as you are, Isa said sweetly.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ހޮސްޕިޓަލަށް ގެންދިޔަ މަގުމަތީ އެމްބިއުލާންގައި މަރުވީ. މިހާރު ޖަނާޒާގެ ކަންކަން ކުރިޔަށް ދަނީ, އާއިލާއާ ގާތް މީހަކު ބުންޏެވެ.",
+      "latin": "hospitalah gendhiya magumathee embiulaangai maruvee. mihaaru janaazaage kankan kuriyah dhanee, aailaaaa gaaiy meehaku bungneve.",
+      "english": "He died in an ambulance on the way to hospital. The funeral is now underway, a source close to the family said.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ހުޅުމާލޭ މަސްޖިދުލް ޝައިޚް ޤާސިމް ބިން އަލްޘާނީ އޭސީކޮށް އާބާތުރަފިލުވުމަށް އުރީދޫއާއި ގަތަރު ޗެރިޓީ އެއްބަސްވުމަކަށް",
+      "latin": "hulhumaaley masjidhul shaikh qaasim bin althaanee eyseekoh aabaathurafiluvumah ureedhooaai gatharu cheritee ebbasvumakah",
+      "english": "Ooredoo and Qatar Charity Sign Agreement to Air-Condition and Renovate Hulhumale' Sheikh Qassim bin Al-Thani Mosque",
+      "domain": "local news"
+    },
+    {
+      "thaana": "ހުޅުމާލޭގެ ކަރަންޓު މައްސަލަ ޙައްލުކުރުމަށް މަސައްކަތްކުރަމުންދާކަމަށް އެޗްޑީސީން ބުނެފި",
+      "latin": "hulhumaaleyge karantu massala hallukurumah masakkaiykuramundhaakamah echdeeseen bunefi",
+      "english": "HDCC says efforts underway to resolve Hulhumale's electricity issues",
+      "domain": "local news"
+    },
+    {
+      "thaana": "ހުމާމަށް މަރުގެ ހުކުމް ތަންފީޒުކުރުން ފަސްކުރުމަށް ގޮވާލައިފި",
+      "latin": "humaamah maruge hukum thanfeezukurun faskurumah govaalaifi",
+      "english": "calls for postponement of execution of Humayun",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ހުނަރުވެރި ލަވަކިޔުންތެރިޔާ ސަނަމް ޕޫރީ",
+      "latin": "hunaruveri lavakiyuntheriyaa sanam pooree",
+      "english": "Talented singer Sanam Puri",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ހުރާގެ ގޮނޑުދޮށުގައި ރެސްޓޯރެންޓް އެޅުމަށް ބިން ދޫކުރަނީ",
+      "latin": "huraage gon'dudhoshugai restoarent elhumah bin dhookuranee",
+      "english": "Land allocated for restaurant on Hura beach",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ހުރަސް ބަރިތަކުގައި އައިކަންތައް ސައިޒް ތަރުތީބުން އަތުރާ",
+      "latin": "huras barithakugai aikanthah saiz tharutheebun athuraa",
+      "english": "Keep icons sorted by size in rows",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ހުރިހާ އިންގްރީޑިއަންޓްއެއް ބޯތައްޓެއްގައި ރަނގަޅަށް ވިސްކް ކޮށްލާށެވެ. އެއަށްފަހު ޑޯނަޓްތައް ރަނގަޅަށް ކޯޓް ކޮށްލާށެވެ.",
+      "latin": "hurihaa ingreedianteh boathatteggai ran'galhah visk kohlaasheve. eahfahu doanatthah ran'galhah koat kohlaasheve.",
+      "english": "Whisk all ingredients well in a bowl. Then coat the donuts well.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ހުވަފެންފުޅު ތަޢުބީރުކުރަން އެކަކަށް ވެސް ނޭނގެންދެން,",
+      "latin": "huvafenfulhu thaubeerukuran ekakah ves neyn'gendhen,",
+      "english": "Until no one can interpret the dream,",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ހުވަފެނުގަ ހަޅޭއްނުލެވިގެން އުޅެނިކޮށް އަޑު އައީ.",
+      "latin": "huvafenuga halheynnulevigen ulhenikoh adu aee.",
+      "english": "I couldn't shout in the dream and the voice came out.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އިބްރަހަމޮވިޗް އަދި ބޭލް ނެތުމުން ވޯލްޑްކަޕަށް ފަޅުކަން އަންނާނެ - މޮރީނިއޯ",
+      "latin": "ibrahamovich adhi beyl nethumun voaldkapah falhukan annaane - moreenioa",
+      "english": "Ibrahimovic and Bale will be empty for the World Cup - Mourinho",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އިލެކްޝަންސް އިން ބުނީ ސުޕްރީމް ކޯޓުގެ ގައިޑްލައިންގައި އެފަދަ އިންތިހެބެކޭ ބުނެފައި އޮންނަ އޮތުން މާ ރަނގަޅަށް ފަހުމު ނުވި ނަމަވެސް ފަހުމުވި ވަރަކުން ސެކިއުރިޓީ ފީޗާސް ވޯޓު ކަރުދާހުގައި ހިމަނާފައިވާނެ ކަމަށެވެ.",
+      "latin": "ilekshans in bunee supreem koatuge gaidlaingai efadha inthihebekey bunefai onna othun maa ran'galhah fahumu nuvi namaves fahumuvi varakun sekiuritee feechaas voatu karudhaahugai himanaafaivaane kamasheve.",
+      "english": "The Election Commission said it did not understand the Supreme Court guidelines for such an election but security features would be included in the ballot papers as soon as it was understood.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އިނގިފައެއް ނެތް. ބަޓް..... އިރުކޮޅަކުން އެބަ ގުޅަން. އެހެން ބުނެ އާޔަން ފޯނު ބޭއްވިއެވެ. އާޔަން ބައްޕައަށް ގުޅަން ފޯނު ކަނޑާލީކަން ނޫރާއަށް އިނގުނެވެ.",
+      "latin": "in'gifaeh neiy. bat..... irukolhakun eba gulhan. ehen bune aayan foanu beyhvieve. aayan bappaah gulhan foanu kan'daaleekan nooraaah in'guneve.",
+      "english": "Not known. But..... I'll call you in a while. With that, Ian hung up. Noora knew that Ian had hung up to call his father.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "އިންކަމް ޓެކްސްއާ ދެކޮޅު ކެމްޕޭނަށް ޑީއާރްޕީން އަތޮޅުތަކަށް",
+      "latin": "inkam teksaa dhekolhu kempeynah deeaarpeen atholhuthakah",
+      "english": "DRP Launches Campaign Against Income Tax in the Atolls",
+      "domain": "politics"
+    },
+    {
+      "thaana": "އިންޕުޓް ޖުމްލައެއް ދީފިނަމަ, ކޮންޓެކްސްޓާ ގުޅޭ ގޮތަށް އެލިޓޭޝަންގެ މިސާލެއް ގެނެސްދޭށެވެ. އަވަސް އަވަހަށް އުއްމީދު ކުރަނީ އަވަސް އަވަހަށް ދިމާވާނެ ކަމަށް.",
+      "latin": "input jumlaeh dheefinama, kontekstaa gulhey gothah eliteyshange misaaleh genesdheysheve. avas avahah ummeedhu kuranee avas avahah dhimaavaane kamah.",
+      "english": "Given an input sentence, come up with an example of alliteration that fits the context. He hastily hopes to have a hurried happening.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އިންސާނުންގެ ނޭފަތުން ވަނީ އާ ވައްތަރެއްގެ އެންޓިބަޔޮޓިކްތަކެއް ފެނިފައި",
+      "latin": "insaanunge neyfathun vanee aa vaththaregge entibayotikthakeh fenifai",
+      "english": "A new type of antibiotic has been found in the human nose",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އިންތިހާބު ބޮއިކޮޓް ކުރުމަކީ ތަހްޒީބު އުސޫލެއް ނޫން: ރައީސް ޔާމީން",
+      "latin": "inthihaabu boikot kurumakee thahzeebu usooleh noon: raees yaameen",
+      "english": "Boycotting the Election Is Not a Civilized Measure: President Yaamin",
+      "domain": "politics"
+    },
+    {
+      "thaana": "އިރާގުގެ ހަމަނުޖެހުން ތަކުގައި 40 މީހުން މަރުވެއްޖެ",
+      "latin": "iraaguge hamanujehun thakugai 40 meehun maruvejje",
+      "english": "40 killed in Iraq unrest",
+      "domain": "international"
+    },
+    {
+      "thaana": "އިސްލާހުކުރަން ފޮނުވާލާ ފޯމުތައް އަންގާރަ ދުވަހުގެ ނިޔަލަށް ބަލައިގަންނަ ގޮތަށް ހަމަޖައްސައިފި",
+      "latin": "islaahukuran fonuvaalaa foamuthah angaara dhuvahuge niyalah balaiganna gothah hamajassaifi",
+      "english": "Forms sent for correction to be accepted until Tuesday",
+      "domain": "politics"
+    },
+    {
+      "thaana": "އިސްމާއިލް ނާއިލް 10 މަސް 17 ގަޑި ކުރިން.",
+      "latin": "ismaail naail 10 mas 17 gadi kurin.",
+      "english": "Ismail Nail 10 months 17 hours ago.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އިތުރު ޓާފް ދަނޑެއް ހެދުމަށް އެކުވެނީގެ ތިން ނަންބަރު ދަނޑު 50 އަހަރަށް އެފްއޭއެމް އަށް",
+      "latin": "ithuru taaf dhan'deh hedhumah ekuveneege thin nanbaru dhan'du 50 aharah efeyem ah",
+      "english": "The association's No. 3 stadium will be given to the FAM for 50 years",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ޖަލުގައި ހުރި މީއާދުގެ މައްޗަށް ރާއްޖެ ޓީވީ ރޯކޮށްލުމުގެ ދައުވާކުރަން ފޮނުވައިފި",
+      "latin": "jalugai huri meeaadhuge machchah raajje teevee roakohlumuge dhauvaakuran fonuvaifi",
+      "english": "Charges Filed Against Inmate over Maldives TV Burning Incident",
+      "domain": "crime"
+    },
+    {
+      "thaana": "ޖިންސަށް ޚާއްޞަ ބަހެއް ބޭނުން ނުކުރުމަށް ދީފައިވާ ޖުމްލަ އަލުން ލިޔާށެވެ އޮފީހުގެ މެނޭޖަރު އެމީހުންގެ މުވައްޒަފުންނާ ވާހަކަ ދެއްކިއެވެ.",
+      "latin": "jinsah khaassa baheh beynun nukurumah dheefaivaa jumla alun liyaasheve ofeehuge meneyjaru emeehunge muvazzafunnaa vaahaka dhekkieve.",
+      "english": "Rewrite the sentence given to avoid using gender-specific language The office manager spoke to their employees.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ޖޯޖް މާރލް އަވަހާރަވީ 1881 ވަނަ އަހަރު ޕެރިހުގައެވެ . އޭނާގެ ދަރިފުޅު ހޫގްސް މާރލް ވެސް ކުލަ ޖައްސާ މީހަކަށް ވެގެން ދިޔައެވެ .",
+      "latin": "joaj maarl avahaaravee 1881 vana aharu perihugaeve . eynaage dharifulhu hoogs maarl ves kula jassaa meehakah vegen dhiyaeve .",
+      "english": "Georges Merle died in 1881 in Paris . His son Hugues Merle also became a painter .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ޖޯލި ރިސޯޓުގެ ބައެއް ވިލާތައް ވިއްކަނީ",
+      "latin": "joali risoatuge baeh vilaathah vikkanee",
+      "english": "Some Villas at Joali Resort Are for Sale",
+      "domain": "business"
+    },
+    {
+      "thaana": "ޖޮއިކީގައި ހަރަކާތްތެރިވާ ބައިތަކެއް ނެތް ކަމަށާއި ފަޅައިގެންދާނެ ކޯކެއް ވެސް ނެތް ކަމަށާއި ފަޅައިގެންދާ ފަދަ ފިޔަތަކެއް ވެސް ނެތް ކަމަށެވެ .",
+      "latin": "joikeegai harakaaiytherivaa baithakeh neiy kamashaai falhaigendhaane koakeh ves neiy kamashaai falhaigendhaa fadha fiyathakeh ves neiy kamasheve .",
+      "english": "The JoyKey has no moving parts , no corks that can break , or feathers that can wear out .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކާކުތަ? މާބޮޑު ވިސްނުމަކާ ނުލާ ލޫނާ ބުނެލިއެވެ.",
+      "latin": "kaakutha? maabodu visnumakaa nulaa loonaa bunelieve.",
+      "english": "Who is it? Luna said without much thought.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކައިވެންޏަށް ފަހު ފިލްމީ މަސައްކަތްތަކާ ޖެނެލިއާ ދުރުގައ ހުރި ނަމަވެސް, ރިތޭޝް އަންނަނީ މިހާރު ވެސް ފިލްމް ކުޅެމުންނެވެ.",
+      "latin": "kaivengnah fahu filmee masakkaiythakaa jeneliaa dhuruga huri namaves, ritheysh annanee mihaaru ves film kulhemunneve.",
+      "english": "Although Genelia has been away from films since her marriage, Ritesh is still acting.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކަލޭ ހޮވިފައި ތިހުރީ ވޯޓް އޮޅުވާލައިގެންނެވެ.",
+      "latin": "kaley hovifai thihuree voat olhuvaalaigenneve.",
+      "english": "You were elected by rigging the vote.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ކަޅު ދެ ޓޮޕެއް ފެނިއްޖެނަމަ އޭނާ ލައިގެން ހުރީ ހުދު ޓޮޕެއް ކަމަށް ހީކުރެވިދާނެއެވެ .",
+      "latin": "kalhu dhe topeh fenijjenama eynaa laigen huree hudhu topeh kamah heekurevidhaaneeve .",
+      "english": "If he saw two black hats , he could have assumed that he was wearing a white hat .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކަނާތު ނުވަތަ އެއްމެތިރީގައި ހުންނަންވީ ކުލަ. ނުވަތަ އެއްކުލައަކުންނަމަ އެކުލައެއް.",
+      "latin": "kanaathu nuvatha emmethireegai hunnanvee kula. nuvatha ekkulaakunnama ekulaeh.",
+      "english": "Right or Bottom color when drawing gradients, not used for solid color.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކައުންސިލްގެ ރައީސް ހެންރީ ހެންރީ ރިކްސަން އާއި ކޮމިޓީތަކުގެ މުގައްރިރަކީ ފްރެޑްރިކް ބްރައުން އެވެ .",
+      "latin": "kaunsilge raees henree henree riksan aai komiteethakuge mugarrirakee fredrik braun eve .",
+      "english": "President of the Council was Henry Henry Wrixon , the chairman of the committees was Frederick Brown .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކެޕިޓަލް މާކެޓަށް ހޭލުންތެރިކުރުވުމުގެ ވޯކްޝޮޕެއް ސީއެމްޑީއޭ އިން ފަށައިފި",
+      "latin": "kepital maaketah heyluntherikuruvumuge voakshopeh seeemdeeey in fashaifi",
+      "english": "CMDA launches workshop to raise awareness about capital market",
+      "domain": "business"
+    },
+    {
+      "thaana": "ކިޔާފައިވާ ޢަދަދު: 3541",
+      "latin": "kiyaafaivaa adhadhu: 3541",
+      "english": "Read count: 3541",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކިޔާފައިވާ ޢަދަދު: 4411",
+      "latin": "kiyaafaivaa adhadhu: 4411",
+      "english": "Number of reads: 4411",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކިޔަމަނޭ މިހިތޭ ނުވީ ތިހަނދާންތަކޭ އާކުރުވަނީ",
+      "latin": "kiyamaney mihithey nuvee thihan'dhaanthakey aakuruvanee",
+      "english": "Kiyamane this heart was not refreshing your memories",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ކިޔަވާ ކުދީންގެ މިފަދަ ހަރަކާތްތައް ފޫހިކަމެއް ނެތި ވަގުތުން ގެނެސްދެއްވާ ކަމަށް ޓަކައި ވަގުތަށް ޝުކުރު އަދާކުރަން",
+      "latin": "kiyavaa kudheenge mifadha harakaaiythah foohikameh nethi vaguthun genesdhehvaa kamah takai vaguthah shukuru adhaakuran",
+      "english": "Thank you for bringing such activities of the students without boredom",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ކޮބާ?...\"\"ކިއާރާ ކީ އެއްޗެއް ނޭނގޭތީ ވިކްޔަންއަށް ސުވާލު ކުރެވުނީ ވަށައިގެން ހޯދާ ލަމުންނެވެ.",
+      "latin": "kobaa?...\"\"kiaaraa kee echcheh neyn'geythee vikyanah suvaalu kurevunee vashaigen hoadhaa lamunneve.",
+      "english": "Where?...\"\"Kiara didn't know what to say, so Victoria asked, looking around.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކޮންއިރަކު ދަނީ? ކޮންތާކު ތިހިރީ? ނޫރާ އަށް އަހާލެ ވުނެވެ.",
+      "latin": "koniraku dhanee? konthaaku thihiree? nooraa ah ahaale vuneve.",
+      "english": "When are you going? Where are you? Noora asked herself.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ކޮންމެ ކެންޑީޑޭޓަކުވެސް ކުރާ ކެމްޕެއިން ވަނީ އަނެއް 3 ކެންޑިޑޭޓުންނަށް އެންޓި ކެމްޕެއިންނަކަށް..",
+      "latin": "konme kendeedeytakuves kuraa kempein vanee aneh 3 kendideytunnah enti kempeinnakah..",
+      "english": "Each candidate's campaign has become an anti-campaign for the other three candidates.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކޮރެއާގެ ލަވަކިޔުންތެރިޔާ ލީ ހީ އަކީ ވައިޖީ އެންޓަޓެއިންމަންޓްގެ ދަށުން ދެކުނު ކޮރެއާގެ ލަވަކިޔުންތެރިއެކެވެ .",
+      "latin": "koreaage lavakiyuntheriyaa lee hee akee vaijee entateinmantge dhashun dhekunu koreaage lavakiyuntheriekeve .",
+      "english": "Korean singer Lee Hi is a South Korean singer under YG Entertainment .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކުއަންޓަމް މެކޭނިކްސްގެ ކުއަންޓަމް ނެޗުރަލް ކަމުގެ ސަބަބުން ނޮން ކޮމިއުޓޭޓިވް ބޯލްޓްޒްމަން މެޝިންގެ ތަމްރީނު ޕްރޮސެސް ނޮން ޓްރިވިއަލް އަކަށް ވެދާނެއެވެ .",
+      "latin": "kuantam mekeyniksge kuantam nechural kamuge sababun non komiuteytiv boaltzman meshinge thamreenu proses non trivial akah vedhaaneeve .",
+      "english": "Due to the quantum nature of quantum mechanics , the training process of the non-commutative Boltzmann machine can become non-trivial .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކުޑަ އީދު ހަވީރުން މާލެއަށް ބޮޑު އުފަލެއް",
+      "latin": "kuda eedhu haveerun maaleah bodu ufaleh",
+      "english": "Big Joy for Male' from Little Eid Afternoon",
+      "domain": "local news"
+    },
+    {
+      "thaana": "ކުޑަކުދިންގެ ދުވަސް \"އެހެން ވިސްނުމެއްގެ ތެރޭގައި\"",
+      "latin": "kudakudhinge dhuvas \"ehen visnumegge thereygai\"",
+      "english": "Children's Day with a \"Different Perspective\"",
+      "domain": "education"
+    },
+    {
+      "thaana": "ކުޑަކުއްޖަކުވެސް ލިޔެފާނެމިކަހަލަ ލިޔުމެއް. ކޮންމެމިސާލެއް ކޮންމެކަމަކާގުޅުވައުގެން ލީޔާނީ ތަންދޮރު ނުދަންނަމީހުން",
+      "latin": "kudakujjakuves liyefaanemikahala liyumeh. konmemisaaleh konmekamakaagulhuvaugen leeyaanee thandhoru nudhannameehun",
+      "english": "A child might write such a text. Every example is written by people who don't know the door",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކުޅިވަރުގެ 'ލެގަސީއެއް' ބޭނުން ނަމަ މަނާ ބޭހާ ދުރުވާން ޖެހޭ: ކޮމިޝަނަރ އޮފް ސްޕޯޓްސް",
+      "latin": "kulhivaruge 'legaseeeh' beynun nama manaa beyhaa dhuruvaan jehey: komishanar of spoats",
+      "english": "Sports Commissioner: Must avoid banned substances if a sports 'legacy' is desired",
+      "domain": "sports"
+    },
+    {
+      "thaana": "ކުޅުދުއްފުށީ ފުލުހުންގެ ބެލުމުގެ ދަށުގައި ހުއްޓާ އަމިއްލައަށް މަރުވާން މަސައްކަތް ކުރި މީހާ ނިޔާވެއްޖެ",
+      "latin": "kulhudhuffushee fuluhunge belumuge dhashugai huttaa amillaah maruvaan masakkaiy kuri meehaa niyaavejje",
+      "english": "Person who attempted suicide while in police custody in Kulhudhuffushi has died",
+      "domain": "crime"
+    },
+    {
+      "thaana": "ކުޅުދުއްފުށި ގެއެއްގައި އަލިފާން ރޯވެ ދެމީހަކަށް އަނިޔާވެއްޖެ",
+      "latin": "kulhudhuffushi geeggai alifaan roave dhemeehakah aniyaavejje",
+      "english": "Two people were injured in a house fire in Khedhufushi",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކުންފުނިން އައިސްކްރީމް ވިއްކަނީ , ދެން ފުޅާކޮށް އައިސް ކޯންސް ފިހެލުމަށް މައި އޮފީސް ބަދަލުވަނީ ބާލްޓިމޯރ އަށެވެ .",
+      "latin": "kunfunin aiskreem vikkanee , dhen fulhaakoh ais koans fihelumah mai ofees badhaluvanee baaltimoar asheve .",
+      "english": "Company sells ice cream , then expands to bake ice cones headquarters moves to Baltimore .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކުނި އެތަނަށް އެޅުމުން, ކުޑަ ބުލްޑޯޒަރެއް މެދުވެރިކޮށް ރަނގަޅަށް ފަތުރާލައި, ގާތްގަނޑަކަށް 12 އިންޗި ހުންނަ ވަރަށް މޫދުން ވެލި އެޅުން.",
+      "latin": "kuni ethanah elhumun, kuda buldoazareh medhuverikoh ran'galhah fathuraalai, gaaiygan'dakah 12 inchi hunna varah moodhun veli elhun.",
+      "english": "after discharging, the garbage to be properly spread by a small bulldozer and then covered with sea sand to a thickness of about eight to 12 inches.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ކުރީގައި ފިލްމް ކުޅެން ބޭނުންވިޔަސް މިއަދު އެކަހަލަ ކަމެއް ކުރާކަށް އަޅުގަނޑަކަށް ނުކެރޭނެ, މިހިސާބަށް ބުނެވުނުތަނާ ހަމީދުގެ ހިނިގަނޑު ފަޅައިގެން ދިޔަ އެވެ.",
+      "latin": "kureegai film kulhen beynunviyas miadhu ekahala kameh kuraakah alhugan'dakah nukereyne, mihisaabah bunevunuthanaa hameedhuge hinigan'du falhaigen dhiya eve.",
+      "english": "I used to want to act in films but I wouldn't dare do that today, Hamid burst out laughing at this point.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ކުރިން ޕްރޫޑެންޝަލް ބިލްޑިންގ ގެ ނަމުން މަޝްހޫރު ހުސްޓަން މެއިން ބިލްޑިންގ ( އެޗްއެމްބީ ) އަކީ ޓެކްސަސްގެ ހުސްޓަންގައި ހުންނަ ޓެކްސަސް މެޑިކަލް ސެންޓަރުގައި ހުރި އުސް އިމާރާތެކެވެ .",
+      "latin": "kurin proodenshal bilding ge namun mashhooru hustan mein bilding ( echembee ) akee teksasge hustangai hunna teksas medikal sentarugai huri us imaaraathekeve .",
+      "english": "The Houston Main Building ( HMB ) formerly known as the Prudential Building was a skyscraper at the Texas Medical Center in Houston , Texas .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ލަފު ހުރި ކުއްޖާގެ އޮޕަރޭޝަނަށް ލައްކައަކަށް ވުރެ ގިނަ ރުފިޔާ ލިބިއްޖެ",
+      "latin": "lafu huri kujjaage opareyshanah lakkaakah vure gina rufiyaa libijje",
+      "english": "Operation for child with deformity receives more than 100,000 rupees",
+      "domain": "health"
+    },
+    {
+      "thaana": "ލަންކާގައި ދިވެއްސަކު ގެއްލިގެން ހޯދަން ފަށައިފި",
+      "latin": "lankaagai dhivessaku gelligen hoadhan fashaifi",
+      "english": "Search for Missing Maldivian Begins in Sri Lanka",
+      "domain": "international"
+    },
+    {
+      "thaana": "ލީން, ޔާނާއަށް ކީއްތަ ކޮށްދިނީ.... މިޝަލް ކުޑަކޮށް ހެމުން އަހާލިއެވެ.",
+      "latin": "leen, yaanaaah keeththa kohdhinee.... mishal kudakoh hemun ahaalieve.",
+      "english": "Lynn, what did you do to Yana.... Michelle asked with a slight laugh.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ލެސްޓަނީ އަކީ ބާސެލޯނާ ޕްރޮވިންސްގެ މުނިސިޕަލްޓީއަކާއި ސްޕެއިންގެ ކެޓަލޯނިއާގެ އޮޓޮނޮމިކް ކޮމިއުނިޓީއެކެވެ .",
+      "latin": "lestanee akee baaseloanaa provinsge munisipalteeakaai speinge ketaloaniaage otonomik komiuniteeekeve .",
+      "english": "L'Estany is a municipality in the province of Barcelona and autonomous community of Catalonia , Spain .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ލިބުނީ ހައްގު މޮޅެއް, އެކަމަކު ރާއްޖެއިން އަހަރުމެން ކުޅުނަކަ ނުދިން: ގަތަރު ކޯޗު",
+      "latin": "libunee haggu molheh, ekamaku raajjein aharumen kulhunaka nudhin: gatharu koachu",
+      "english": "Deserved Victory, But Maldives Didn't Let Us Play Our Game: Qatar Coach",
+      "domain": "sports"
+    },
+    {
+      "thaana": "ލޯބިވެރިޔާ ނުލިބިގެންވެސް, ބައިވެރިޔާއާއިމެދު ވިސްނަމުންގޮސްވެސް ބައްޔަކަށް ވެއްޖެނަމަ އެއީ ކުރެވޭ ފާފައަކަށްވާ ސަބަބާ މާޔޫސްބަލީގެ ބޭސް ކާން ނުޖެހޭނެ ގޮތް!",
+      "latin": "loabiveriyaa nulibigenves, baiveriyaaaaimedhu visnamungosves bayyakah vejjenama eee kurevey faafaakahvaa sababaa maayoosbaleege beys kaan nujeheyne goiy!",
+      "english": "If Loving Someone Unattainable or Constantly Thinking About a Partner Leads to Illness, It Becomes a Sin - And How to Avoid Needing Medication for Depression!",
+      "domain": "health"
+    },
+    {
+      "thaana": "މާދަމާއަށް ޓަކައި ދަރުމަ ގިނަކޮށްލުމަށް",
+      "latin": "maadhamaaah takai dharuma ginakohlumah",
+      "english": "To increase the charity for tomorrow",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މާރާމާރީގައި ޒަހަމްވި ގައިދީގެ ހާލު ސީރިއަސް: އައިޖީއެމްއެޗް",
+      "latin": "maaraamaareegai zahamvi gaidheege haalu seerias: aijeeemech",
+      "english": "Prisoner injured in attack in serious condition: IGMH",
+      "domain": "crime"
+    },
+    {
+      "thaana": "މާޓާ އާއި އެޑީގެ ބޭބެ އެންޖެލާ ވެސް ސިޓީން ނަހަމަ ގޮތުގައި ބޭނުން ކުރެ އެވެ .",
+      "latin": "maataa aai edeege beybe enjelaa ves siteen nahama gothugai beynun kure eve .",
+      "english": "Both Marta and Eddie 's brother Angela are exploited by the city .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މަގު ފްރޭމްކޮށްފައިވަނީ ފަސް ބެލްކަނީއަކުން ކަމަށާއި މެދުގައި ވަށައިގެން ވަށައިގެން ފައުންޓަނެއް ހުންނައިރު ކޮންމެ ބެލްކަނީއެއްގެ ސިފައަކީ ސާދާ ޗަސްބިމުގެ އަނގޮޓިއެކެވެ .",
+      "latin": "magu freymkohfaivanee fas belkaneeakun kamashaai medhugai vashaigen vashaigen fauntaneh hunnairu konme belkaneeegge sifaakee saadhaa chasbimuge an'gotiekeve .",
+      "english": "The path is framed by five balconies with a circular fountain in the middle and each balcony is characterized by a simple ring of grass .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މަޖިލިސް މެންބަރުންގެ މުސާރަ ކުޑަކުރަން ގޮވާލައި ޕެޓިޝަނެއްގައި ސޮއިކުރަނީ",
+      "latin": "majilis menbarunge musaara kudakuran govaalai petishaneggai soikuranee",
+      "english": "Signatures being collected on petition calling for reduction of parliament members' salaries",
+      "domain": "politics"
+    },
+    {
+      "thaana": "މަލާދަރު ބާސޫ އާއި ޗަންދީދާސް އަކީ ވެސް ވައިޝްނާވާ ބައެއް ނޫން ނަމަވެސް ބެންގަލްގައި ތިރީގައިވާ ވައިޝްނާވާ ޅެންތަކުގެ ބޮޑު ބައެއްގެ ބިންގާ އެޅެން ޖެހެ އެވެ .",
+      "latin": "malaadharu baasoo aai chandheedhaas akee ves vaishnaavaa baeh noon namaves bengalgai thireegaivaa vaishnaavaa lhenthakuge bodu baegge bingaa elhen jehe eve .",
+      "english": "Although neither Maladhar Basu nor Chandidas were Vaishnavas , they should lay the foundation for much of the following Vaishnava poetry in Bengal .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މަނާ ޖަނަވާރު ރާއްޖެ އެތެރެކުރުން ހުއްޓުވަން ފިޔަވަޅު އަޅަން ފަށައިފި",
+      "latin": "manaa janavaaru raajje etherekurun huttuvan fiyavalhu alhan fashaifi",
+      "english": "Measures initiated to prevent the importation of prohibited animals into the Maldives",
+      "domain": "environment"
+    },
+    {
+      "thaana": "މަރީ ދެން ކޯޗިން އަށް ނުކުންނާނީ ރަނގަޅަށް ދަސްކޮށްގެން މަރީ ދެން ކޯޗިން އަށް ނުކުންނާނީ ރަނގަޅަށް ދަސްކޮށްގެން",
+      "latin": "maree dhen koachin ah nukunnaanee ran'galhah dhaskohgen maree dhen koachin ah nukunnaanee ran'galhah dhaskohgen",
+      "english": "Mary will only go into coaching after learning it properly. Mary will only go into coaching after learning it properly.",
+      "domain": "education"
+    },
+    {
+      "thaana": "މަސްކިރާ ދޯނި ފަހަރަށް މިއަހަރު ތެރޭ 14.2 މިލިއަން ރުފިޔާ ޖަމާކޮށްދީފި",
+      "latin": "maskiraa dhoani faharah miaharu therey 14.2 milian rufiyaa jamaakohdheefi",
+      "english": "14.2 million rufiyaa deposited for fishing boats this year",
+      "domain": "business"
+    },
+    {
+      "thaana": "މަސްތުވާތަކެތީގެ ވަބާއިން ސަލާމަތްވެފައިވާ ފަރާތްތަކަށް ރަނުގެ ފުރުސަތެއް",
+      "latin": "masthuvaathaketheege vabaain salaamaiyvefaivaa faraaiythakah ranuge furusatheh",
+      "english": "Golden opportunity for those free from drug abuse",
+      "domain": "health"
+    },
+    {
+      "thaana": "މީ އެވަރުކަމެއް ނޫނޭ.... ރުހައިލުގެ ބައްޕަ ހީކުރާނީ ކީކޭ ތިހެން އުޅުނީމަ... ދެން ދޭ މިތަނުން... އަހަރެންގެ ފަޔަށް ކަމެއްނުވެއެއްނު",
+      "latin": "mee evarukameh nooney.... ruhailuge bappa heekuraanee keekey thihen ulhuneema... dhen dhey mithanun... aharenge fayah kamennuveennu",
+      "english": "This isn't that much.... What will Rachel's father think of you... Then get out of here... My leg isn't hurt",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "މީ ކޯޗެއް? އެ ސިޓީ ނިއުޅާލަމުން ސުޒޭނާ އަހާލި އެވެ.",
+      "latin": "mee koacheh? e sitee niulhaalamun suzeynaa ahaali eve.",
+      "english": "What is this? Suzanne asked, opening the letter.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މީގެ ކުރިން ކަރަންޓީިން ކުރަނީ ހަމައެކަނި މީހުން އައުން މަނާކޮށްފައިވާ ގައުމަކުން ނުވަތަ ސަރަހައްދަކުން އަންނަ ދިވެހިން އެކަންޏެވެ. އެ ނޫން ގައުމުތަކުން އަންނަ މީހުން ދިވެހިން ދޫކޮށްލަނީ ހޯމް އައިސްލޭޝަނަށެވެ.",
+      "latin": "meege kurin karanteein kuranee hamaekani meehun aun manaakohfaivaa gaumakun nuvatha sarahahdhakun anna dhivehin ekangneve. e noon gaumuthakun anna meehun dhivehin dhookohlanee hoam aisleyshanasheve.",
+      "english": "Previously, only those coming from a country or region where people were banned from entering were quarantined. Those from other countries are released to home isolation.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މީގެ ތިން ހަފްތާއެއްހާ ދުވަސް ކުރިން އެ ފިލްމު ލޯންޗްކުރުމަށްފަހު ފިލްމުގެ ކާސްޓުން ޝޫޓިންގްއަށް ބ. ގޮއިދޫއަށް ފުރިއެވެ.",
+      "latin": "meege thin hafthaaehhaa dhuvas kurin e filmu loanchkurumahfahu filmuge kaastun shootingah b. goidhooah furieve.",
+      "english": "After the launch of the film three weeks ago, the cast of the film went to Badulla for shooting. He left for Goiâ€TMdu.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މީހުން ޓްރެފިކް ކުރާ ނެޓްވޯކްތަކުގެ އަމާޒަކަށް ރާއްޖެ ވަނީ ވެފައި: ޔޫތް މިނިސްޓަރު",
+      "latin": "meehun trefik kuraa netvoakthakuge amaazakah raajje vanee vefai: yooiy ministaru",
+      "english": "Maldives Becomes Target for Human Trafficking Networks: Youth Minister",
+      "domain": "crime"
+    },
+    {
+      "thaana": "މި ހާދިސާގައި އެމީހާ ޖަމްޕިންގ ކުޝަންއަށް ފުންމާލި ވަގުތު, ޖަމްޕިންގ ކުޝަން މަތިން ކައްސާލައިގެން ބިންމަތީ ޖެހި އަނިޔާ ލިބުމުގެ ސަބަބުން އިތުރު ފަރުވާއަށް އޭޑީކޭ ހޮސްޕިޓަލަށް ވަނީ ގެންދެވިފައި ކަމަށް ވެސް އެމްއެންޑީއެފް އިން ވިދާޅުވިއެވެ.",
+      "latin": "mi haadhisaagai emeehaa jamping kushanah funmaali vaguthu, jamping kushan mathin kassaalaigen binmathee jehi aniyaa libumuge sababun ithuru faruvaaah eydeekey hospitalah vanee gendhevifai kamah ves emendeeef in vidhaalhuvieve.",
+      "english": "The man jumped on the jumping cushion and fell to the ground. He was taken to ADK Hospital for further treatment, the MNDF said.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މި ޖުމްލައަށް ދީފައި, އެކަށީގެންވާ ނަމުގެ ޢިބާރާތެއް ހޯދާށެވެ. މި ޖުމްލައިން އެކަށީގެންވާ ނަމުގެ ޢިބާރާތަކީ: \"ހިނގާލުމެއް\" އެވެ.",
+      "latin": "mi jumlaah dheefai, ekasheegenvaa namuge ibaaraatheh hoadhaasheve. mi jumlain ekasheegenvaa namuge ibaaraathakee: \"hin'gaalumeh\" eve.",
+      "english": "Given this sentence, find an appropriate noun phrase. An appropriate noun phrase from this sentence is: \"a walk.\"",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "މިއީ ޖިއޮގްރަފިކަލީ ސަގާފީ ގްލާސްގޯ ޑިސްޓްރިކްޓާއި ސައުތު އާއި އެޑިންބާރގް ޑިސްޓްރިކްޓް އަދި ނޯތު އަދި މިޑްލެންޑްސް ޑިސްޓްރިކްޓްތަކާ ދިމާވާ ތަންތަނެވެ .",
+      "latin": "miee jiografikalee sagaafee glaasgoa distriktaai sauthu aai edinbaarg distrikt adhi noathu adhi midlends distriktthakaa dhimaavaa thanthaneve .",
+      "english": "These geographically correspond to the traditional Glasgow District , South , Edinburgh District , and North and Midlands districts .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މިއީ މިއަދާ ހަމައަށްވެސް އަޅުގަނޑު ކިޔަމަންވާ ނަސޭހަތުގެ ބަސްތަކެކެވެ.",
+      "latin": "miee miadhaa hamaahves alhugan'du kiyamanvaa naseyhathuge basthakekeve.",
+      "english": "a piece of advice i obey to this day.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "މިއީ ސީޒަންގެ އެންމެ މުހިއްމު މެޗުތައް: ރަނީއޭރީ",
+      "latin": "miee seezange enme muhimmu mechuthah: raneeeyree",
+      "english": "These are the most important matches of the season: Ranieiri",
+      "domain": "sports"
+    },
+    {
+      "thaana": "މިފަދަ ޑިސްޓޯރޓްޑް ޕެޕްޓައިޑް ނުވަތަ `` މޮޑިފައިޑް ކީ '' އަކީ އޮޓޮމެޓިކުން އެޗްއައިވީ ޕްރޮޓީއޭޒް އާއި ދެކޮޅަށް އިންހިބިޓަރ ކެންޑިޑޭޓަކަށް ވެގެންދެއެވެ .",
+      "latin": "mifadha distoartd peptaid nuvatha `` modifaid kee '' akee otometikun echaivee proteeeyz aai dhekolhah inhibitar kendideytakah vegendheeve .",
+      "english": "Such a distorted peptide or `` modified key '' becomes an inhibitor candidate against HIV protease automatically .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މިގެ ވަށައިގެން މި ހުރިހާ ގެތަށް ހުއްޓާ, އަހަރެން މާދުރަށް ވިޝާމްގާތަށް ދާންޖެހުނީ ކީއްވެކަމާއިމެދު ހިތުގައި ސުވާލެއް ނުއުފެދޭތަ?",
+      "latin": "mige vashaigen mi hurihaa gethah huttaa, aharen maadhurah vishaamgaathah dhaanjehunee keehvekamaaimedhu hithugai suvaaleh nuufedheytha?",
+      "english": "With all these houses around this house, don't you wonder why I had to go so far to Visham?",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "މިހާރު ދުނިޔޭގެ އެކި ކަންކޮޅުތަކުގައި ހަލުވިކަމާއެކު ފެތުރެމުންދާ ކޮރާނާ ވައިރަސް ނުވަތަ ކޮވިޑް-19 ކޮންޓްރޯލް ކުރުމުގެ ގޮތުން އިންޑިއާއިން ޓޫރިސްޓް ވިސާ ދިނުން ހުއްޓާލަން ނިންމައިފި އެވެ.",
+      "latin": "mihaaru dhuniyeyge eki kankolhuthakugai haluvikamaaeku fethuremundhaa koraanaa vairas nuvatha kovid-19 kontroal kurumuge gothun indiaain toorist visaa dhinun huttaalan ninmaifi eve.",
+      "english": "India has decided to stop issuing tourist visas to control the spread of the coronavirus.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މިނިމަމް ވޭޖު ބޯޑުން ފާހަގަކުރި ކަންކަން",
+      "latin": "minimam veyju boadun faahagakuri kankan",
+      "english": "Minimum Wage Board observations",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މިނިވަން އިންތިހާބެއްގައި އަޅުގަނޑާ ވާދަކޮށްލަން ކެރޭނެ ލީޑަރަކު ނެތް: ޔާމީން",
+      "latin": "minivan inthihaabeggai alhugan'daa vaadhakohlan kereyne leedaraku neiy: yaameen",
+      "english": "There is no leader brave enough to compete against me in a free election: Yameen",
+      "domain": "politics"
+    },
+    {
+      "thaana": "މިނިވަން މުއައްސަސާތަކާ ބެހޭ ކޮމެޓީން ޑީއާރްޕީގެ އަލީ ވަހީދާއި ޕީއޭގެ އަބްދުއްރަހީމް އިސްތިއުފާ ދެއްވައިފި",
+      "latin": "minivan muassasaathakaa behey kometeen deeaarpeege alee vaheedhaai peeeyge abdhurraheem isthiufaa dhehvaifi",
+      "english": "Ali Waheed of DRP and Abdul Raheem of PA Resign from Independent Institutions Committee",
+      "domain": "politics"
+    },
+    {
+      "thaana": "މިސާލަކަށް މިހާރު ޑެވޫގެ މިލްކުވެރިކަމުގައިވާ ޖީއެމް އިން އުފައްދާ ކާރުތަކުގައި މިހާރު ޑެވޫސްގެ ގޮތުގައި ބެޖް ނުކުރެވެއެވެ .",
+      "latin": "misaalakah mihaaru devooge milkuverikamugaivaa jeeem in ufahdhaa kaaruthakugai mihaaru devoosge gothugai bej nukureveeve .",
+      "english": "For example , cars built by GM , now owned by Daewoo , are no longer badged as Daewoos .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މޯކަމް ކުންފުނީގެ ފައިލްތައް ސަރުކާރުން ވަނީ ގެންގޮސްފައި: މުނީޒު",
+      "latin": "moakam kunfuneege failthah sarukaarun vanee gengosfai: muneezu",
+      "english": "Government has taken away MoKam Company's files: Muneez",
+      "domain": "politics"
+    },
+    {
+      "thaana": "މޯލްޑިވިއަން އައިޑޮލްގެ އެއްވަނަ އަށް 250,000ރ.",
+      "latin": "moaldivian aidolge ehvana ah 250,000r.",
+      "english": "First Place in Maldivian Idol Wins MVR 250,000",
+      "domain": "entertainment"
+    },
+    {
+      "thaana": "މޯލްޑިވިއަން އެއަރލައިންއިން ޗުއްޓީއާ ދިމާކޮށް ރާއްޖޭގެ އެތެރޭގެ ދަތުރުތައް އިތުރުކޮށްފި",
+      "latin": "moaldivian earlainin chutteeaa dhimaakoh raajjeyge ethereyge dhathuruthah ithurukohfi",
+      "english": "Maldivian Airlines Increases Domestic Flights for the Holiday Season",
+      "domain": "business"
+    },
+    {
+      "thaana": "މޮނިއުމެންޓްތަކުގެ މައްސަލަ ސަލަފުން ޕޮލިސް އިންޓަގްރިޓީއަށް ހުށަހަޅައިފި",
+      "latin": "moniumentthakuge massala salafun polis intagriteeah hushahalhaifi",
+      "english": "Salaf Submits Monument Issues to Police Integrity",
+      "domain": "local news"
+    },
+    {
+      "thaana": "މޮސްކޯވިޗް ނެދަލެންޑްސްގައި މަޝްހޫރުވެވަޑައިގަތީ އެމްސްޓަރޑަމްގެ އަންޑަރވޯލްޑްގެ ގޯޑްފާޑަރ ކްލާސް ބްރޫއިންސްމާ އާއި ހައިނެކެން ރަހީނުކުރި ކޯރ ވެން ހައުޓް އަދި ވިލެމް ހޮލީޑަރ ދިފާއު ކުރެއްވުމުންނެވެ .",
+      "latin": "moskoavich nedhalendsgai mashhooruvevadaigathee emstardamge andarvoaldge goadfaadar klaas brooinsmaa aai haineken raheenukuri koar ven haut adhi vilem holeedar dhifaau kurehvumunneve .",
+      "english": "Moszkowicz became well known in the Netherlands for defending the godfather of the Amsterdam underworld Klaas Bruinsma and the Heineken kidnappers Cor van Hout and Willem Holleeder .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މޮޔަ ކުއްޖާ. ތިގޮތަށް ވާހަކަ ދައްކަން ނުވާނެކަން ނޭގެނީތަ? ބޭނުން ވިޔަސް ނުވިޔަސް މަރުވާ ވަގުތު ޖެހުނީމަ މަރުވާނެ......... ކިޔަން ކޮއްކޮގެ ވާހަކަތަކުން ބައެއްފަހަރު ހާސްވާގޮތްވެއެވެ.",
+      "latin": "moya kujjaa. thigothah vaahaka dhakkan nuvaanekan neygeneetha? beynun viyas nuviyas maruvaa vaguthu jehuneema maruvaane......... kiyan kokkoge vaahakathakun baeffaharu haasvaagoiyveeve.",
+      "english": "Crazy kid. Don't you know you shouldn't talk like that? Whether you want to or not, you will die when the time comes......... Reading is sometimes annoying.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "މުހުލަތެއް ދިނަސް އުސް ފަސްގަނޑު ހަވާލުކުރުމުގެ ވިސްނުމެއް ކައުންސިލްގެ ނެތް",
+      "latin": "muhulatheh dhinas us fasgan'du havaalukurumuge visnumeh kaunsilge neiy",
+      "english": "Council has no intention of handing over the High Ground despite deadline",
+      "domain": "politics"
+    },
+    {
+      "thaana": "މުއިއްޒަށް ރޯދަމަސް ނިމޭހިސާބު ނުފެނިގެން ބޮޑުތަކުރުފާނުމަގު ނުފެށިފަ!",
+      "latin": "muizzah roadhamas nimeyhisaabu nufenigen boduthakurufaanumagu nufeshifa!",
+      "english": "Muizzu cannot see the end of Ramadan, hence the Bodu Thakurufaanu Magu has not commenced!",
+      "domain": "religion"
+    },
+    {
+      "thaana": "މުއިއްޒު ބުނީ ބޭރުގައި ކިޔަވާކުދިންނަށް ފައިސާ ދެވެންނެތްކަމަށް!",
+      "latin": "muizzu bunee beyrugai kiyavaakudhinnah faisaa dhevenneiykamah!",
+      "english": "Muizzu says no funds available for students studying abroad!",
+      "domain": "education"
+    },
+    {
+      "thaana": "މުޖުތަމަޢުން ލިތުއޭނިއާގެ ސަގާފަތް ކުރިއެރުވުމާއި ކެތޮލިކް ޢަޤީދާ ހިމާޔަތްކޮށް އަންހެނުންގެ ހެޔޮ ސިފަތަކަށް ތާއީދުކުރިއެވެ .",
+      "latin": "mujuthamaun lithueyniaage sagaafaiy kurieruvumaai ketholik aqeedhaa himaayaiykoh anhenunge heyo sifathakah thaaeedhukurieve .",
+      "english": "Society promoted Lithuanian culture , protected Catholic faith and supported the virtues of women .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "މުސްކުޅި ދެމަފިރިއަކު ލައްވައި އެތެރެކުރި 1 ކިލޯގެ މަސްތުވާ ތަކެތީގެ މައްސަލާގައި ހައްޔަރުކުރި އެކަކީ ޑްރަގްގެ ވިޔާފާރިކުރުމުގައި އިސް",
+      "latin": "muskulhi dhemafiriaku lahvai etherekuri 1 kiloage masthuvaa thaketheege massalaagai hayyarukuri ekakee dragge viyaafaarikurumugai is",
+      "english": "One person arrested in the case of 1 kilo of drugs brought in by an elderly couple is a key figure in drug trafficking",
+      "domain": "crime"
+    },
+    {
+      "thaana": "ނާއިފް ދުވެފައި ގޮސް ޝަފްގާގެ ގައިގައި ބައްދައިގަތެވެ. އެންމެން ހީކުރި ގޮތާ ހިލާފަށް ޝަފްގާގެ މޫނުމަތިން އެއްވެސް ހާސްކަމެއް ފެންނާކަށް ނެތެވެ.",
+      "latin": "naaif dhuvefai gos shafgaage gaigai bahdhaigatheve. enmen heekuri gothaa hilaafah shafgaage moonumathin ehves haaskameh fennaakah netheve.",
+      "english": "Naif ran and hugged Shafga. Contrary to what everyone thought, Shafga's face did not show any anxiety.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ނާރތެސިއަމް އަކީ ޔޫރޭޝިއަން އަދި އުތުރު އެމެރިކާގެ މާ ގަސްތަކުގެ ތެރެއިން ގަސްގަހާގެހި ގިނަ ޖިންސެކެވެ .",
+      "latin": "naarthesiam akee yooreyshian adhi uthuru emerikaage maa gasthakuge therein gasgahaagehi gina jinsekeve .",
+      "english": "Narthecium is a herbaceous genus of Eurasian and North American flower plants .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ނަމާދާއި ގުޅުންހުރި މައުލޫމާތު އަންގައިދޭ އެޕްލިކޭޝަން އެއް ތަޢާރަފް ކުރުމުގެ މަސައްކަތް ކުރަމުން ދާކަމަށް ޖަމިއްޔަތުއް ސަލަފުން ބުނެފިއެވެ.",
+      "latin": "namaadhaai gulhunhuri mauloomaathu angaidhey eplikeyshan eh thaaaraf kurumuge masakkaiy kuramun dhaakamah jamiyyathuh salafun bunefieve.",
+      "english": "The Jamiyyatul Salaf is working on introducing an application that provides information related to prayer.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ނަމަވެސް ޑޭވިޑް ޕިޒާރޯ އާއި މިރްކޯ ވުޗިނިޗް އަދި މާކޯ ކަސެޓީ ވަނީ ރޯމާގެ ފުރިހަމަ މުދާ ގަނެފަ އެވެ .",
+      "latin": "namaves deyvid pizaaroa aai mirkoa vuchinich adhi maakoa kasetee vanee roamaage furihama mudhaa ganefa eve .",
+      "english": "David Pizarro , Mirko Vučinić and Marco Cassetti , however , bought full property of Roma .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ނަމަވެސް ޑޯޓްމަންޑްގެ ސީއީއޯ ވަޓްޒްކޭ ވަނީ, އޮބަމެޔަންގް ޑޯޓްމަންޑް ދޫކޮށްލަން އުޅޭ ވާހަކަތަކަކީ ކަނޑައެޅިގެން ދޮގު ވާހަކަތަކެއް ކަމަށް ބުނެފައެވެ.",
+      "latin": "namaves doatmandge seeeeoa vatzkey vanee, obameyang doatmand dhookohlan ulhey vaahakathakakee kan'daelhigen dhogu vaahakathakeh kamah bunefaeve.",
+      "english": "However, Dortmund CEO Watzke has insisted that the rumors that Obama is leaving Dortmund are definitely false.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ނަމަވެސް ކޯޓުން މިއަދު ވަނީ ސަލްމާން ހާންގެ މައްޗަށް ކުރާ ހުރިިހާ ދައުވާއެއް ސާބިތުވާ ކަމަށް ކަނޑައަޅައިފި އެވެ.",
+      "latin": "namaves koatun miadhu vanee salmaan haange machchah kuraa huriihaa dhauvaaeh saabithuvaa kamah kan'daalhaifi eve.",
+      "english": "However, the court today ruled that all the charges against Salman Khan are proved.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ނަމަވެސް ރޭ ގެ މެޗަށް ނިއު ނުކުތީ އެ ޓީމްގެ ކޯޗް ސާބިއާގެ ނިކޮލާ ކަވަޒޮވިޗް ސަސްޕެންޝަންގައި ހުރުމުގެ ސަބަބުން އޭނާ ނުހިމަނައެވެ.",
+      "latin": "namaves rey ge mechah niu nukuthee e teemge koach saabiaage nikolaa kavazovich saspenshangai hurumuge sababun eynaa nuhimanaeve.",
+      "english": "However, Newcastle were without Serbian coach Nikola Kavazovic due to suspension.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ނަސްރީ ގެންދިއުމަށް ބޭނުންވާކަމަށާއި މިމަސް ނިމެންވާއިރަށް ގެންދާނެކަމަށް މެންޗެސްޓާ ސިޓީގެ ކޯޗް މަންޗިނީ އިއްޔެވަނީ ހާމަކޮށްފައެވެ.",
+      "latin": "nasree gendhiumah beynunvaakamashaai mimas nimenvaairah gendhaanekamah menchestaa siteege koach manchinee iyyevanee haamakohfaeve.",
+      "english": "Manchester City manager Jose Mourinho has revealed that he wants to sign Nasri by the end of the month.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ނަތީޖާއެއްގެ ގޮތުން އެމްއާރުޑީސީ އިން ވާސިލުވުމަށް ކަނޑައަޅާފައިވާ ލަނޑުދަނޑިތަކަށް ވާސިލުވިކަމެއް އެނގޭނެގޮތެއް ނެތް ކަމަށް އޮޑިޓް ރިޕޯޓުގައި ބުންޏެވެ.",
+      "latin": "natheejaaegge gothun emaarudeesee in vaasiluvumah kan'daalhaafaivaa lan'dudhan'dithakah vaasiluvikameh en'geynegotheh neiy kamah odit ripoatugai bungneve.",
+      "english": "As a result, there is no way to know whether MRDC has achieved its targets, the audit report said.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ނަޒާހާ އުމުރަށް ޖަލަށް ލާން ކުރި ހުކުމަށް ހައި ކޯޓުން ތާއީދުކޮށްފި",
+      "latin": "nazaahaa umurah jalah laan kuri hukumah hai koatun thaaeedhukohfi",
+      "english": "High Court upholds life sentence for Nazaha",
+      "domain": "crime"
+    },
+    {
+      "thaana": "ނެކްސަސް 5 ހިންގަނީ އެންޑްރޮއިޑް 4.4, ކިޓްކެޓުންނެވެ. ކިޓްކެޓް ފަރުމާކޮށްފައި ވަނީ ސްޕެކް ދަށް ފޯނުތަކުގައި ވެސް ބޭނުންކުރެވޭ ގޮތަށެވެ. ސަބަބަކީ ކިޓްކެޓަށް މެމޮރީން ނަގާ ޖާގަ ކުޑަވުމެވެ.",
+      "latin": "neksas 5 hinganee endroid 4.4, kitketunneve. kitket farumaakohfai vanee spek dhah foanuthakugai ves beynunkurevey gothasheve. sababakee kitketah memoreen nagaa jaaga kudavumeve.",
+      "english": "The Nexus 5 runs Android 4.4, KitKat. KitKat is designed to run on lower-spec phones. The reason is that KitKat takes up less memory space.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ނޭޝަނަލް ޖުވެނައިލް ޖަސްޓިސް ކޮންފަރެންސް ފަށައިފި",
+      "latin": "neyshanal juvenail jastis konfarens fashaifi",
+      "english": "National Juvenile Justice Conference Begins",
+      "domain": "education"
+    },
+    {
+      "thaana": "ނިހޯން ޔުނިވާސިޓީން ޑިގްރީ ހާސިލް ކުރައްވައި ޖޫޑޯ އިން 4 ވަނަ ޑޭން އާއި ކަރަޓޭ އިން 5 ވަނަ ޑޭން ހާސިލް ކުރެއްވި އެވެ .",
+      "latin": "nihoan yunivaasiteen digree haasil kurahvai joodoa in 4 vana deyn aai karatey in 5 vana deyn haasil kurehvi eve .",
+      "english": "He graduated from Nihon University , holding a 4th dan in judo and a 5th dan in karate .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ނިކޮލަސް ފްރިޑްރިކް ފޮން ތޯރެޓް ( އުފަންވީ ލުޑްވިގްސްބަރގް , 2 ޖޫން 1767 ; މަރުވީ ސްޓޫޓްގާޓް , 17 ޖެނުއަރީ 1845 ) .",
+      "latin": "nikolas fridrik fon thoaret ( ufanvee ludvigsbarg , 2 joon 1767 ; maruvee stootgaat , 17 jenuaree 1845 ) .",
+      "english": "Nikolaus Friedrich von Thouret ( born Ludwigsburg , 2 June 1767 ; died Stuttgart , 17 January 1845 ) .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ނިއު އަށް އެފްރިކާ ދެ ކުޅުންތެރިންނާއި ޔޫރަޕް ކުޅުންތެރިއެއް ގެންނަނީ",
+      "latin": "niu ah efrikaa dhe kulhuntherinnaai yoorap kulhuntherieh gennanee",
+      "english": "New Club Bringing in Two African Players and One European Player",
+      "domain": "sports"
+    },
+    {
+      "thaana": "ނޯޓް: މިއީ ނޫރުލް އިސްލާމް އިން ނަކަލް ކޮށްފައިވާ ލިޔުމެކެވެ. މިލިޔުމަށް އުނިއިތުރެއް ގެނެސްފައެއް ނުވާނެއެވެ.",
+      "latin": "noat: miee noorul islaam in nakal kohfaivaa liyumekeve. miliyumah uniithureh genesfaeh nuvaaneeve.",
+      "english": "Note: This is a quote from Noorul Islam. This article has not been amended.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ނޫސްވެރިކަމުގެ އެވޯޑު މި ފަހަރު ހަތް ދާއިރާއަކުން",
+      "latin": "noosverikamuge evoadu mi faharu haiy dhaairaaakun",
+      "english": "Journalism Awards to be Given in Seven Categories This Time",
+      "domain": "entertainment"
+    },
+    {
+      "thaana": "ނުހޯދާ ހިދުމަތްތަކަށް އޭޑީކޭއިން ފައިސާ ނަގާ ކަމަށް ބުނެ އާސަންދައިން ޝަކުވާކޮށްފި",
+      "latin": "nuhoadhaa hidhumaiythakah eydeekeyin faisaa nagaa kamah bune aasandhain shakuvaakohfi",
+      "english": "Aasandha Complaints That ADK Charges for Services Not Provided",
+      "domain": "business"
+    },
+    {
+      "thaana": "ނުހުރުން, ނުހުންނާނެ!",
+      "latin": "nuhurun, nuhunnaane!",
+      "english": "Not being, not being!",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ނުވަތަ އެއިރުގެ ވަޒީރުލްއަޢުޒަމް މުޙައްމަދު އަމީން މެދުވެރި ކުރައްވައިގެން އަންގަވާ ފައިސާ,",
+      "latin": "nuvatha eiruge vazeerulauzam muhammadhu ameen medhuveri kurahvaigen angavaa faisaa,",
+      "english": "or the disbursements through then prime minister amin didi,",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އޮސްޓްރޭލިއާ އިން އޭޝިއަން ކަޕް ކާމިޔާބުކޮށްފި",
+      "latin": "ostreyliaa in eyshian kap kaamiyaabukohfi",
+      "english": "Australia wins the Asian Cup",
+      "domain": "sports"
+    },
+    {
+      "thaana": "ޕާކިސްތާންގެ ފުޓްބޯޅަ އަށް ގަތަރުން އެހީވަނީ",
+      "latin": "paakisthaange futboalha ah gatharun eheevanee",
+      "english": "Qatar providing assistance to Pakistani football",
+      "domain": "sports"
+    },
+    {
+      "thaana": "ޕާޓީ ބަދަލުވިޔަސް ކާށިދޫ ގޮނޑި ހުސްވެއްޖެ ނަމަ ވާދަކުރާނަން: ޖާބިރު",
+      "latin": "paatee badhaluviyas kaashidhoo gon'di husvejje nama vaadhakuraanan: jaabiru",
+      "english": "Jabir: I will contest if Kaashidhoo seat becomes vacant, even if I change parties",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ޕިލާރ އަކީ ޗޮންޓެލް މޫރުގެ ރޯލުން މަޝްހޫރު އެމެރިކާގެ ބަތަލާއެކެވެ .",
+      "latin": "pilaar akee chontel mooruge roalun mashhooru emerikaage bathalaaekeve .",
+      "english": "Pilar is an American actress known for her role as Chontelle Moore .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ޕޮޕޯފް އަށް އިތުރު ވަގުތު ދޭން ޖެހޭ: އިމްރާން",
+      "latin": "popoaf ah ithuru vaguthu dheyn jehey: imraan",
+      "english": "Popof should be given more time: Imran",
+      "domain": "sports"
+    },
+    {
+      "thaana": "ޤާނޫނު އަސާސީގެ ދިފާއުގައި ދިވެހިން.. އެމްޑީޕީ އަދި ޖޭޕީގެ ބޮޑު ޖަލްސާ ނިންމާލައިފި",
+      "latin": "qaanoonu asaaseege dhifaaugai dhivehin.. emdeepee adhi jeypeege bodu jalsaa ninmaalaifi",
+      "english": "Constitution in Defense.. MDP and JP",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރާއްޖެ ހަލާކު ކުރާ ޕާޓީ????",
+      "latin": "raajje halaaku kuraa paatee????",
+      "english": "The party that destroys the country????",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ރާއްޖެ ސަސްޕެންޝަނުން ސަލާމަތްކުރުން އޮތީ ކްލަބްތައް އަތްމަތީގައި: މިނިސްޓަރު ރާއްޖެ ސަސްޕެންޝަނުން ސަލާމަތްކުރުން އޮތީ ކްލަބްތައް އަތްމަތީގައި: މިނިސްޓަރު",
+      "latin": "raajje saspenshanun salaamaiykurun othee klabthah aiymatheegai: ministaru raajje saspenshanun salaamaiykurun othee klabthah aiymatheegai: ministaru",
+      "english": "The salvation of Maldives from suspension lies in the hands of the clubs: Minister",
+      "domain": "sports"
+    },
+    {
+      "thaana": "ރާއްޖެއާ މެދު މިވަގުތު ހަރުކަށި ފިޔަވަޅެއް ނާޅަން އިންޑިއާ އިން ނިންމައިފި",
+      "latin": "raajjeaa medhu mivaguthu harukashi fiyavalheh naalhan indiaa in ninmaifi",
+      "english": "India Decides Not to Impose Tough Measures Against Maldives for Now",
+      "domain": "international"
+    },
+    {
+      "thaana": "ރާއްޖެއަކީ ޓޫރިޒަމްއިން ގައުމަކަށްވާ ފައިދާ ދައްކުވައިދޭ މިސާލެއް - އަދީބު",
+      "latin": "raajjeakee toorizamin gaumakahvaa faidhaa dhakkuvaidhey misaaleh - adheebu",
+      "english": "Sri Lanka is an example of the benefits of tourism - Adib",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރާއްޖެގައި ބައިނަލްއަގުވާމީ ބިގް ގޭމް ފިޝިން މުބާރާތެއް ބާއްވައިފި",
+      "latin": "raajjegai bainalaguvaamee big geym fishin mubaaraatheh baahvaifi",
+      "english": "International Big Game Fishing Tournament Held in the Maldives",
+      "domain": "sports"
+    },
+    {
+      "thaana": "ރާއްޖެއިން ގުޅުން ކަނޑާލުމުން, އިރާނުން އެއްޗެއް ބުނަން ދެކޮޅު ހަދައިފި",
+      "latin": "raajjein gulhun kan'daalumun, iraanun echcheh bunan dhekolhu hadhaifi",
+      "english": "Sri Lanka cut ties, Iran refused to comment",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރާއްޖޭގައި ވަރަށް ހުނަރުވެރި މިއުޒީޝަނުން އެބަތިބި? އެހެން ވީއިރު ކީއްވެތަ އަސްލު ކުރިއަރަންވީ ވަރަށް މިއުޒިކް އިންޑަސްޓްރީ ކުރިނާރަނީ?",
+      "latin": "raajjeygai varah hunaruveri miuzeeshanun ebathibi? ehen veeiru keehvetha aslu kuriaranvee varah miuzik indastree kurinaaranee?",
+      "english": "Are there very talented musicians in Sri Lanka? So why isn't the music industry growing as much as it should?",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ރާއްޖޭގެ އިޤްތިޞާދީ ދުވެލި މަޑުޖެހިއްޖެ: އެމްއެމްއޭ",
+      "latin": "raajjeyge iqthisaadhee dhuveli madujehijje: ememey",
+      "english": "Maldives' Economic Momentum Has Slowed Down: MMA",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރައީސް އެސްޓޯނިއާގެ ގްރީނަރޖީ ޑޭޓާ ސެންޓަރސްއަށް ޒިޔާރަތް ކުރައްވައިފި",
+      "latin": "raees estoaniaage greenarjee deytaa sentarsah ziyaaraiy kurahvaifi",
+      "english": "President visits Estonia's Green Energy Data Centers",
+      "domain": "technology"
+    },
+    {
+      "thaana": "ރައީސް މުއިއްޒު އަބުރުގެ ވާހަކަ ދެއްކެވީ ދިވެހިންގެ އަބުރަށް ކޮޅުފައިން އަރައި ހުންނަވައި: ޝިފާޒް ރައީސް މުއިއްޒު އަބުރުގެ ވާހަކަ ދެއްކެވީ ދިވެހިންގެ އަބުރަށް ކޮޅުފައިން އަރައި ހުންނަވައި: ޝިފާޒް",
+      "latin": "raees muizzu aburuge vaahaka dhekkevee dhivehinge aburah kolhufain arai hunnavai: shifaaz raees muizzu aburuge vaahaka dhekkevee dhivehinge aburah kolhufain arai hunnavai: shifaaz",
+      "english": "President Muizzu Spoke About Honor While Trampling on the Honor of Maldivians: Shifaz",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ރައީސް ޔާމީން އިސްލާހީ އެޖެންޑާއެއް އެކުލަވާލަން ގައިދީއަކަށް ނުދެންނެވޭނެ: މުއާޒް",
+      "latin": "raees yaameen islaahee ejendaaeh ekulavaalan gaidheeakah nudhenneveyne: muaaz",
+      "english": "President Yaamin cannot ask a prisoner to form a reform agenda: Muaz",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ރައީސް ޔާމީނަށް ދަންނަވާލަން, އަނދަގޮނޑީގައި ބޭންދިއަސް ފަހަތަކަށް ނުޖެއްސޭނެ: ނަޝީދު",
+      "latin": "raees yaameenah dhannavaalan, an'dhagon'deegai beyndhias fahathakah nujesseyne: nasheedhu",
+      "english": "Message to President Yameen: You Cannot Push Back Even If Seated on Hot Seat: Nasheed",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ރައީސް ޔާމީންގެ ކެބިނެޓް ޖަލްސާއެއްގެ ތެރެއިން: އާދީއްތަ ދުވަހު އޮންނާނީ ކެބިނެޓްގެ ހާއްސަ ޖަލްސާއެއް -- ފޮޓޯ: ރައީސް އޮފީސް",
+      "latin": "raees yaameenge kebinet jalsaaegge therein: aadheeththa dhuvahu onnaanee kebinetge haassa jalsaaeh -- fotoa: raees ofees",
+      "english": "President Yameen's Cabinet meeting: Special Cabinet meeting on Sunday -- Photo: President's Office",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރައީސްގެ ދެކަނބަލުން މެލޭޝިއާ އަށް ފުރާވަޑައިގަތުން",
+      "latin": "raeesge dhekan'balun meleyshiaa ah furaavadaigathun",
+      "english": "President's wife leaves for Malaysia",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރައީސްގެ އިންޑިއާ ދަތުރުފުޅު: އިންޑިއާ ބޭންކުން ރާއްޖެ އަށް ދޭ ލޯންގެ އަދަދު 500 މިލިއަން ޑޮލަރަށް ބޮޑުކުރަން ހުށަހަޅައިފި",
+      "latin": "raeesge indiaa dhathurufulhu: indiaa beynkun raajje ah dhey loange adhadhu 500 milian dolarah bodukuran hushahalhaifi",
+      "english": "President's India Visit: Proposal to Increase Loan Amount from Indian Bank to Maldives to 500 Million Dollars",
+      "domain": "international"
+    },
+    {
+      "thaana": "ރައީސުލްޖުމްހޫރިއްޔާގެ އަނބިކަނބަލުންގެ އަރިހަށް, މެރކް ފައުންޑޭޝަންގެ މަންދޫބުން ޒިޔާރަތްކުރައްވައިފި",
+      "latin": "raeesuljumhooriyyaage an'bikan'balunge arihah, merk faundeyshange mandhoobun ziyaaraiykurahvaifi",
+      "english": "Delegates from the Merck Foundation Visit the Wife of the President",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ރައިޓް ނިއުޔޯކުން ބަދަލުވީ އެންސީގެ ޗެޕަލް ހިލް އަށެވެ .",
+      "latin": "rait niuyoakun badhaluvee enseege chepal hil asheve .",
+      "english": "Wright moved from New York to Chapel Hill in NC .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރައިޓް އޮން ބްރަދާ އަކީ 1970 ވަނަ އަހަރު ރެކޯޑްކޮށްފައިވާ ގިޓާރިސްޓް ބޫގަލޫ ޖޯ ޖޯންސްގެ ހަތަރު ވަނަ އަލްބަމެވެ .",
+      "latin": "rait on bradhaa akee 1970 vana aharu rekoadkohfaivaa gitaarist boogaloo joa joansge hatharu vana albameve .",
+      "english": "Right On Brother is the fourth album by guitarist Boogaloo Joe Jones , which was recorded in 1970 and was published on the Prestige label .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރަތްކުލައިން: ފުރަތަމަ ދަތުރު, ފެހިކުލައިން: ދެވަނަ ދަތުރު, ދަނބުކުލައިން: ތިންވަނަ ދަތުރު",
+      "latin": "raiykulain: furathama dhathuru, fehikulain: dhevana dhathuru, dhan'bukulain: thinvana dhathuru",
+      "english": "Red: first trip, green: second trip, purple: third trip",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރަކީދޫ މަރުގެ މައްސަަލަ މަޖިލީހުގެ ކޮމިޓީއަށް",
+      "latin": "rakeedhoo maruge massaala majileehuge komiteeah",
+      "english": "Rakidu murder case to parliamentary committee",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރަމަޟާންމަހުގެ މުނާސަބަތުގައި ތިމަރަފުށީ ޔޫތު ސެންޓަރުން ބޭއްވި ޤުރުއާން މުބާރާތާއި މަދަހަ ކިޔުމުގެ މުބާރާތުގެ ނިމުމުގެ ރަސްމިއްޔާތު ރޭ ތިމަރަފުށީ ޔޫތު ސެންޓަރ ގައި ބާއްވައިފިއެވެ.",
+      "latin": "ramadaanmahuge munaasabathugai thimarafushee yoothu sentarun beyhvi quruaan mubaaraathaai madhaha kiyumuge mubaaraathuge nimumuge rasmiyyaathu rey thimarafushee yoothu sentar gai baahvaifieve.",
+      "english": "The closing ceremony of the Ramadan Quran recitation and Madhaha recitation competition was held at the Thomarafushi Youth Center yesterday.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރަމީޒު ގޮސްފައި އާދޭ! އަހަރެން ކޮޓަރިތެރެ ރީތިކޮށްލަން މަޑުކޮށްލާނަން. ޝަހާމާ ތެދުވި އެވެ. ހަބީބަކީ ނަޖީބުގެ އަޚެކެވެ. އެހެންކަމުން ހަބީބަކާވެސް ވާހަކަދައްކާހިތެއް ޝަހާމާ ނުވެއެވެ.",
+      "latin": "rameezu gosfai aadhey! aharen kotarithere reethikohlan madukohlaanan. shahaamaa thedhuvi eve. habeebakee najeebuge akhekeve. ehenkamun habeebakaaves vaahakadhakkaahitheh shahaamaa nuveeve.",
+      "english": "Ramiz goes and comes! I'll stop to clean up the room. Shahama stood up. Habib is Najib's brother. So Shahama doesn't want to talk to Habib.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ރަން އަހަރުތަކެއްގެ ރަންޔޫބީލް އިޙްތިފާލުތައް",
+      "latin": "ran aharuthakegge ranyoobeel ihthifaaluthah",
+      "english": "Golden jubilee celebrations of golden years",
+      "domain": "local news"
+    },
+    {
+      "thaana": "ރަނގަޅުވާހަކަ އެއް. މީހަކު މަރުވިއަސް މައްސަލަޖެއްސޭގޮތަށް ހުކުމުގަ އެއޮތީ. ތިޔަ ކޯޓުން ރައީސަކު ހޮފާފަ ހުކުމެއްކޮށްލަންވީނުން. ފަހުބަސް ބުނާތަނަކީ ތިއީވިއްޔާ",
+      "latin": "ran'galhuvaahaka eh. meehaku maruvias massalajesseygothah hukumuga eothee. thiya koatun raeesaku hofaafa hukumekkohlanveenun. fahubas bunaathanakee thieeviyyaa",
+      "english": "That's a good story. There is a case in the verdict even if someone dies. Your court should elect a president and make a verdict. That's where the last word is",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ރަސްގެތީމުގެ ކައުންސިލްގެ ރައީސްގެ ފައި ބުރިކޮށްލައިފި",
+      "latin": "rasgetheemuge kaunsilge raeesge fai burikohlaifi",
+      "english": "The president of Rasgefaanu Council has his foot amputated",
+      "domain": "health"
+    },
+    {
+      "thaana": "ރައްޔިތުންނަށް ފައިދާހުރި ކަންތައްތަކެއް އިންޑިއާ ދަތުރުފުޅުން ހަމަޖެހޭނެ: ރައީސް ޔާމީން",
+      "latin": "rayyithunnah faidhaahuri kanthaththakeh indiaa dhathurufulhun hamajeheyne: raees yaameen",
+      "english": "Beneficial Deals for the People Will Be Secured During India Trip: President Yaameen",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ރީޢާނު ރަޝީދު 2 މަސް 1 ދުވަސް ކުރިން.",
+      "latin": "reeaanu rasheedhu 2 mas 1 dhuvas kurin.",
+      "english": "Reana Rasheed 2 months 1 day ago.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރޭ ކުޅުނު ކޮލިފިކޭޝަންގެ އެހެން މެޗުތަކުގެ ނަތީޖާ :",
+      "latin": "rey kulhunu kolifikeyshange ehen mechuthakuge natheejaa :",
+      "english": "Other qualifying matches played yesterday :",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރޭޝާމް... ގަޑިބަލާބަލަ ފުރަތަމަ.. މީ އަންހެން ކުދިން ބޭރުގައި އުޅެންޖެހޭ ވަގުތެއްތަ?",
+      "latin": "reyshaam... gadibalaabala furathama.. mee anhen kudhin beyrugai ulhenjehey vagutheththa?",
+      "english": "Resham... Look at the clock first.. Is this the time for girls to be outside?",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ރިލްވާންގެ މައްސަލައިގައި އައްޑޫ ފްރެންޑްސް ނުކުންނަނީ!",
+      "latin": "rilvaange massalaigai addoo frends nukunnanee!",
+      "english": "Andhra Friends come out in Rilwan case!",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރިސޯޓް މިޔުޒިކަކީ ރަނގަޅު އާމްދަނީއެއް ލިބޭ މަސައްކަތެކެވެ. ޝައްމުއަށް ރިސޯޓް މިޔުޒިކުން ރަނގަޅު އާމްދަނީއެއް ލިބޭ ކަމަށް އޭނާ ބުންޏެވެ.",
+      "latin": "risoat miyuzikakee ran'galhu aamdhaneeeh libey masakkathekeve. shammuah risoat miyuzikun ran'galhu aamdhaneeeh libey kamah eynaa bungneve.",
+      "english": "Resort music is a good income generating activity. Shammu earns a good income from resort music, he said.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރިވެތިކޮށް ނުކިޔެވޭތީ ބާރަށް ކިޔަވަން ލަދުގަންނަނަމަ މަޑުން ކިޔަވާށެވެ! ނަމަވެސް ދުލާއި ދެތުންފަތް ޙަރަކާތްކުރުވަން ވާނެއެވެ!",
+      "latin": "rivethikoh nukiyeveythee baarah kiyavan ladhugannanama madun kiyavaasheve! namaves dhulaai dhethunfaiy harakaaiykuruvan vaaneeve!",
+      "english": "If you feel ashamed to read aloud because you can't read beautifully, read quietly! However, your tongue and lips must move!",
+      "domain": "education"
+    },
+    {
+      "thaana": "ރޯދަ ހަދިޔާ - ހަލީސާ (48)",
+      "latin": "roadha hadhiyaa - haleesaa (48)",
+      "english": "Ramadan Gift - Halisa (48)",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ރޯދަމަހު ފިހާރަތައް މެންދަމު 1 ޖަހަންދެން އަދި ކެފޭތައް 3 ޖަހަންދެން ހުޅުވޭނެ",
+      "latin": "roadhamahu fihaarathah mendhamu 1 jahandhen adhi kefeythah 3 jahandhen hulhuveyne",
+      "english": "Shops to Remain Open Until 1 AM and Cafes Until 3 AM During Ramadan",
+      "domain": "local news"
+    },
+    {
+      "thaana": "ރޯސްގެ ރީތިކަމަށެވެ.",
+      "latin": "roasge reethikamasheve.",
+      "english": "For Rose's beauty.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ސައިކަލެއްގައި އައި ދެ މީހަކު އައިސް އަތް ދަބަސް ފޭރިގަނެގެން ދިޔަ ކަމަށް ރިޕޯޓްކޮށްފައި އިނީ, އޮފިޝަލް ވިދާޅުވި އެވެ.",
+      "latin": "saikaleggai ai dhe meehaku ais aiy dhabas feyriganegen dhiya kamah ripoatkohfai inee, ofishal vidhaalhuvi eve.",
+      "english": "Two men on a motorcycle reportedly came and robbed her of her handbag, the official said.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ސަރުކާރުގެ ހުރިހާ އަމާޒެއް ނަތީޖާއާ ދިމާއަށް",
+      "latin": "sarukaaruge hurihaa amaazeh natheejaaaa dhimaaah",
+      "english": "All government objectives aimed at achieving results",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ސަރުކާރުން ކިތަންމެ ވަރަކަށް ޕްރެޝަރު ކުރިޔަސް ޕްރޮވިންސްތައް ހަދާކަށް ޖާގައެއް ނުދެވޭނެ: ލ. އަތޮޅު މެމްބަރުން",
+      "latin": "sarukaarun kithanme varakah presharu kuriyas provinsthah hadhaakah jaagaeh nudheveyne: l. atholhu membarun",
+      "english": "No Room for Provinces Despite Government Pressure: L. Atoll Members",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ސަވާރުވެ އެއަށް ދަތުރުކުރި ރޭތަކުން!",
+      "latin": "savaaruve eah dhathurukuri reythakun!",
+      "english": "From the nights I rode and traveled to it!",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ސެން ޕެޑްރޯ ސްޕްރިންގްސް ޕާކަކީ އެމެރިކާގެ ޓެކްސަސް ސްޓޭޓްގެ ސެން އެންޓޯނިއޯ ޑެސް ބެކްސާ ކައުންޓީ ސިޓީގައެވެ .",
+      "latin": "sen pedroa springs paakakee emerikaage teksas steytge sen entoanioa des beksaa kauntee siteegaeve .",
+      "english": "San Pedro Springs Park is located in the city of San Antonio des Bexar County in the US state of Texas .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ސިފައިންނާއި ފުލުހުންނަށް ފުޓްބޯޅަ އިން ފުރުސަތު ދީފި",
+      "latin": "sifainnaai fuluhunnah futboalha in furusathu dheefi",
+      "english": "Opportunities given in football to military and police",
+      "domain": "sports"
+    },
+    {
+      "thaana": "ސިއްހީ ޚިދުމަތް ދޭ ސަރުކާރުގެ ތަންތަނުން އަގެއް ނުނަގާނެ: ރައީސް",
+      "latin": "sihhee khidhumaiy dhey sarukaaruge thanthanun ageh nunagaane: raees",
+      "english": "Government healthcare facilities will not charge fees: President",
+      "domain": "health"
+    },
+    {
+      "thaana": "ސިއްހީ ކުއްލި ނުރައްކަލުގައި ޑިރެކްޓަރު ޖެނެރަލް އޮފް ޕަބްލިކް ހެލްތަށް ލިބިދޭ ބާރުގެ ދަށުން, ޒަރޫރީ ބޭނުމެއްގައި މެނުވީ އެއް ރަށުން އަނެއް ރަށަށް ދަތުރުފަތުރުކުރުން ވަނީ މަނާކޮށްފަ އެވެ.",
+      "latin": "sihhee kulli nurakkalugai direktaru jeneral of pablik helthah libidhey baaruge dhashun, zarooree beynumeggai menuvee eh rashun aneh rashah dhathurufathurukurun vanee manaakohfa eve.",
+      "english": "Under the powers of the Director General of Public Health in a health emergency, travel from one village to another is prohibited except for essential purposes.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ސިލޯން ބޭންކަށް 5.2 މިލިއަން ރުފިޔާ ދެއްކުމަށް އެމްވީކޭގެ މައްޗަށް ހުކުމްކޮށްފި",
+      "latin": "siloan beynkah 5.2 milian rufiyaa dhekkumah emveekeyge machchah hukumkohfi",
+      "english": "MVK Ordered to Pay 5.2 Million Rufiyaa to Ceylon Bank",
+      "domain": "business"
+    },
+    {
+      "thaana": "ސިމިލް އެއް ހިމެނޭ އާ ޖުމްލައެއް އުފެއްދުން. އޭނާގެ ހިނިތުންވުން ހުރީ ހޫނު މޫސުމުގެ ސާފު ދުވަހެއްގެ އިރު ފަދައިން އުޖާލާވެފައެވެ.",
+      "latin": "simil eh himeney aa jumlaeh ufehdhun. eynaage hinithunvun huree hoonu moosumuge saafu dhuvahegge iru fadhain ujaalaavefaeve.",
+      "english": "Create a new sentence that contains a simile. Her smile was as bright as the sun on a clear summer day.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ސިވިލް ސާވިސް މުވައްޒަފުންގެ މުސާރައިގެ މައްސަލައިގައި އެއްވުމެއް ބާއްވައިފި",
+      "latin": "sivil saavis muvazzafunge musaaraige massalaigai ehvumeh baahvaifi",
+      "english": "A gathering held regarding the issue of Civil Service employees' salaries",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ސޯ ވަޓް... ހިނިއައިސްފައި ބޯއަރިކޮށްލަމުން ޒައުލްއަށް ބަލާލި ޝަދަފު ބުނެލިއެވެ.",
+      "latin": "soa vat... hiniaisfai boaarikohlamun zaulah balaali shadhafu bunelieve.",
+      "english": "So what... Shadaf said, looking at Zaul with a smile.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ސޮބޭ އާޓް އެވޯޑަކަށް ( ޕްރެއިރީސް އެންޑް ދަ ނޯތު އަށް ނޮމިނޭޓްވި ) ނޮމިނޭޓް ވެފައިވަނީ 2017 ވަނަ އަހަރު އެވެ .",
+      "latin": "sobey aat evoadakah ( preirees end dha noathu ah nomineytvi ) nomineyt vefaivanee 2017 vana aharu eve .",
+      "english": "She was nominated for a Sobey Art Award ( nominated for the Prairies and the North ) in 2017 .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ސްޓޫކްލީ ވަނީ ރޭލީއާ ދެކޮޅަށް ޢަދާވާތްތެރި ނަމަވެސް ކޮންމެހެން ދޮގު ހެކިތަކެއް ނޫން ހެކިތަކެއް ދީފައެވެ .",
+      "latin": "stooklee vanee reyleeaa dhekolhah adhaavaaiytheri namaves konmehen dhogu hekithakeh noon hekithakeh dheefaeve .",
+      "english": "Stukley had given hostile , but not necessarily false , evidence against Raleigh .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ޓީމުގެ އެހެން ކުޅުންތެރިން ބުނި ޓޮޓެންހަމްއޭ އަހަރުމެންގެ ހަގީގީ ވާދަވެރިންނަކީ ބްރެޒިލްއަށް އުފަން ގެބްރިއެލް ބުންޏެވެ.",
+      "latin": "teemuge ehen kulhuntherin buni totenhamey aharumenge hageegee vaadhaverinnakee brezilah ufan gebriel bungneve.",
+      "english": "\"Tottenham are our real rivals,\" said the Brazilian.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ތާރީޚަށް ސޯޝަލް މީޑިއާ އާއި މައިގަނޑު މީޑިއާގެ ބޮޑު ސަމާލުކަމެއް ލިބުނެވެ .",
+      "latin": "thaareekhah soashal meediaa aai maigan'du meediaage bodu samaalukameh libuneve .",
+      "english": "History attracted widespread attention from social media and the mainstream media .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ތަސްދީގުކުރާ ދުވަހުން ފެށިގެން އަމަލުކުރާ ގޮތަށް ޓެރަރިޒަމް މަނާކުރުމުގެ ބިލް ކޮމިޓީން ނިންމައިފި",
+      "latin": "thasdheegukuraa dhuvahun feshigen amalukuraa gothah terarizam manaakurumuge bil komiteen ninmaifi",
+      "english": "Terrorism Prevention Bill to be Implemented from the Day of Ratification: Committee Decision",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ތީ ޝާޢިރާއެއްކަމެއް ކުރިން ނުދަންނަން. ހާދަ މޮޅޭ ދޯ ދިވެއްސަށް. ވަރަށް މޮޅު އިނގޭ. އަހަރެން ޝުދޫއަށް ތަޢުރީފްކޮށްލީމެވެ.",
+      "latin": "thee shaairaaekkameh kurin nudhannan. haadha molhey dhoa dhivessah. varah molhu in'gey. aharen shudhooah thaureefkohleemeve.",
+      "english": "I didn't know you were a poet before. How great for the Dutch. Very good, you know. I complimented Shudu.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ތިކިޔާ އެއްޗެއް ނޭނގޭ އަރުފީނު ބުނެލިއެވެ.",
+      "latin": "thikiyaa echcheh neyn'gey arufeenu bunelieve.",
+      "english": "I don't know what you're talking about.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ތިން މުވައްޒަފަކު ވަޒީފާއިން ވަކިކުރުމުން އަލިމަތާ ރިސޯޓުގެ ދިވެހި މުވައްޒަފުން މުޒާހަރާ ކުރަން ފަށައިފި",
+      "latin": "thin muvazzafaku vazeefaain vakikurumun alimathaa risoatuge dhivehi muvazzafun muzaaharaa kuran fashaifi",
+      "english": "Alimatha Resort's Maldivian employees start protesting after three staff members dismissed",
+      "domain": "local news"
+    },
+    {
+      "thaana": "ތިރީގައިވާ ހިސާބު ސުވާލު ގްރޭޑް ކުރުން: 2+2 އޭއައި އެސިސްޓެންޓެއްގެ ހައިސިއްޔަތުން ހިސާބު ސުވާލަށް ޖަވާބެއް ދީގެން ނޫނީ ގްރޭޑް ނުކުރެވޭނެއެވެ. ޖަވާބެއް ދެއްވައިގެން އަޅުގަނޑަށް ސުވާލު ރަނގަޅަށް ގްރޭޑް ކުރެވޭނެއެވެ.",
+      "latin": "thireegaivaa hisaabu suvaalu greyd kurun: 2+2 eyai esistentegge haisiyyathun hisaabu suvaalah javaabeh dheegen noonee greyd nukureveyneeve. javaabeh dhehvaigen alhugan'dah suvaalu ran'galhah greyd kureveyneeve.",
+      "english": "Grade the following mathematics question: 2+2 As an AI assistant, I cannot grade the mathematics question unless it is given an answer. Please provide an answer and I will be able to grade the question correctly.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ތިރީގައިވާ މާއްދާ ކިޔައި ގޯސް ބަސްތައް ހޯދާށެވެ. ފޯރުކޮށްދީފައިވާ ޕެސޭޖްގައި ގޯސް ބަސްތަކެއް ނެތެވެ. އެޕަލް އިންކް އާއި ބެހޭ ގޮތުން ހުށަހަޅާފައިވާ ހުރިހާ މައުލޫމާތަކީ ޞައްޙަ މަޢުލޫމާތެކެވެ.",
+      "latin": "thireegaivaa maahdhaa kiyai goas basthah hoadhaasheve. foarukohdheefaivaa peseyjgai goas basthakeh netheve. epal ink aai behey gothun hushahalhaafaivaa hurihaa mauloomaathakee sahha mauloomaathekeve.",
+      "english": "Read the following passage and find the wrong statements. There are no wrong statements in the provided passage. All the information presented about Apple Inc. is accurate.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ތުންފަތަށް ވެރިވި ލުއި ހިނިތުންވުމާއެކު, އޭނާ އިތުރު ދެ ފޮތް ވެސް ނެގިއެވެ.",
+      "latin": "thunfathah verivi lui hinithunvumaaeku, eynaa ithuru dhe foiy ves negieve.",
+      "english": "With a light smile on his lips, he took out two more books.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ޓިއުނީޝިއާ އޮންނަ ޤައުމު ބައްރުގެ ނަން ކިޔާށެވެ. ޓިއުނީޝިއާ އޮތީ އެފްރިކާ ބައްރުގައެވެ.",
+      "latin": "tiuneeshiaa onna qaumu barruge nan kiyaasheve. tiuneeshiaa othee efrikaa barrugaeve.",
+      "english": "Name the continent in which the country Tunisia is located. Tunisia is located on the continent of Africa.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ޓްރަމްޕް ޓެރިފް ހަނގުރާމައިގައި ދިވެހި އިގުތިސާދު",
+      "latin": "tramp terif han'guraamaigai dhivehi iguthisaadhu",
+      "english": "The Maldivian economy in Trump's tariff war",
+      "domain": "business"
+    },
+    {
+      "thaana": "އުމުރުގެ ގޮތުން ފައުޒީއާއި ހަމްދާ އެއްވަރެވެ.",
+      "latin": "umuruge gothun fauzeeaai hamdhaa ehvareve.",
+      "english": "Fauzy was of the same age as Hamdha.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "އުމުރުން 53 އަހަރުގެ ކެވިން ވިޓްނީ ބުނެފައިވަނީ އޭނާގެ ފޯނު ގެއްލުނީ ގޮވާން އެޅުމަށް ބޭނުންކުރާ ސިލޯ އަކުން ގޮވާން ނަގަން ހުއްޓާ އޭނާގެ ގަމީހުގެ ޖީބުން ފޯނު ވެއްޓިގެން ކަމަށެވެ.",
+      "latin": "umurun 53 aharuge kevin vitnee bunefaivanee eynaage foanu gellunee govaan elhumah beynunkuraa siloa akun govaan nagan huttaa eynaage gameehuge jeebun foanu vettigen kamasheve.",
+      "english": "Kevin Whitney, 53, said he lost his phone when it fell out of his shirt pocket while removing wheat from a silo.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ޢުވައިޝަތީ އެވެ! ލޯތްބަކީ ވަރަށްވެސް ރީތި އެއްޗެކެވެ! އެއަށްވުރެ ރީތި އެއްޗަކީ, ތިމާދެކެ ލޯބިވާ އަދި ތިމާ ލޯބިވާ މީހަކާ އިނދެގެން ކާމިޔާބު ޒަވާޖީ ޙަޔާތެއް ޙާޞިލުކުރުމެވެ!!!",
+      "latin": "uvaishathee eve! loaiybakee varahves reethi echchekeve! eahvure reethi echchakee, thimaadheke loabivaa adhi thimaa loabivaa meehakaa in'dhegen kaamiyaabu zavaajee hayaatheh haasilukurumeve!!!",
+      "english": "Uwayshathi! Love is so beautiful! The most beautiful thing is to have a successful marriage with someone who loves you and loves you!!!",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ވާނެހައި ގޮތް މިސާލުން އެ އަންގައިދެނީ",
+      "latin": "vaanehai goiy misaalun e angaidhenee",
+      "english": "The example shows how it will be",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ވަގުތު ހޭރިޔާ ޓީމުން ސ. އަތޮޅު ސްކޫލާއި ބައްދަލުކޮށްފި",
+      "latin": "vaguthu heyriyaa teemun s. atholhu skoolaai bahdhalukohfi",
+      "english": "Time Hero team s. met with the Provincial School",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ވަރަށް މާތް ރެޔެއް ހިމެނިފައި ވީކަމުން",
+      "latin": "varah maaiy reyeh himenifai veekamun",
+      "english": "Because it included a very holy night",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ވެޑިކް ނަޒަރަކުން ބަލާއިރު މި 11 ޔޯގާ އުޕަނިޝާޑް ނިސްބަތްވަނީ ވެޑަންޓިކް ޝަކާ ( ސްކޫލް ) އަށެވެ .",
+      "latin": "vedik nazarakun balaairu mi 11 yoagaa upanishaad nisbaiyvanee vedantik shakaa ( skool ) asheve .",
+      "english": "From a Vedic point of view , these 11 yoga upanishads belong to the Vedantic shaka ( school ) .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ވެރިކަން ބަދަލުވުމުން ޕީއެންސީއަށް ސޮއިކުރި ކުރީގެ ދެ މެންބަރުންނަށް ސަރުކާރު ކުންފުނިތަކުން ވަޒީފާ ދީފި ވެރިކަން ބަދަލުވުމުން ޕީއެންސީއަށް ސޮއިކުރި ކުރީގެ ދެ މެންބަރުންނަށް ސަރުކާރު ކުންފުނިތަކުން ވަޒީފާ ދީފި",
+      "latin": "verikan badhaluvumun peeenseeah soikuri kureege dhe menbarunnah sarukaaru kunfunithakun vazeefaa dheefi verikan badhaluvumun peeenseeah soikuri kureege dhe menbarunnah sarukaaru kunfunithakun vazeefaa dheefi",
+      "english": "Two former members who signed with PNC after the change of government have been given jobs in government companies",
+      "domain": "politics"
+    },
+    {
+      "thaana": "ވިލިއަމް ހެންރީ އެމަރސަން އުފަންވެވަޑައިގަތީ 1860 ވަނަ އަހަރު ޖޯޖިއާގެ ޓަނަލް ހިލް އަށް އުފަން ކްލިސްބޭ އޮސްޓިން އާއި ކެލެބް ޖޭ އެމަރސަންގެ ދަރިކަނބަލުން މަޓިލްޑާ ކެރޮލައިން އޮސްޓިން ގެ ވަށައިގެންނެވެ .",
+      "latin": "viliam henree emarsan ufanvevadaigathee 1860 vana aharu joajiaage tanal hil ah ufan klisbey ostin aai keleb jey emarsange dharikan'balun matildaa kerolain ostin ge vashaigenneve .",
+      "english": "William Henry Emerson was born in 1860 in Tunnel Hill , Georgia , around Matilda Caroline Austin , daughter of Clisbe Austin , and Caleb J. Emerson .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ވިޝާމްގެ ތި ފަޔަކަށްނު ބޭސްކުރަންވީ.. ކޮންމެ ދުވަހަކު ކޮންމެވެސް އެއް އިރެއްގަ ރިއްސާނެ..",
+      "latin": "vishaamge thi fayakahnu beyskuranvee.. konme dhuvahaku konmeves eh iregga rissaane..",
+      "english": "Wishma's leg should be treated.. it hurts sometime every day.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ވޯކަލް ޕަރކިޝަން އުފެދުމުން އަ ކެޕެލާ ޖޯންރާއަށް އާ ޑިމޭންޝަންތަކެއް އިތުރުވެ ޒަމާނީ އިންތިޒާމުތަކުގައި ވަރަށް ފުޅާދާއިރާއެއްގައި ފެތުރިފައިވެއެވެ .",
+      "latin": "voakal parkishan ufedhumun a kepelaa joanraaah aa dimeynshanthakeh ithuruve zamaanee inthizaamuthakugai varah fulhaadhaairaaeggai fethurifaiveeve .",
+      "english": "The advent of vocal percussion added new dimensions to the a cappella genre and has spread very widely in modern arrangements .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ވުލްފިއަސް އޭނާގެ ދަރިފުޅާއެކު ޖަރުމަނަށް ފިލައިގެން ދިޔައިރު 1953 ވަނަ އަހަރު އޮސްޓްރޭލިއާއަށް އަންނަންދެން އޭނާ ދިރިއުޅުނެވެ .",
+      "latin": "vulfias eynaage dharifulhaaeku jarumanah filaigen dhiyairu 1953 vana aharu ostreyliaaah annandhen eynaa dhiriulhuneve .",
+      "english": "Wulffius fled with her son to Germany , where she lived until she came to Australia in 1953 .",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ޒާންބެ ތި ދިނީ ނަދުއްތައަށް ތަ? ފިޒާ ހައިރާން ވެފައި ހުރެ ތެދުވަމުން އަހާލެވުނެވެ.",
+      "latin": "zaanbe thi dhinee nadhuththaah tha? fizaa hairaan vefai hure thedhuvamun ahaalevuneve.",
+      "english": "Did you give it to Nadu? Fiza asked, standing up in surprise.",
+      "domain": "conversational"
+    },
+    {
+      "thaana": "ޒީވާ މިގެއިން ދިޔައިރު ހުރި ގޮތަކަށް ނޫން މިހާރު އެހުރީ, މަގުމަތިން ކަމެއް ދިމާވީތަ? ދަރިފުޅު ވެސް ފެންނަނީ ކޮންމެވެސް ކަމަކާ ފޫހިވެފައި ހުރިހެން މޫނިސާ ބުނި އެއްޗަކުން ޝަނޫޒާ ހައިރާންވިއެވެ.",
+      "latin": "zeevaa migein dhiyairu huri gothakah noon mihaaru ehuree, magumathin kameh dhimaaveetha? dharifulhu ves fennanee konmeves kamakaa foohivefai hurihen moonisaa buni echchakun shanoozaa hairaanvieve.",
+      "english": "Zeeva is not the same as she was when she left this house, did something happen on the way? Shanuza was surprised by what Munisa said as her daughter seemed to be bored with something.",
+      "domain": "source:alakxender/dhivehi-english-parallel"
+    },
+    {
+      "thaana": "ޒުވާނުންގެ މުޒާހަރާ: ރައީސް ވިދާޅުވީ ޒުވާނުންނަށް ޝުއޫރު ފާޅުކުރަން ފުރުސަތު ދޭންޖެހޭނެ ކަމަށް",
+      "latin": "zuvaanunge muzaaharaa: raees vidhaalhuvee zuvaanunnah shuooru faalhukuran furusathu dheynjeheyne kamah",
+      "english": "Youth Protest: President Says Youth Must Be Given Opportunity to Express Feelings",
+      "domain": "politics"
+    }
+  ],
+  "note": "the same sentence in three scripts, so a token-count difference between columns is a property of the script and not of the sentence. Thaana comes from the source corpus; Latin is the transliterator's output for that Thaana; English is the corpus's own reference translation."
+}

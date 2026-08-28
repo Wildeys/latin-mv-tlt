@@ -13,6 +13,7 @@
     "test:watch": "vitest",
     "check:models": "node scripts/check-models.mjs",
     "transliterate": "node tools/transliterate.mjs",
+    "predict": "node tools/predict_onnx.mjs",
     "postbuild": "node scripts/prune-ort-assets.mjs"
   },
   "dependencies": {

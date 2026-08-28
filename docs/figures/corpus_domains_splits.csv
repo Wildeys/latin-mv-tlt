@@ -1,0 +1,19 @@
+domain,rows,split
+law,45,test
+society,59,test
+tourism,189,test
+other,257,train
+religion,1601,test
+technology,1802,test
+environment,2448,test
+education,3681,test
+entertainment,4125,test
+health,5041,test
+international,6214,valid
+sports,7685,valid
+business,9849,valid
+crime,10846,train
+local news,11181,train
+politics,20848,train
+conversational,41415,all three
+source:alakxender/dhivehi-english-parallel,158462,train
